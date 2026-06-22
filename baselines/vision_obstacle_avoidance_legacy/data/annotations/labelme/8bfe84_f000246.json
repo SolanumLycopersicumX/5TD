@@ -1,0 +1,240 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "barrier_left",
+      "points": [
+        [
+          291.6176470588234,
+          655.4411764705882
+        ],
+        [
+          0.0,
+          685.7578625509609
+        ],
+        [
+          0.0,
+          877.5
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          141.61764705882342,
+          701.0294117647059
+        ],
+        [
+          210.73529411764696,
+          773.0882352941176
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          256.3235294117645,
+          667.2058823529411
+        ],
+        [
+          271.02941176470586,
+          689.2647058823529
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          294.5588235294117,
+          656.9117647058823
+        ],
+        [
+          0.0,
+          875.6435643564356
+        ],
+        [
+          0.4411764705881751,
+          924.5588235294117
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          306.32352941176464,
+          655.4411764705882
+        ],
+        [
+          720.0,
+          832.9406549853985
+        ],
+        [
+          720.0,
+          786.3235294117646
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ego_passable",
+      "points": [
+        [
+          297.4999999999998,
+          651.0294117647059
+        ],
+        [
+          720.0,
+          834.9749899959984
+        ],
+        [
+          720.0,
+          1278.9705882352941
+        ],
+        [
+          0.0,
+          1278.9705882352941
+        ],
+        [
+          0.0,
+          927.5
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          101.9117647058822,
+          1243.6764705882351
+        ],
+        [
+          0.0,
+          1171.5925394548062
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "opposite_passable",
+      "points": [
+        [
+          300.44117647058806,
+          652.5
+        ],
+        [
+          720.0,
+          783.7905162064826
+        ],
+        [
+          720.0,
+          721.6176470588235
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          484.2647058823527,
+          668.6764705882352
+        ],
+        [
+          516.6176470588234,
+          695.1470588235294
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          634.2647058823527,
+          670.1470588235294
+        ],
+        [
+          678.3823529411764,
+          726.0294117647059
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "barrier_right",
+      "points": [
+        [
+          310.73529411764684,
+          651.0294117647059
+        ],
+        [
+          720.0,
+          720.6322529011604
+        ],
+        [
+          720.0,
+          667.2058823529411
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "../images/8bfe84_f000246.jpg",
+  "imageData": null,
+  "imageHeight": 1280,
+  "imageWidth": 720
+}

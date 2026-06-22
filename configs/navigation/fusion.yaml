@@ -1,0 +1,5 @@
+fusion_navigation:
+  enabled: false
+  lidar_rgb_fusion: transformer_fusion
+  output: semantic_risk_costmap
+  safety_filter_required: true

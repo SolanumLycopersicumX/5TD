@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Vision Obstacle Avoidance
+Comment=Industrial vision-based obstacle avoidance system
+Exec=__PROJECT_DIR__/.venv/bin/python3 __PROJECT_DIR__/main.py
+Path=__PROJECT_DIR__
+Terminal=true
+Type=Application
+Categories=Science;Robotics;Utility;
+StartupNotify=true

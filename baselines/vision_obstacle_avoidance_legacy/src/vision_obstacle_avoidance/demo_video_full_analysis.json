@@ -1,0 +1,6166 @@
+{
+  "video": "demo_video.mp4",
+  "video_duration_sec": 222.2,
+  "video_fps": 24.0,
+  "total_frames": 5334,
+  "sample_fps": 1.0,
+  "frame_skip": 24,
+  "total_samples": 223,
+  "analysis_time_sec": 1.2,
+  "avg_pipeline_latency_ms": 1.6,
+  "command_distribution": {
+    "STOP": 43,
+    "TURN_RIGHT": 2,
+    "FORWARD": 178
+  },
+  "total_danger_zones": 16,
+  "danger_zones": [
+    {
+      "start": "00:00.0",
+      "end": "00:26.0",
+      "start_sec": 0.0,
+      "end_sec": 26.0,
+      "duration_sec": 26.0,
+      "max_danger_in_zone": 0.98
+    },
+    {
+      "start": "00:30.0",
+      "end": "01:28.0",
+      "start_sec": 30.0,
+      "end_sec": 88.0,
+      "duration_sec": 58.0,
+      "max_danger_in_zone": 0.6
+    },
+    {
+      "start": "01:40.0",
+      "end": "01:46.0",
+      "start_sec": 100.0,
+      "end_sec": 106.0,
+      "duration_sec": 6.0,
+      "max_danger_in_zone": 0.51
+    },
+    {
+      "start": "01:51.0",
+      "end": "01:52.0",
+      "start_sec": 111.0,
+      "end_sec": 112.0,
+      "duration_sec": 1.0,
+      "max_danger_in_zone": 0.5
+    },
+    {
+      "start": "01:54.0",
+      "end": "01:59.0",
+      "start_sec": 114.0,
+      "end_sec": 119.0,
+      "duration_sec": 5.0,
+      "max_danger_in_zone": 0.72
+    },
+    {
+      "start": "02:00.0",
+      "end": "02:06.0",
+      "start_sec": 120.0,
+      "end_sec": 126.0,
+      "duration_sec": 6.0,
+      "max_danger_in_zone": 0.72
+    },
+    {
+      "start": "02:10.0",
+      "end": "02:11.0",
+      "start_sec": 130.0,
+      "end_sec": 131.0,
+      "duration_sec": 1.0,
+      "max_danger_in_zone": 0.53
+    },
+    {
+      "start": "02:18.0",
+      "end": "02:31.0",
+      "start_sec": 138.0,
+      "end_sec": 151.0,
+      "duration_sec": 13.0,
+      "max_danger_in_zone": 0.55
+    },
+    {
+      "start": "02:38.0",
+      "end": "02:45.0",
+      "start_sec": 158.0,
+      "end_sec": 165.0,
+      "duration_sec": 7.0,
+      "max_danger_in_zone": 0.79
+    },
+    {
+      "start": "02:46.0",
+      "end": "02:50.0",
+      "start_sec": 166.0,
+      "end_sec": 170.0,
+      "duration_sec": 4.0,
+      "max_danger_in_zone": 1.0
+    },
+    {
+      "start": "02:59.0",
+      "end": "03:01.0",
+      "start_sec": 179.0,
+      "end_sec": 181.0,
+      "duration_sec": 2.0,
+      "max_danger_in_zone": 0.73
+    },
+    {
+      "start": "03:02.0",
+      "end": "03:03.0",
+      "start_sec": 182.0,
+      "end_sec": 183.0,
+      "duration_sec": 1.0,
+      "max_danger_in_zone": 0.65
+    },
+    {
+      "start": "03:07.0",
+      "end": "03:11.0",
+      "start_sec": 187.0,
+      "end_sec": 191.0,
+      "duration_sec": 4.0,
+      "max_danger_in_zone": 0.97
+    },
+    {
+      "start": "03:13.0",
+      "end": "03:20.0",
+      "start_sec": 193.0,
+      "end_sec": 200.0,
+      "duration_sec": 7.0,
+      "max_danger_in_zone": 0.42
+    },
+    {
+      "start": "03:22.0",
+      "end": "03:28.0",
+      "start_sec": 202.0,
+      "end_sec": 208.0,
+      "duration_sec": 6.0,
+      "max_danger_in_zone": 1.0
+    },
+    {
+      "start": "03:30.0",
+      "end": "03:39.0",
+      "start_sec": 210.0,
+      "end_sec": 219.0,
+      "duration_sec": 9.0,
+      "max_danger_in_zone": 0.42
+    }
+  ],
+  "time_windows_10sec": [
+    {
+      "start_sec": 0,
+      "start_str": "00:00",
+      "samples": 10,
+      "avg_danger": 0.66,
+      "max_danger": 0.98,
+      "decisions": {
+        "STOP": 8,
+        "TURN_RIGHT": 2
+      },
+      "avg_obstacles": 1.2
+    },
+    {
+      "start_sec": 10,
+      "start_str": "00:10",
+      "samples": 10,
+      "avg_danger": 0.55,
+      "max_danger": 0.69,
+      "decisions": {
+        "STOP": 4,
+        "FORWARD": 6
+      },
+      "avg_obstacles": 2.1
+    },
+    {
+      "start_sec": 20,
+      "start_str": "00:20",
+      "samples": 10,
+      "avg_danger": 0.33,
+      "max_danger": 0.58,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.4
+    },
+    {
+      "start_sec": 30,
+      "start_str": "00:30",
+      "samples": 10,
+      "avg_danger": 0.52,
+      "max_danger": 0.6,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.1
+    },
+    {
+      "start_sec": 40,
+      "start_str": "00:40",
+      "samples": 10,
+      "avg_danger": 0.51,
+      "max_danger": 0.51,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.0
+    },
+    {
+      "start_sec": 50,
+      "start_str": "00:50",
+      "samples": 10,
+      "avg_danger": 0.51,
+      "max_danger": 0.51,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.0
+    },
+    {
+      "start_sec": 60,
+      "start_str": "01:00",
+      "samples": 10,
+      "avg_danger": 0.51,
+      "max_danger": 0.52,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.1
+    },
+    {
+      "start_sec": 70,
+      "start_str": "01:10",
+      "samples": 10,
+      "avg_danger": 0.51,
+      "max_danger": 0.52,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.1
+    },
+    {
+      "start_sec": 80,
+      "start_str": "01:20",
+      "samples": 10,
+      "avg_danger": 0.41,
+      "max_danger": 0.52,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.1
+    },
+    {
+      "start_sec": 90,
+      "start_str": "01:30",
+      "samples": 10,
+      "avg_danger": 0.0,
+      "max_danger": 0.0,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.0
+    },
+    {
+      "start_sec": 100,
+      "start_str": "01:40",
+      "samples": 10,
+      "avg_danger": 0.31,
+      "max_danger": 0.51,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.6
+    },
+    {
+      "start_sec": 110,
+      "start_str": "01:50",
+      "samples": 10,
+      "avg_danger": 0.38,
+      "max_danger": 0.72,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.6
+    },
+    {
+      "start_sec": 120,
+      "start_str": "02:00",
+      "samples": 10,
+      "avg_danger": 0.41,
+      "max_danger": 0.72,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.6
+    },
+    {
+      "start_sec": 130,
+      "start_str": "02:10",
+      "samples": 10,
+      "avg_danger": 0.14,
+      "max_danger": 0.53,
+      "decisions": {
+        "STOP": 3,
+        "FORWARD": 7
+      },
+      "avg_obstacles": 0.4
+    },
+    {
+      "start_sec": 140,
+      "start_str": "02:20",
+      "samples": 10,
+      "avg_danger": 0.45,
+      "max_danger": 0.5,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 1.0
+    },
+    {
+      "start_sec": 150,
+      "start_str": "02:30",
+      "samples": 10,
+      "avg_danger": 0.19,
+      "max_danger": 0.79,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.9
+    },
+    {
+      "start_sec": 160,
+      "start_str": "02:40",
+      "samples": 10,
+      "avg_danger": 0.6,
+      "max_danger": 1.0,
+      "decisions": {
+        "FORWARD": 7,
+        "STOP": 3
+      },
+      "avg_obstacles": 2.7
+    },
+    {
+      "start_sec": 170,
+      "start_str": "02:50",
+      "samples": 10,
+      "avg_danger": 0.06,
+      "max_danger": 0.61,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.1
+    },
+    {
+      "start_sec": 180,
+      "start_str": "03:00",
+      "samples": 10,
+      "avg_danger": 0.36,
+      "max_danger": 0.97,
+      "decisions": {
+        "FORWARD": 4,
+        "STOP": 6
+      },
+      "avg_obstacles": 1.4
+    },
+    {
+      "start_sec": 190,
+      "start_str": "03:10",
+      "samples": 10,
+      "avg_danger": 0.35,
+      "max_danger": 0.65,
+      "decisions": {
+        "STOP": 8,
+        "FORWARD": 2
+      },
+      "avg_obstacles": 0.8
+    },
+    {
+      "start_sec": 200,
+      "start_str": "03:20",
+      "samples": 10,
+      "avg_danger": 0.6,
+      "max_danger": 1.0,
+      "decisions": {
+        "FORWARD": 10
+      },
+      "avg_obstacles": 0.6
+    },
+    {
+      "start_sec": 210,
+      "start_str": "03:30",
+      "samples": 10,
+      "avg_danger": 0.4,
+      "max_danger": 0.42,
+      "decisions": {
+        "STOP": 10
+      },
+      "avg_obstacles": 2.1
+    },
+    {
+      "start_sec": 220,
+      "start_str": "03:40",
+      "samples": 3,
+      "avg_danger": 0.04,
+      "max_danger": 0.13,
+      "decisions": {
+        "STOP": 1,
+        "FORWARD": 2
+      },
+      "avg_obstacles": 0.3
+    }
+  ],
+  "samples": [
+    {
+      "idx": 1,
+      "frame": 0,
+      "time_sec": 0.0,
+      "time_str": "00:00.0",
+      "latency_ms": 4.1,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.98,
+        "right": 0.99
+      },
+      "center_offset": -0.001,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1160
+    },
+    {
+      "idx": 2,
+      "frame": 24,
+      "time_sec": 1.0,
+      "time_str": "00:01.0",
+      "latency_ms": 4.7,
+      "decision": "STOP",
+      "reason": "(pending) Center blocked -> RIGHT detour (urgency=0.04)",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 0.95,
+        "right": 0.97
+      },
+      "center_offset": 0.042,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1258
+    },
+    {
+      "idx": 3,
+      "frame": 48,
+      "time_sec": 2.0,
+      "time_str": "00:02.0",
+      "latency_ms": 1.9,
+      "decision": "STOP",
+      "reason": "(pending) Center blocked -> RIGHT detour (urgency=0.04)",
+      "danger_level": 0.56,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 0.94,
+        "right": 0.97
+      },
+      "center_offset": 0.04,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1620
+    },
+    {
+      "idx": 4,
+      "frame": 72,
+      "time_sec": 3.0,
+      "time_str": "00:03.0",
+      "latency_ms": 1.3,
+      "decision": "TURN_RIGHT",
+      "reason": "Center blocked -> RIGHT detour (urgency=0.04)",
+      "danger_level": 0.64,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.9,
+        "center": 0.94,
+        "right": 0.97
+      },
+      "center_offset": 0.037,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2412
+    },
+    {
+      "idx": 5,
+      "frame": 96,
+      "time_sec": 4.0,
+      "time_str": "00:04.0",
+      "latency_ms": 1.3,
+      "decision": "TURN_RIGHT",
+      "reason": "Center blocked -> RIGHT detour (urgency=0.05)",
+      "danger_level": 0.84,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.9,
+        "center": 0.94,
+        "right": 0.96
+      },
+      "center_offset": 0.033,
+      "obstacle_count": 1,
+      "obstacle_max_area": 4277
+    },
+    {
+      "idx": 6,
+      "frame": 120,
+      "time_sec": 5.0,
+      "time_str": "00:05.0",
+      "latency_ms": 2.4,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.94,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.94,
+        "right": 0.96
+      },
+      "center_offset": 0.025,
+      "obstacle_count": 1,
+      "obstacle_max_area": 10797
+    },
+    {
+      "idx": 7,
+      "frame": 144,
+      "time_sec": 6.0,
+      "time_str": "00:06.0",
+      "latency_ms": 2.2,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.98,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.92,
+        "center": 0.93,
+        "right": 0.91
+      },
+      "center_offset": -0.009,
+      "obstacle_count": 1,
+      "obstacle_max_area": 29769
+    },
+    {
+      "idx": 8,
+      "frame": 168,
+      "time_sec": 7.0,
+      "time_str": "00:07.0",
+      "latency_ms": 1.9,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.54,
+      "blocked": {
+        "left": true,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.92,
+        "center": 0.91,
+        "right": 0.95
+      },
+      "center_offset": 0.014,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1618
+    },
+    {
+      "idx": 9,
+      "frame": 192,
+      "time_sec": 8.0,
+      "time_str": "00:08.0",
+      "latency_ms": 1.8,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.47,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.91,
+        "right": 0.99
+      },
+      "center_offset": 0.002,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1338
+    },
+    {
+      "idx": 10,
+      "frame": 216,
+      "time_sec": 9.0,
+      "time_str": "00:09.0",
+      "latency_ms": 2.0,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.59,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.65,
+        "center": 0.3,
+        "right": 0.66
+      },
+      "center_offset": 0.003,
+      "obstacle_count": 2,
+      "obstacle_max_area": 917
+    },
+    {
+      "idx": 11,
+      "frame": 240,
+      "time_sec": 10.0,
+      "time_str": "00:10.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.85,
+        "right": 0.77
+      },
+      "center_offset": -0.083,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1395
+    },
+    {
+      "idx": 12,
+      "frame": 264,
+      "time_sec": 11.0,
+      "time_str": "00:11.0",
+      "latency_ms": 1.4,
+      "decision": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.14)",
+      "danger_level": 0.61,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.86,
+        "center": 0.84,
+        "right": 0.63
+      },
+      "center_offset": -0.15,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1114
+    },
+    {
+      "idx": 13,
+      "frame": 288,
+      "time_sec": 12.0,
+      "time_str": "00:12.0",
+      "latency_ms": 1.6,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.82,
+        "center": 0.86,
+        "right": 0.65
+      },
+      "center_offset": -0.118,
+      "obstacle_count": 2,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 14,
+      "frame": 312,
+      "time_sec": 13.0,
+      "time_str": "00:13.0",
+      "latency_ms": 1.6,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.107,
+      "obstacle_count": 1,
+      "obstacle_max_area": 536
+    },
+    {
+      "idx": 15,
+      "frame": 336,
+      "time_sec": 14.0,
+      "time_str": "00:14.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.69,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 3,
+      "obstacle_max_area": 2838
+    },
+    {
+      "idx": 16,
+      "frame": 360,
+      "time_sec": 15.0,
+      "time_str": "00:15.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.55,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1471
+    },
+    {
+      "idx": 17,
+      "frame": 384,
+      "time_sec": 16.0,
+      "time_str": "00:16.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.55,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.105,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1469
+    },
+    {
+      "idx": 18,
+      "frame": 408,
+      "time_sec": 17.0,
+      "time_str": "00:17.0",
+      "latency_ms": 2.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.55,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1470
+    },
+    {
+      "idx": 19,
+      "frame": 432,
+      "time_sec": 18.0,
+      "time_str": "00:18.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 1,
+      "obstacle_max_area": 513
+    },
+    {
+      "idx": 20,
+      "frame": 456,
+      "time_sec": 19.0,
+      "time_str": "00:19.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.87,
+        "right": 0.65
+      },
+      "center_offset": -0.107,
+      "obstacle_count": 1,
+      "obstacle_max_area": 513
+    },
+    {
+      "idx": 21,
+      "frame": 480,
+      "time_sec": 20.0,
+      "time_str": "00:20.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.55,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.107,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1475
+    },
+    {
+      "idx": 22,
+      "frame": 504,
+      "time_sec": 21.0,
+      "time_str": "00:21.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.54,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1468
+    },
+    {
+      "idx": 23,
+      "frame": 528,
+      "time_sec": 22.0,
+      "time_str": "00:22.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.58,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 3,
+      "obstacle_max_area": 2614
+    },
+    {
+      "idx": 24,
+      "frame": 552,
+      "time_sec": 23.0,
+      "time_str": "00:23.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.54,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1468
+    },
+    {
+      "idx": 25,
+      "frame": 576,
+      "time_sec": 24.0,
+      "time_str": "00:24.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.54,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.104,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1467
+    },
+    {
+      "idx": 26,
+      "frame": 600,
+      "time_sec": 25.0,
+      "time_str": "00:25.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.105,
+      "obstacle_count": 2,
+      "obstacle_max_area": 738
+    },
+    {
+      "idx": 27,
+      "frame": 624,
+      "time_sec": 26.0,
+      "time_str": "00:26.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.107,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 28,
+      "frame": 648,
+      "time_sec": 27.0,
+      "time_str": "00:27.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.106,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 29,
+      "frame": 672,
+      "time_sec": 28.0,
+      "time_str": "00:28.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.86,
+        "right": 0.65
+      },
+      "center_offset": -0.105,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 30,
+      "frame": 696,
+      "time_sec": 29.0,
+      "time_str": "00:29.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.86,
+        "right": 0.65
+      },
+      "center_offset": -0.105,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 31,
+      "frame": 720,
+      "time_sec": 30.0,
+      "time_str": "00:30.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.58,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.81,
+        "center": 0.88,
+        "right": 0.65
+      },
+      "center_offset": -0.107,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2580
+    },
+    {
+      "idx": 32,
+      "frame": 744,
+      "time_sec": 31.0,
+      "time_str": "00:31.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.83,
+        "center": 0.86,
+        "right": 0.65
+      },
+      "center_offset": -0.123,
+      "obstacle_count": 1,
+      "obstacle_max_area": 511
+    },
+    {
+      "idx": 33,
+      "frame": 768,
+      "time_sec": 32.0,
+      "time_str": "00:32.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.87,
+        "right": 0.66
+      },
+      "center_offset": -0.12,
+      "obstacle_count": 1,
+      "obstacle_max_area": 511
+    },
+    {
+      "idx": 34,
+      "frame": 792,
+      "time_sec": 33.0,
+      "time_str": "00:33.0",
+      "latency_ms": 2.0,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.88,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 510
+    },
+    {
+      "idx": 35,
+      "frame": 816,
+      "time_sec": 34.0,
+      "time_str": "00:34.0",
+      "latency_ms": 2.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 1,
+      "obstacle_max_area": 512
+    },
+    {
+      "idx": 36,
+      "frame": 840,
+      "time_sec": 35.0,
+      "time_str": "00:35.0",
+      "latency_ms": 2.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 1,
+      "obstacle_max_area": 512
+    },
+    {
+      "idx": 37,
+      "frame": 864,
+      "time_sec": 36.0,
+      "time_str": "00:36.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 1,
+      "obstacle_max_area": 512
+    },
+    {
+      "idx": 38,
+      "frame": 888,
+      "time_sec": 37.0,
+      "time_str": "00:37.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.6,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 2,
+      "obstacle_max_area": 962
+    },
+    {
+      "idx": 39,
+      "frame": 912,
+      "time_sec": 38.0,
+      "time_str": "00:38.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.68
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 40,
+      "frame": 936,
+      "time_sec": 39.0,
+      "time_str": "00:39.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 41,
+      "frame": 960,
+      "time_sec": 40.0,
+      "time_str": "00:40.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 42,
+      "frame": 984,
+      "time_sec": 41.0,
+      "time_str": "00:41.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 43,
+      "frame": 1008,
+      "time_sec": 42.0,
+      "time_str": "00:42.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 44,
+      "frame": 1032,
+      "time_sec": 43.0,
+      "time_str": "00:43.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 45,
+      "frame": 1056,
+      "time_sec": 44.0,
+      "time_str": "00:44.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 46,
+      "frame": 1080,
+      "time_sec": 45.0,
+      "time_str": "00:45.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 47,
+      "frame": 1104,
+      "time_sec": 46.0,
+      "time_str": "00:46.0",
+      "latency_ms": 1.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 48,
+      "frame": 1128,
+      "time_sec": 47.0,
+      "time_str": "00:47.0",
+      "latency_ms": 2.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 49,
+      "frame": 1152,
+      "time_sec": 48.0,
+      "time_str": "00:48.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 50,
+      "frame": 1176,
+      "time_sec": 49.0,
+      "time_str": "00:49.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 51,
+      "frame": 1200,
+      "time_sec": 50.0,
+      "time_str": "00:50.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.68
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 620
+    },
+    {
+      "idx": 52,
+      "frame": 1224,
+      "time_sec": 51.0,
+      "time_str": "00:51.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 53,
+      "frame": 1248,
+      "time_sec": 52.0,
+      "time_str": "00:52.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 54,
+      "frame": 1272,
+      "time_sec": 53.0,
+      "time_str": "00:53.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 55,
+      "frame": 1296,
+      "time_sec": 54.0,
+      "time_str": "00:54.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 56,
+      "frame": 1320,
+      "time_sec": 55.0,
+      "time_str": "00:55.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 57,
+      "frame": 1344,
+      "time_sec": 56.0,
+      "time_str": "00:56.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 58,
+      "frame": 1368,
+      "time_sec": 57.0,
+      "time_str": "00:57.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 59,
+      "frame": 1392,
+      "time_sec": 58.0,
+      "time_str": "00:58.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 60,
+      "frame": 1416,
+      "time_sec": 59.0,
+      "time_str": "00:59.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 61,
+      "frame": 1440,
+      "time_sec": 60.0,
+      "time_str": "01:00.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 62,
+      "frame": 1464,
+      "time_sec": 61.0,
+      "time_str": "01:01.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 63,
+      "frame": 1488,
+      "time_sec": 62.0,
+      "time_str": "01:02.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.85,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.113,
+      "obstacle_count": 1,
+      "obstacle_max_area": 619
+    },
+    {
+      "idx": 64,
+      "frame": 1512,
+      "time_sec": 63.0,
+      "time_str": "01:03.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 553
+    },
+    {
+      "idx": 65,
+      "frame": 1536,
+      "time_sec": 64.0,
+      "time_str": "01:04.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 553
+    },
+    {
+      "idx": 66,
+      "frame": 1560,
+      "time_sec": 65.0,
+      "time_str": "01:05.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.67
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 1,
+      "obstacle_max_area": 553
+    },
+    {
+      "idx": 67,
+      "frame": 1584,
+      "time_sec": 66.0,
+      "time_str": "01:06.0",
+      "latency_ms": 2.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.84,
+        "center": 0.89,
+        "right": 0.66
+      },
+      "center_offset": -0.116,
+      "obstacle_count": 1,
+      "obstacle_max_area": 553
+    },
+    {
+      "idx": 68,
+      "frame": 1608,
+      "time_sec": 67.0,
+      "time_str": "01:07.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.74,
+        "center": 0.91,
+        "right": 0.63
+      },
+      "center_offset": -0.082,
+      "obstacle_count": 1,
+      "obstacle_max_area": 512
+    },
+    {
+      "idx": 69,
+      "frame": 1632,
+      "time_sec": 68.0,
+      "time_str": "01:08.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.64,
+        "center": 0.9,
+        "right": 0.53
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 2,
+      "obstacle_max_area": 634
+    },
+    {
+      "idx": 70,
+      "frame": 1656,
+      "time_sec": 69.0,
+      "time_str": "01:09.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.55,
+        "center": 0.92,
+        "right": 0.47
+      },
+      "center_offset": -0.08,
+      "obstacle_count": 1,
+      "obstacle_max_area": 643
+    },
+    {
+      "idx": 71,
+      "frame": 1680,
+      "time_sec": 70.0,
+      "time_str": "01:10.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.083,
+      "obstacle_count": 1,
+      "obstacle_max_area": 643
+    },
+    {
+      "idx": 72,
+      "frame": 1704,
+      "time_sec": 71.0,
+      "time_str": "01:11.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 73,
+      "frame": 1728,
+      "time_sec": 72.0,
+      "time_str": "01:12.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.51,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 74,
+      "frame": 1752,
+      "time_sec": 73.0,
+      "time_str": "01:13.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.51,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 75,
+      "frame": 1776,
+      "time_sec": 74.0,
+      "time_str": "01:14.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 1,
+      "obstacle_max_area": 554
+    },
+    {
+      "idx": 76,
+      "frame": 1800,
+      "time_sec": 75.0,
+      "time_str": "01:15.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 2,
+      "obstacle_max_area": 633
+    },
+    {
+      "idx": 77,
+      "frame": 1824,
+      "time_sec": 76.0,
+      "time_str": "01:16.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.93,
+        "right": 0.44
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 1,
+      "obstacle_max_area": 640
+    },
+    {
+      "idx": 78,
+      "frame": 1848,
+      "time_sec": 77.0,
+      "time_str": "01:17.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.43
+      },
+      "center_offset": -0.097,
+      "obstacle_count": 1,
+      "obstacle_max_area": 635
+    },
+    {
+      "idx": 79,
+      "frame": 1872,
+      "time_sec": 78.0,
+      "time_str": "01:18.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.43
+      },
+      "center_offset": -0.097,
+      "obstacle_count": 1,
+      "obstacle_max_area": 635
+    },
+    {
+      "idx": 80,
+      "frame": 1896,
+      "time_sec": 79.0,
+      "time_str": "01:19.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.93,
+        "right": 0.44
+      },
+      "center_offset": -0.087,
+      "obstacle_count": 1,
+      "obstacle_max_area": 635
+    },
+    {
+      "idx": 81,
+      "frame": 1920,
+      "time_sec": 80.0,
+      "time_str": "01:20.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.93,
+        "right": 0.44
+      },
+      "center_offset": -0.087,
+      "obstacle_count": 1,
+      "obstacle_max_area": 635
+    },
+    {
+      "idx": 82,
+      "frame": 1944,
+      "time_sec": 81.0,
+      "time_str": "01:21.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.44
+      },
+      "center_offset": -0.091,
+      "obstacle_count": 1,
+      "obstacle_max_area": 635
+    },
+    {
+      "idx": 83,
+      "frame": 1968,
+      "time_sec": 82.0,
+      "time_str": "01:22.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.52,
+        "center": 0.92,
+        "right": 0.43
+      },
+      "center_offset": -0.092,
+      "obstacle_count": 2,
+      "obstacle_max_area": 637
+    },
+    {
+      "idx": 84,
+      "frame": 1992,
+      "time_sec": 83.0,
+      "time_str": "01:23.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.92,
+        "right": 0.49
+      },
+      "center_offset": -0.092,
+      "obstacle_count": 3,
+      "obstacle_max_area": 636
+    },
+    {
+      "idx": 85,
+      "frame": 2016,
+      "time_sec": 84.0,
+      "time_str": "01:24.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.67,
+        "center": 0.93,
+        "right": 0.56
+      },
+      "center_offset": -0.087,
+      "obstacle_count": 1,
+      "obstacle_max_area": 643
+    },
+    {
+      "idx": 86,
+      "frame": 2040,
+      "time_sec": 85.0,
+      "time_str": "01:25.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.67,
+        "center": 0.92,
+        "right": 0.57
+      },
+      "center_offset": -0.081,
+      "obstacle_count": 1,
+      "obstacle_max_area": 643
+    },
+    {
+      "idx": 87,
+      "frame": 2064,
+      "time_sec": 86.0,
+      "time_str": "01:26.0",
+      "latency_ms": 1.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.67,
+        "center": 0.92,
+        "right": 0.57
+      },
+      "center_offset": -0.081,
+      "obstacle_count": 1,
+      "obstacle_max_area": 642
+    },
+    {
+      "idx": 88,
+      "frame": 2088,
+      "time_sec": 87.0,
+      "time_str": "01:27.0",
+      "latency_ms": 1.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.52,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.085,
+      "obstacle_count": 1,
+      "obstacle_max_area": 642
+    },
+    {
+      "idx": 89,
+      "frame": 2112,
+      "time_sec": 88.0,
+      "time_str": "01:28.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 90,
+      "frame": 2136,
+      "time_sec": 89.0,
+      "time_str": "01:29.0",
+      "latency_ms": 1.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 91,
+      "frame": 2160,
+      "time_sec": 90.0,
+      "time_str": "01:30.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 92,
+      "frame": 2184,
+      "time_sec": 91.0,
+      "time_str": "01:31.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 93,
+      "frame": 2208,
+      "time_sec": 92.0,
+      "time_str": "01:32.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 94,
+      "frame": 2232,
+      "time_sec": 93.0,
+      "time_str": "01:33.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 95,
+      "frame": 2256,
+      "time_sec": 94.0,
+      "time_str": "01:34.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 96,
+      "frame": 2280,
+      "time_sec": 95.0,
+      "time_str": "01:35.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 97,
+      "frame": 2304,
+      "time_sec": 96.0,
+      "time_str": "01:36.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 98,
+      "frame": 2328,
+      "time_sec": 97.0,
+      "time_str": "01:37.0",
+      "latency_ms": 2.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 99,
+      "frame": 2352,
+      "time_sec": 98.0,
+      "time_str": "01:38.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 100,
+      "frame": 2376,
+      "time_sec": 99.0,
+      "time_str": "01:39.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.088,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 101,
+      "frame": 2400,
+      "time_sec": 100.0,
+      "time_str": "01:40.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 1,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 102,
+      "frame": 2424,
+      "time_sec": 101.0,
+      "time_str": "01:41.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 1,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 103,
+      "frame": 2448,
+      "time_sec": 102.0,
+      "time_str": "01:42.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 1,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 104,
+      "frame": 2472,
+      "time_sec": 103.0,
+      "time_str": "01:43.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 1,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 105,
+      "frame": 2496,
+      "time_sec": 104.0,
+      "time_str": "01:44.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 1,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 106,
+      "frame": 2520,
+      "time_sec": 105.0,
+      "time_str": "01:45.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.57
+      },
+      "center_offset": -0.089,
+      "obstacle_count": 1,
+      "obstacle_max_area": 552
+    },
+    {
+      "idx": 107,
+      "frame": 2544,
+      "time_sec": 106.0,
+      "time_str": "01:46.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.68,
+        "center": 0.93,
+        "right": 0.58
+      },
+      "center_offset": -0.08,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 108,
+      "frame": 2568,
+      "time_sec": 107.0,
+      "time_str": "01:47.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Off-center, correcting: offset=-0.19",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.74,
+        "center": 0.87,
+        "right": 0.5
+      },
+      "center_offset": -0.19,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 109,
+      "frame": 2592,
+      "time_sec": 108.0,
+      "time_str": "01:48.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Off-center, correcting: offset=-0.28",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.78,
+        "center": 0.75,
+        "right": 0.44
+      },
+      "center_offset": -0.28,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 110,
+      "frame": 2616,
+      "time_sec": 109.0,
+      "time_str": "01:49.0",
+      "latency_ms": 2.4,
+      "decision": "FORWARD",
+      "reason": "Off-center, correcting: offset=-0.26",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.77,
+        "center": 0.75,
+        "right": 0.45
+      },
+      "center_offset": -0.262,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 111,
+      "frame": 2640,
+      "time_sec": 110.0,
+      "time_str": "01:50.0",
+      "latency_ms": 2.6,
+      "decision": "FORWARD",
+      "reason": "Off-center, correcting: offset=-0.23",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.74,
+        "center": 0.76,
+        "right": 0.46
+      },
+      "center_offset": -0.228,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 112,
+      "frame": 2664,
+      "time_sec": 111.0,
+      "time_str": "01:51.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.11)",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.69,
+        "center": 0.78,
+        "right": 0.46
+      },
+      "center_offset": -0.198,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1765
+    },
+    {
+      "idx": 113,
+      "frame": 2688,
+      "time_sec": 112.0,
+      "time_str": "01:52.0",
+      "latency_ms": 2.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.63,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.146,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 114,
+      "frame": 2712,
+      "time_sec": 113.0,
+      "time_str": "01:53.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.114,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 115,
+      "frame": 2736,
+      "time_sec": 114.0,
+      "time_str": "01:54.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.116,
+      "obstacle_count": 1,
+      "obstacle_max_area": 560
+    },
+    {
+      "idx": 116,
+      "frame": 2760,
+      "time_sec": 115.0,
+      "time_str": "01:55.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.116,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2613
+    },
+    {
+      "idx": 117,
+      "frame": 2784,
+      "time_sec": 116.0,
+      "time_str": "01:56.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.71,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.116,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2606
+    },
+    {
+      "idx": 118,
+      "frame": 2808,
+      "time_sec": 117.0,
+      "time_str": "01:57.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2613
+    },
+    {
+      "idx": 119,
+      "frame": 2832,
+      "time_sec": 118.0,
+      "time_str": "01:58.0",
+      "latency_ms": 2.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2613
+    },
+    {
+      "idx": 120,
+      "frame": 2856,
+      "time_sec": 119.0,
+      "time_str": "01:59.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 121,
+      "frame": 2880,
+      "time_sec": 120.0,
+      "time_str": "02:00.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.09)",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2668
+    },
+    {
+      "idx": 122,
+      "frame": 2904,
+      "time_sec": 121.0,
+      "time_str": "02:01.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.71,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2611
+    },
+    {
+      "idx": 123,
+      "frame": 2928,
+      "time_sec": 122.0,
+      "time_str": "02:02.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.46
+      },
+      "center_offset": -0.125,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2629
+    },
+    {
+      "idx": 124,
+      "frame": 2952,
+      "time_sec": 123.0,
+      "time_str": "02:03.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.46
+      },
+      "center_offset": -0.125,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2628
+    },
+    {
+      "idx": 125,
+      "frame": 2976,
+      "time_sec": 124.0,
+      "time_str": "02:04.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.72,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.115,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2623
+    },
+    {
+      "idx": 126,
+      "frame": 3000,
+      "time_sec": 125.0,
+      "time_str": "02:05.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.55,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 1,
+      "obstacle_max_area": 506
+    },
+    {
+      "idx": 127,
+      "frame": 3024,
+      "time_sec": 126.0,
+      "time_str": "02:06.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 128,
+      "frame": 3048,
+      "time_sec": 127.0,
+      "time_str": "02:07.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.81,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 129,
+      "frame": 3072,
+      "time_sec": 128.0,
+      "time_str": "02:08.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.57,
+        "center": 0.57,
+        "right": 0.45
+      },
+      "center_offset": -0.121,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 130,
+      "frame": 3096,
+      "time_sec": 129.0,
+      "time_str": "02:09.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.57,
+        "center": 0.57,
+        "right": 0.45
+      },
+      "center_offset": -0.12,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 131,
+      "frame": 3120,
+      "time_sec": 130.0,
+      "time_str": "02:10.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.53,
+      "blocked": {
+        "left": true,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.57,
+        "center": 0.63,
+        "right": 0.47
+      },
+      "center_offset": -0.09,
+      "obstacle_count": 2,
+      "obstacle_max_area": 820
+    },
+    {
+      "idx": 132,
+      "frame": 3144,
+      "time_sec": 131.0,
+      "time_str": "02:11.0",
+      "latency_ms": 1.7,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 133,
+      "frame": 3168,
+      "time_sec": 132.0,
+      "time_str": "02:12.0",
+      "latency_ms": 1.8,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 134,
+      "frame": 3192,
+      "time_sec": 133.0,
+      "time_str": "02:13.0",
+      "latency_ms": 4.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.82,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 135,
+      "frame": 3216,
+      "time_sec": 134.0,
+      "time_str": "02:14.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 136,
+      "frame": 3240,
+      "time_sec": 135.0,
+      "time_str": "02:15.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.112,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 137,
+      "frame": 3264,
+      "time_sec": 136.0,
+      "time_str": "02:16.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 138,
+      "frame": 3288,
+      "time_sec": 137.0,
+      "time_str": "02:17.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 139,
+      "frame": 3312,
+      "time_sec": 138.0,
+      "time_str": "02:18.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 562
+    },
+    {
+      "idx": 140,
+      "frame": 3336,
+      "time_sec": 139.0,
+      "time_str": "02:19.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 562
+    },
+    {
+      "idx": 141,
+      "frame": 3360,
+      "time_sec": 140.0,
+      "time_str": "02:20.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 142,
+      "frame": 3384,
+      "time_sec": 141.0,
+      "time_str": "02:21.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 143,
+      "frame": 3408,
+      "time_sec": 142.0,
+      "time_str": "02:22.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 144,
+      "frame": 3432,
+      "time_sec": 143.0,
+      "time_str": "02:23.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 145,
+      "frame": 3456,
+      "time_sec": 144.0,
+      "time_str": "02:24.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.49,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1090
+    },
+    {
+      "idx": 146,
+      "frame": 3480,
+      "time_sec": 145.0,
+      "time_str": "02:25.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 147,
+      "frame": 3504,
+      "time_sec": 146.0,
+      "time_str": "02:26.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 148,
+      "frame": 3528,
+      "time_sec": 147.0,
+      "time_str": "02:27.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 149,
+      "frame": 3552,
+      "time_sec": 148.0,
+      "time_str": "02:28.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.44,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 558
+    },
+    {
+      "idx": 150,
+      "frame": 3576,
+      "time_sec": 149.0,
+      "time_str": "02:29.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.5,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.79,
+        "right": 0.47
+      },
+      "center_offset": -0.109,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1131
+    },
+    {
+      "idx": 151,
+      "frame": 3600,
+      "time_sec": 150.0,
+      "time_str": "02:30.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.55,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.79,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 1,
+      "obstacle_max_area": 507
+    },
+    {
+      "idx": 152,
+      "frame": 3624,
+      "time_sec": 151.0,
+      "time_str": "02:31.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.79,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 153,
+      "frame": 3648,
+      "time_sec": 152.0,
+      "time_str": "02:32.0",
+      "latency_ms": 2.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 154,
+      "frame": 3672,
+      "time_sec": 153.0,
+      "time_str": "02:33.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 155,
+      "frame": 3696,
+      "time_sec": 154.0,
+      "time_str": "02:34.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 156,
+      "frame": 3720,
+      "time_sec": 155.0,
+      "time_str": "02:35.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 157,
+      "frame": 3744,
+      "time_sec": 156.0,
+      "time_str": "02:36.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 158,
+      "frame": 3768,
+      "time_sec": 157.0,
+      "time_str": "02:37.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.59,
+        "center": 0.83,
+        "right": 0.47
+      },
+      "center_offset": -0.111,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 159,
+      "frame": 3792,
+      "time_sec": 158.0,
+      "time_str": "02:38.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.59,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.97,
+        "right": 0.74
+      },
+      "center_offset": -0.141,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1495
+    },
+    {
+      "idx": 160,
+      "frame": 3816,
+      "time_sec": 159.0,
+      "time_str": "02:39.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.79,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 1.0,
+        "right": 0.92
+      },
+      "center_offset": 0.014,
+      "obstacle_count": 5,
+      "obstacle_max_area": 10181
+    },
+    {
+      "idx": 161,
+      "frame": 3840,
+      "time_sec": 160.0,
+      "time_str": "02:40.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.79,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 1.0,
+        "right": 0.92
+      },
+      "center_offset": 0.016,
+      "obstacle_count": 5,
+      "obstacle_max_area": 10175
+    },
+    {
+      "idx": 162,
+      "frame": 3864,
+      "time_sec": 161.0,
+      "time_str": "02:41.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.79,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 1.0,
+        "right": 0.92
+      },
+      "center_offset": 0.016,
+      "obstacle_count": 5,
+      "obstacle_max_area": 10175
+    },
+    {
+      "idx": 163,
+      "frame": 3888,
+      "time_sec": 162.0,
+      "time_str": "02:42.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.79,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 1.0,
+        "right": 0.92
+      },
+      "center_offset": 0.016,
+      "obstacle_count": 5,
+      "obstacle_max_area": 10175
+    },
+    {
+      "idx": 164,
+      "frame": 3912,
+      "time_sec": 163.0,
+      "time_str": "02:43.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.79,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 1.0,
+        "right": 0.92
+      },
+      "center_offset": 0.016,
+      "obstacle_count": 6,
+      "obstacle_max_area": 10177
+    },
+    {
+      "idx": 165,
+      "frame": 3936,
+      "time_sec": 164.0,
+      "time_str": "02:44.0",
+      "latency_ms": 1.6,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.71,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.88,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.051,
+      "obstacle_count": 2,
+      "obstacle_max_area": 2750
+    },
+    {
+      "idx": 166,
+      "frame": 3960,
+      "time_sec": 165.0,
+      "time_str": "02:45.0",
+      "latency_ms": 1.4,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.001,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 167,
+      "frame": 3984,
+      "time_sec": 166.0,
+      "time_str": "02:46.0",
+      "latency_ms": 1.7,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.002,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7658
+    },
+    {
+      "idx": 168,
+      "frame": 4008,
+      "time_sec": 167.0,
+      "time_str": "02:47.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.51,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.99
+      },
+      "center_offset": 0.004,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1091
+    },
+    {
+      "idx": 169,
+      "frame": 4032,
+      "time_sec": 168.0,
+      "time_str": "02:48.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.31,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.002,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1022
+    },
+    {
+      "idx": 170,
+      "frame": 4056,
+      "time_sec": 169.0,
+      "time_str": "02:49.0",
+      "latency_ms": 2.0,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.32,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.001,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1092
+    },
+    {
+      "idx": 171,
+      "frame": 4080,
+      "time_sec": 170.0,
+      "time_str": "02:50.0",
+      "latency_ms": 1.8,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 172,
+      "frame": 4104,
+      "time_sec": 171.0,
+      "time_str": "02:51.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 173,
+      "frame": 4128,
+      "time_sec": 172.0,
+      "time_str": "02:52.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 174,
+      "frame": 4152,
+      "time_sec": 173.0,
+      "time_str": "02:53.0",
+      "latency_ms": 2.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 175,
+      "frame": 4176,
+      "time_sec": 174.0,
+      "time_str": "02:54.0",
+      "latency_ms": 2.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.94,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.021,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 176,
+      "frame": 4200,
+      "time_sec": 175.0,
+      "time_str": "02:55.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.038,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 177,
+      "frame": 4224,
+      "time_sec": 176.0,
+      "time_str": "02:56.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.92,
+        "right": 0.98
+      },
+      "center_offset": 0.037,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 178,
+      "frame": 4248,
+      "time_sec": 177.0,
+      "time_str": "02:57.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.93,
+        "right": 0.98
+      },
+      "center_offset": 0.039,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 179,
+      "frame": 4272,
+      "time_sec": 178.0,
+      "time_str": "02:58.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.93,
+        "right": 0.98
+      },
+      "center_offset": 0.038,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 180,
+      "frame": 4296,
+      "time_sec": 179.0,
+      "time_str": "02:59.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.61,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.93,
+        "right": 0.98
+      },
+      "center_offset": 0.038,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1061
+    },
+    {
+      "idx": 181,
+      "frame": 4320,
+      "time_sec": 180.0,
+      "time_str": "03:00.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.73,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.93,
+        "right": 0.98
+      },
+      "center_offset": 0.037,
+      "obstacle_count": 3,
+      "obstacle_max_area": 7222
+    },
+    {
+      "idx": 182,
+      "frame": 4344,
+      "time_sec": 181.0,
+      "time_str": "03:01.0",
+      "latency_ms": 1.4,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.94,
+        "right": 0.99
+      },
+      "center_offset": 0.043,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 183,
+      "frame": 4368,
+      "time_sec": 182.0,
+      "time_str": "03:02.0",
+      "latency_ms": 1.7,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.65,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.011,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1497
+    },
+    {
+      "idx": 184,
+      "frame": 4392,
+      "time_sec": 183.0,
+      "time_str": "03:03.0",
+      "latency_ms": 1.1,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.96,
+        "right": 0.96
+      },
+      "center_offset": -0.015,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 185,
+      "frame": 4416,
+      "time_sec": 184.0,
+      "time_str": "03:04.0",
+      "latency_ms": 1.4,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.96,
+        "right": 0.72
+      },
+      "center_offset": -0.148,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 186,
+      "frame": 4440,
+      "time_sec": 185.0,
+      "time_str": "03:05.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.95,
+        "center": 0.96,
+        "right": 0.82
+      },
+      "center_offset": -0.071,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 187,
+      "frame": 4464,
+      "time_sec": 186.0,
+      "time_str": "03:06.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.003,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 188,
+      "frame": 4488,
+      "time_sec": 187.0,
+      "time_str": "03:07.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "All zones blocked",
+      "danger_level": 0.97,
+      "blocked": {
+        "left": true,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.89,
+        "center": 0.82,
+        "right": 0.77
+      },
+      "center_offset": -0.07,
+      "obstacle_count": 7,
+      "obstacle_max_area": 7593
+    },
+    {
+      "idx": 189,
+      "frame": 4512,
+      "time_sec": 188.0,
+      "time_str": "03:08.0",
+      "latency_ms": 1.6,
+      "decision": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.08)",
+      "danger_level": 0.61,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.88,
+        "center": 0.81,
+        "right": 0.76
+      },
+      "center_offset": -0.076,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1238
+    },
+    {
+      "idx": 190,
+      "frame": 4536,
+      "time_sec": 189.0,
+      "time_str": "03:09.0",
+      "latency_ms": 1.4,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.65,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.001,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2607
+    },
+    {
+      "idx": 191,
+      "frame": 4560,
+      "time_sec": 190.0,
+      "time_str": "03:10.0",
+      "latency_ms": 1.3,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.65,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.006,
+      "obstacle_count": 1,
+      "obstacle_max_area": 2612
+    },
+    {
+      "idx": 192,
+      "frame": 4584,
+      "time_sec": 191.0,
+      "time_str": "03:11.0",
+      "latency_ms": 1.2,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.007,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 193,
+      "frame": 4608,
+      "time_sec": 192.0,
+      "time_str": "03:12.0",
+      "latency_ms": 1.1,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.97
+      },
+      "center_offset": -0.004,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 194,
+      "frame": 4632,
+      "time_sec": 193.0,
+      "time_str": "03:13.0",
+      "latency_ms": 1.2,
+      "decision": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.06)",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1614
+    },
+    {
+      "idx": 195,
+      "frame": 4656,
+      "time_sec": 194.0,
+      "time_str": "03:14.0",
+      "latency_ms": 1.4,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1419
+    },
+    {
+      "idx": 196,
+      "frame": 4680,
+      "time_sec": 195.0,
+      "time_str": "03:15.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.06)",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1615
+    },
+    {
+      "idx": 197,
+      "frame": 4704,
+      "time_sec": 196.0,
+      "time_str": "03:16.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1419
+    },
+    {
+      "idx": 198,
+      "frame": 4728,
+      "time_sec": 197.0,
+      "time_str": "03:17.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.079,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1421
+    },
+    {
+      "idx": 199,
+      "frame": 4752,
+      "time_sec": 198.0,
+      "time_str": "03:18.0",
+      "latency_ms": 1.6,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.079,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1420
+    },
+    {
+      "idx": 200,
+      "frame": 4776,
+      "time_sec": 199.0,
+      "time_str": "03:19.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.83
+      },
+      "center_offset": -0.078,
+      "obstacle_count": 1,
+      "obstacle_max_area": 1419
+    },
+    {
+      "idx": 201,
+      "frame": 4800,
+      "time_sec": 200.0,
+      "time_str": "03:20.0",
+      "latency_ms": 2.0,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.006,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 202,
+      "frame": 4824,
+      "time_sec": 201.0,
+      "time_str": "03:21.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.006,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 203,
+      "frame": 4848,
+      "time_sec": 202.0,
+      "time_str": "03:22.0",
+      "latency_ms": 1.2,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.042,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7308
+    },
+    {
+      "idx": 204,
+      "frame": 4872,
+      "time_sec": 203.0,
+      "time_str": "03:23.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.96,
+        "right": 0.99
+      },
+      "center_offset": 0.043,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7308
+    },
+    {
+      "idx": 205,
+      "frame": 4896,
+      "time_sec": 204.0,
+      "time_str": "03:24.0",
+      "latency_ms": 1.7,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.96,
+        "right": 0.99
+      },
+      "center_offset": 0.042,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7308
+    },
+    {
+      "idx": 206,
+      "frame": 4920,
+      "time_sec": 205.0,
+      "time_str": "03:25.0",
+      "latency_ms": 2.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.96,
+        "right": 0.99
+      },
+      "center_offset": 0.042,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7308
+    },
+    {
+      "idx": 207,
+      "frame": 4944,
+      "time_sec": 206.0,
+      "time_str": "03:26.0",
+      "latency_ms": 1.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.96,
+        "right": 0.99
+      },
+      "center_offset": 0.042,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7308
+    },
+    {
+      "idx": 208,
+      "frame": 4968,
+      "time_sec": 207.0,
+      "time_str": "03:27.0",
+      "latency_ms": 2.3,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 1.0,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.91,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.042,
+      "obstacle_count": 1,
+      "obstacle_max_area": 7308
+    },
+    {
+      "idx": 209,
+      "frame": 4992,
+      "time_sec": 208.0,
+      "time_str": "03:28.0",
+      "latency_ms": 1.9,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.009,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 210,
+      "frame": 5016,
+      "time_sec": 209.0,
+      "time_str": "03:29.0",
+      "latency_ms": 2.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.95,
+        "right": 0.99
+      },
+      "center_offset": 0.006,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 211,
+      "frame": 5040,
+      "time_sec": 210.0,
+      "time_str": "03:30.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": 0.0,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1228
+    },
+    {
+      "idx": 212,
+      "frame": 5064,
+      "time_sec": 211.0,
+      "time_str": "03:31.0",
+      "latency_ms": 1.3,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": 0.0,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1229
+    },
+    {
+      "idx": 213,
+      "frame": 5088,
+      "time_sec": 212.0,
+      "time_str": "03:32.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": -0.0,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1229
+    },
+    {
+      "idx": 214,
+      "frame": 5112,
+      "time_sec": 213.0,
+      "time_str": "03:33.0",
+      "latency_ms": 1.4,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1230
+    },
+    {
+      "idx": 215,
+      "frame": 5136,
+      "time_sec": 214.0,
+      "time_str": "03:34.0",
+      "latency_ms": 1.9,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 3,
+      "obstacle_max_area": 1232
+    },
+    {
+      "idx": 216,
+      "frame": 5160,
+      "time_sec": 215.0,
+      "time_str": "03:35.0",
+      "latency_ms": 1.2,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.42,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": -0.002,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1232
+    },
+    {
+      "idx": 217,
+      "frame": 5184,
+      "time_sec": 216.0,
+      "time_str": "03:36.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.39,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.99,
+        "center": 0.94,
+        "right": 0.98
+      },
+      "center_offset": -0.004,
+      "obstacle_count": 1,
+      "obstacle_max_area": 910
+    },
+    {
+      "idx": 218,
+      "frame": 5208,
+      "time_sec": 217.0,
+      "time_str": "03:37.0",
+      "latency_ms": 2.1,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.91,
+        "right": 0.97
+      },
+      "center_offset": -0.004,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1445
+    },
+    {
+      "idx": 219,
+      "frame": 5232,
+      "time_sec": 218.0,
+      "time_str": "03:38.0",
+      "latency_ms": 2.1,
+      "decision": "STOP",
+      "reason": "Center blocked, no detour",
+      "danger_level": 0.4,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": true
+      },
+      "free_scores": {
+        "left": 0.98,
+        "center": 0.91,
+        "right": 0.97
+      },
+      "center_offset": -0.004,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1444
+    },
+    {
+      "idx": 220,
+      "frame": 5256,
+      "time_sec": 219.0,
+      "time_str": "03:39.0",
+      "latency_ms": 1.5,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.29,
+      "blocked": {
+        "left": false,
+        "center": true,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.97,
+        "center": 0.9,
+        "right": 1.0
+      },
+      "center_offset": 0.013,
+      "obstacle_count": 2,
+      "obstacle_max_area": 1100
+    },
+    {
+      "idx": 221,
+      "frame": 5280,
+      "time_sec": 220.0,
+      "time_str": "03:40.0",
+      "latency_ms": 2.2,
+      "decision": "STOP",
+      "reason": "(pending) Center clear",
+      "danger_level": 0.13,
+      "blocked": {
+        "left": true,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.95,
+        "center": 0.99,
+        "right": 1.0
+      },
+      "center_offset": 0.025,
+      "obstacle_count": 1,
+      "obstacle_max_area": 702
+    },
+    {
+      "idx": 222,
+      "frame": 5304,
+      "time_sec": 221.0,
+      "time_str": "03:41.0",
+      "latency_ms": 2.1,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.95,
+        "center": 0.99,
+        "right": 1.0
+      },
+      "center_offset": 0.023,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    },
+    {
+      "idx": 223,
+      "frame": 5328,
+      "time_sec": 222.0,
+      "time_str": "03:42.0",
+      "latency_ms": 1.5,
+      "decision": "FORWARD",
+      "reason": "Center clear",
+      "danger_level": 0.0,
+      "blocked": {
+        "left": false,
+        "center": false,
+        "right": false
+      },
+      "free_scores": {
+        "left": 0.39,
+        "center": 0.3,
+        "right": 0.3
+      },
+      "center_offset": -0.129,
+      "obstacle_count": 0,
+      "obstacle_max_area": 0
+    }
+  ],
+  "warnings": [
+    {
+      "type": "speed_change",
+      "time_sec": 0.0,
+      "time_str": "00:00.0",
+      "frame": 0,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 1.0,
+      "time_str": "00:01.0",
+      "frame": 24,
+      "command": "STOP",
+      "reason": "(pending) Center blocked -> RIGHT detour (urgency=0.04)"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 2.0,
+      "time_str": "00:02.0",
+      "frame": 48,
+      "command": "STOP",
+      "reason": "(pending) Center blocked -> RIGHT detour (urgency=0.04)"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 3.0,
+      "time_str": "00:03.0",
+      "frame": 72,
+      "danger": 0.64,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 4.0,
+      "time_str": "00:04.0",
+      "frame": 96,
+      "danger": 0.84,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 5.0,
+      "time_str": "00:05.0",
+      "frame": 120,
+      "danger": 0.94,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 5.0,
+      "time_str": "00:05.0",
+      "frame": 120,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 6.0,
+      "time_str": "00:06.0",
+      "frame": 144,
+      "danger": 0.98,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 6.0,
+      "time_str": "00:06.0",
+      "frame": 144,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 7.0,
+      "time_str": "00:07.0",
+      "frame": 168,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 8.0,
+      "time_str": "00:08.0",
+      "frame": 192,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 9.0,
+      "time_str": "00:09.0",
+      "frame": 216,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 10.0,
+      "time_str": "00:10.0",
+      "frame": 240,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 11.0,
+      "time_str": "00:11.0",
+      "frame": 264,
+      "danger": 0.61,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 11.0,
+      "time_str": "00:11.0",
+      "frame": 264,
+      "command": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.14)"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 12.0,
+      "time_str": "00:12.0",
+      "frame": 288,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 13.0,
+      "time_str": "00:13.0",
+      "frame": 312,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 14.0,
+      "time_str": "00:14.0",
+      "frame": 336,
+      "danger": 0.69,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 115.0,
+      "time_str": "01:55.0",
+      "frame": 2760,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 116.0,
+      "time_str": "01:56.0",
+      "frame": 2784,
+      "danger": 0.71,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 117.0,
+      "time_str": "01:57.0",
+      "frame": 2808,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 118.0,
+      "time_str": "01:58.0",
+      "frame": 2832,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 120.0,
+      "time_str": "02:00.0",
+      "frame": 2880,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 121.0,
+      "time_str": "02:01.0",
+      "frame": 2904,
+      "danger": 0.71,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 122.0,
+      "time_str": "02:02.0",
+      "frame": 2928,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 123.0,
+      "time_str": "02:03.0",
+      "frame": 2952,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 124.0,
+      "time_str": "02:04.0",
+      "frame": 2976,
+      "danger": 0.72,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 130.0,
+      "time_str": "02:10.0",
+      "frame": 3120,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 131.0,
+      "time_str": "02:11.0",
+      "frame": 3144,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 132.0,
+      "time_str": "02:12.0",
+      "frame": 3168,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 159.0,
+      "time_str": "02:39.0",
+      "frame": 3816,
+      "danger": 0.79,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 160.0,
+      "time_str": "02:40.0",
+      "frame": 3840,
+      "danger": 0.79,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 161.0,
+      "time_str": "02:41.0",
+      "frame": 3864,
+      "danger": 0.79,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 162.0,
+      "time_str": "02:42.0",
+      "frame": 3888,
+      "danger": 0.79,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 163.0,
+      "time_str": "02:43.0",
+      "frame": 3912,
+      "danger": 0.79,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 164.0,
+      "time_str": "02:44.0",
+      "frame": 3936,
+      "danger": 0.71,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 164.0,
+      "time_str": "02:44.0",
+      "frame": 3936,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 165.0,
+      "time_str": "02:45.0",
+      "frame": 3960,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 166.0,
+      "time_str": "02:46.0",
+      "frame": 3984,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 166.0,
+      "time_str": "02:46.0",
+      "frame": 3984,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 179.0,
+      "time_str": "02:59.0",
+      "frame": 4296,
+      "danger": 0.61,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 180.0,
+      "time_str": "03:00.0",
+      "frame": 4320,
+      "danger": 0.73,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 182.0,
+      "time_str": "03:02.0",
+      "frame": 4368,
+      "danger": 0.65,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 182.0,
+      "time_str": "03:02.0",
+      "frame": 4368,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 183.0,
+      "time_str": "03:03.0",
+      "frame": 4392,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 184.0,
+      "time_str": "03:04.0",
+      "frame": 4416,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 187.0,
+      "time_str": "03:07.0",
+      "frame": 4488,
+      "danger": 0.97,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 187.0,
+      "time_str": "03:07.0",
+      "frame": 4488,
+      "command": "STOP",
+      "reason": "All zones blocked"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 188.0,
+      "time_str": "03:08.0",
+      "frame": 4512,
+      "danger": 0.61,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 188.0,
+      "time_str": "03:08.0",
+      "frame": 4512,
+      "command": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.08)"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 189.0,
+      "time_str": "03:09.0",
+      "frame": 4536,
+      "danger": 0.65,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 189.0,
+      "time_str": "03:09.0",
+      "frame": 4536,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 190.0,
+      "time_str": "03:10.0",
+      "frame": 4560,
+      "danger": 0.65,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 190.0,
+      "time_str": "03:10.0",
+      "frame": 4560,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 191.0,
+      "time_str": "03:11.0",
+      "frame": 4584,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 192.0,
+      "time_str": "03:12.0",
+      "frame": 4608,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 193.0,
+      "time_str": "03:13.0",
+      "frame": 4632,
+      "command": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.06)"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 194.0,
+      "time_str": "03:14.0",
+      "frame": 4656,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 195.0,
+      "time_str": "03:15.0",
+      "frame": 4680,
+      "command": "STOP",
+      "reason": "(pending) Center blocked -> LEFT detour (urgency=0.06)"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 196.0,
+      "time_str": "03:16.0",
+      "frame": 4704,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 197.0,
+      "time_str": "03:17.0",
+      "frame": 4728,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 202.0,
+      "time_str": "03:22.0",
+      "frame": 4848,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 203.0,
+      "time_str": "03:23.0",
+      "frame": 4872,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 204.0,
+      "time_str": "03:24.0",
+      "frame": 4896,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 205.0,
+      "time_str": "03:25.0",
+      "frame": 4920,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 206.0,
+      "time_str": "03:26.0",
+      "frame": 4944,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "high_danger",
+      "time_sec": 207.0,
+      "time_str": "03:27.0",
+      "frame": 4968,
+      "danger": 1.0,
+      "closest_zone": "NONE"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 210.0,
+      "time_str": "03:30.0",
+      "frame": 5040,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 211.0,
+      "time_str": "03:31.0",
+      "frame": 5064,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 212.0,
+      "time_str": "03:32.0",
+      "frame": 5088,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 213.0,
+      "time_str": "03:33.0",
+      "frame": 5112,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 214.0,
+      "time_str": "03:34.0",
+      "frame": 5136,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 215.0,
+      "time_str": "03:35.0",
+      "frame": 5160,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 216.0,
+      "time_str": "03:36.0",
+      "frame": 5184,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 217.0,
+      "time_str": "03:37.0",
+      "frame": 5208,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 218.0,
+      "time_str": "03:38.0",
+      "frame": 5232,
+      "command": "STOP",
+      "reason": "Center blocked, no detour"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 219.0,
+      "time_str": "03:39.0",
+      "frame": 5256,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    },
+    {
+      "type": "speed_change",
+      "time_sec": 220.0,
+      "time_str": "03:40.0",
+      "frame": 5280,
+      "command": "STOP",
+      "reason": "(pending) Center clear"
+    }
+  ]
+}

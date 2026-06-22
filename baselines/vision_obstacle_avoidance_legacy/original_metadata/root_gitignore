@@ -1,0 +1,44 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime data
+logs/
+videos/
+*.wav
+*.avi
+*.mp4
+
+# Temp files
+.tmp/
+
+# PID files
+*.pid
+
+# MCP / Claude (local settings only, .mcp.json IS tracked)
+.claude/
+
+# Large data / models
+*.pth
+*.onnx
+*.engine
+*.trt
+*.pt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Image cache
+*.jpg
+*.png
+!docs/**/*.jpg
+!docs/**/*.png

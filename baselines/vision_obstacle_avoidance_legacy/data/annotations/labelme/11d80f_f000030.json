@@ -1,0 +1,186 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "barrier_left",
+      "points": [
+        [
+          7.79411764705867,
+          718.6764705882352
+        ],
+        [
+          409.2647058823527,
+          668.6764705882352
+        ],
+        [
+          0.0,
+          859.570255664103
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          81.32352941176464,
+          883.3823529411765
+        ],
+        [
+          0.0,
+          785.7941176470589
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          410.73529411764684,
+          676.0294117647059
+        ],
+        [
+          0.0,
+          889.2682926829267
+        ],
+        [
+          0.0,
+          859.8529411764705
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          416.6176470588234,
+          678.970588235294
+        ],
+        [
+          720.0,
+          898.56162464986
+        ],
+        [
+          718.0882352941176,
+          826.0294117647059
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ego_passable",
+      "points": [
+        [
+          410.73529411764684,
+          671.6176470588235
+        ],
+        [
+          720.0,
+          898.1213753106878
+        ],
+        [
+          720.0,
+          1280.0
+        ],
+        [
+          720.0,
+          1280.0
+        ],
+        [
+          3.38235294117635,
+          1278.9705882352941
+        ],
+        [
+          0.4411764705881751,
+          892.2058823529411
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "opposite_passable",
+      "points": [
+        [
+          410.73529411764684,
+          668.6764705882352
+        ],
+        [
+          720.0,
+          827.6443100604729
+        ],
+        [
+          720.0,
+          736.3235294117646
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          618.0882352941176,
+          696.6176470588235
+        ],
+        [
+          644.5588235294117,
+          730.4411764705882
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          312.205882352941,
+          699.5588235294117
+        ],
+        [
+          337.205882352941,
+          726.0294117647059
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "../images/11d80f_f000030.jpg",
+  "imageData": null,
+  "imageHeight": 1280,
+  "imageWidth": 720
+}

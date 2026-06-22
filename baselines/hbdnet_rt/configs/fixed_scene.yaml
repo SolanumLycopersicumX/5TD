@@ -1,0 +1,41 @@
+# HBD-Net-RT 固定场景配置
+# 隧道施工半幅通行纯视觉避障
+
+scene:
+  name: "tunnel_half_lane"
+  description: "隧道半幅通行固定场景"
+
+input:
+  camera:
+    width: 1280
+    height: 720
+    fps: 30
+  model_input:
+    width: 640
+    height: 384
+    letterbox: true
+    letterbox_color: 128
+
+output:
+  detection:
+    classes:
+      - construction_vehicle
+      - worker
+      - suspended_object
+      - falling_debris
+    score_threshold: 0.3
+    nms_iou_threshold: 0.45
+    max_detections: 50
+  segmentation:
+    ego_passable_threshold: 0.5
+    hard_boundary_threshold: 0.5
+    edge_threshold: 0.5
+  bev_grid:
+    range_x_min: -2.5
+    range_x_max: 2.5
+    range_y_min: 0.0
+    range_y_max: 8.0
+    resolution: 0.10
+  control:
+    max_speed_ms: 1.5
+    max_steering_rad: 0.5

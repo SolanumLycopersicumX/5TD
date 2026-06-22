@@ -1,0 +1,6 @@
+rgb_only_navigation:
+  enabled: true
+  baseline: hbdnet_rt
+  require_hard_boundary_detection: true
+  require_person_stop: true
+  require_trench_margin_validation: true

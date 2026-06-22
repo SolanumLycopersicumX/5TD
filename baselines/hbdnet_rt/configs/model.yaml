@@ -1,0 +1,39 @@
+# HBD-Net-RT 感知模型配置
+
+model:
+  name: "HBD-Net-RT"
+  version: "1.0"
+  input_shape: [3, 384, 640]
+
+backbone:
+  type: "placeholder"  # 后续替换为 mobilenet_v4_small / repvgg_lite
+  pretrained: false
+  output_channels: [64, 128, 256]
+
+neck:
+  type: "lightweight_fpn"
+  fpn_channels: 128
+
+heads:
+  detection:
+    type: "anchor_free"
+    num_classes: 4
+  ego_passable_seg:
+    type: "lightweight_seg"
+    num_classes: 1
+  hard_boundary_seg:
+    type: "lightweight_seg"
+    num_classes: 4
+  edge:
+    type: "lightweight_seg"
+    num_classes: 1
+    enabled: true
+
+training:
+  image_size: [640, 384]
+  batch_size: 8
+  loss_weights:
+    detection: 1.0
+    passable_seg: 0.8
+    boundary_seg: 1.0
+    edge: 0.5

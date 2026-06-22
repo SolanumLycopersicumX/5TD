@@ -1,0 +1,4 @@
+planner:
+  baseline: dwa_or_mpc
+  execute_learning_outputs_directly: false
+  candidate_trajectory_safety_check: true

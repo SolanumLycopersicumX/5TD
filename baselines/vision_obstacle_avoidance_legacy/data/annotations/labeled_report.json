@@ -1,0 +1,35 @@
+{
+  "stats": {
+    "total": 92,
+    "lane_detected": 92,
+    "obstacles_found": 23,
+    "debris_found": 0,
+    "large_debris_found": 0
+  },
+  "per_video": {
+    "11d80f": {
+      "frames": 19,
+      "lane_ok": 19,
+      "obstacles": 7
+    },
+    "335344": {
+      "frames": 1,
+      "lane_ok": 1
+    },
+    "8bfe84": {
+      "frames": 19,
+      "lane_ok": 19,
+      "obstacles": 7
+    },
+    "b0c37d": {
+      "frames": 12,
+      "lane_ok": 12,
+      "obstacles": 7
+    },
+    "ccb5ac": {
+      "frames": 41,
+      "lane_ok": 41,
+      "obstacles": 2
+    }
+  }
+}

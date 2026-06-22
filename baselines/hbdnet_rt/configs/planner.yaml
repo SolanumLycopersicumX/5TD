@@ -1,0 +1,36 @@
+# DWA 路径规划配置
+
+dwa:
+  # 速度采样
+  min_velocity_ms: 0.2
+  max_velocity_ms: 1.5
+  velocity_samples: 5
+
+  # 转角采样
+  min_steering_rad: -0.5
+  max_steering_rad: 0.5
+  steering_samples: 9
+
+  # 前向模拟
+  predict_time_s: 2.0
+  dt_s: 0.1
+
+  # 车辆参数 (待实测)
+  vehicle_width_m: 2.0
+  vehicle_length_m: 3.0
+  wheelbase_m: 2.0
+  safety_margin_m: 0.25
+  inner_wheel_offset_m: 0.5
+
+  # 代价函数权重
+  cost_weights:
+    clearance: 0.35
+    risk_cost: 0.25
+    smoothness: 0.25
+    progress: 0.15
+
+  # 安全阈值
+  min_clearance_m: 0.30
+  hard_boundary_risk_threshold: 0.99
+  risk_slow_threshold: 0.5
+  risk_stop_threshold: 0.85

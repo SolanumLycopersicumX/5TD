@@ -1,0 +1,14 @@
+sensors:
+  rgb_front:
+    enabled: true
+    role: primary_rgb_perception
+  lidar_front:
+    enabled: false
+    role: enhanced_geometry
+  right_distance:
+    enabled: false
+    role: trench_margin_monitoring
+  imu:
+    enabled: false
+  wheel_encoder:
+    enabled: false

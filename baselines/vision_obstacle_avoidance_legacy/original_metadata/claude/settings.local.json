@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 list *)",
+      "Bash(systemctl list-units *)",
+      "Bash(pip list *)",
+      "Read(//usr/share/applications/**)",
+      "Read(//etc/systemd/system/**)",
+      "Read(//home/nickwang/.local/share/applications/**)",
+      "Bash(snap list *)",
+      "Bash(flatpak list *)",
+      "Bash(/home/nickwang/Projects/vision_obstacle_avoidance/vision_obstacle_avoidance/.venv/bin/python3 *)"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+rl_experiment:
+  enabled: false
+  observation: semantic_risk_costmap
+  action: candidate_waypoint_or_velocity
+  safety_filter_required: true

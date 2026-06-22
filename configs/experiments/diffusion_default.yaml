@@ -1,0 +1,5 @@
+diffusion_experiment:
+  enabled: false
+  condition: risk_costmap_and_history
+  output: candidate_trajectories
+  safety_filter_required: true

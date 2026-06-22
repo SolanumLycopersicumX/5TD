@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Voice Daemon (Hotkey)
+Comment=Background voice dictation via Ctrl+Alt+Space hotkey
+Exec=__PROJECT_DIR__/.venv/bin/python3 __PROJECT_DIR__/voice_daemon.py
+Path=__PROJECT_DIR__
+Terminal=true
+Type=Application
+Categories=Utility;TextTools;
+StartupNotify=false

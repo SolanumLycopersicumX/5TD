@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 3c51aa26fb0b5b3ed9f8c23ea59d466b56043738 nickwang <nickwang@users.noreply.github.com> 1780480559 +0800	commit (initial): Initial commit: HBD-Net-RT + vision_obstacle_avoidance dual-stack project
+3c51aa26fb0b5b3ed9f8c23ea59d466b56043738 bd3053a473956c9a42f9c09bf8ecb6e18a5b153a nickwang <nickwang@users.noreply.github.com> 1780480676 +0800	commit: Replace brave-search with ddg-mcp-search (free, no API key required)

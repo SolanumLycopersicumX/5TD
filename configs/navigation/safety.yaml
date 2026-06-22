@@ -1,0 +1,5 @@
+safety:
+  emergency_stop_enabled: true
+  human_stop_required: true
+  trench_keepout_required: true
+  manual_override_required: true

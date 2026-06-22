@@ -1,0 +1,29 @@
+[Unit]
+Description=Vision Obstacle Avoidance — Main Pipeline
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=__PROJECT_DIR__/.venv/bin/python3 __PROJECT_DIR__/main.py
+WorkingDirectory=__PROJECT_DIR__
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# systemd watchdog: 主循环卡死 10 秒后自动重启进程
+# 应用层每 5 秒喂狗一次（WatchdogSec 的一半）
+WatchdogSec=10
+
+# 环境（无头模式，不依赖 X11）
+Environment=PYTHONUNBUFFERED=1
+Environment=OPENCV_OPENCL_RUNTIME=
+Environment=OPENCV_IO_ENABLE_OPENEXR=0
+
+# 安全加固
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

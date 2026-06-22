@@ -1,0 +1,23 @@
+[Unit]
+Description=Vision Obstacle Avoidance — Voice GUI
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=__PROJECT_DIR__/.venv/bin/python3 __PROJECT_DIR__/voice_gui.py
+Restart=on-failure
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+# Desktop environment
+Environment=DISPLAY=:0
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/%U
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
+Environment=HF_ENDPOINT=https://hf-mirror.com
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

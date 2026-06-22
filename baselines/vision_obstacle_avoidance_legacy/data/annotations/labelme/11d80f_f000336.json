@@ -1,0 +1,112 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          88.67647058823513,
+          883.3823529411765
+        ],
+        [
+          0.0,
+          496.69479267116725
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          198.97058823529403,
+          661.3235294117646
+        ],
+        [
+          246.02941176470574,
+          712.7941176470588
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          273.9705882352939,
+          653.970588235294
+        ],
+        [
+          290.1470588235293,
+          671.6176470588235
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "barrier_left",
+      "points": [
+        [
+          62.2058823529411,
+          659.8529411764706
+        ],
+        [
+          331.32352941176464,
+          646.6176470588235
+        ],
+        [
+          88.67647058823513,
+          752.5
+        ],
+        [
+          87.2058823529411,
+          717.2058823529411
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          332.7941176470588,
+          645.1470588235294
+        ],
+        [
+          720.0,
+          891.2890881259567
+        ],
+        [
+          720.0,
+          803.970588235294
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "../images/11d80f_f000336.jpg",
+  "imageData": null,
+  "imageHeight": 1280,
+  "imageWidth": 720
+}

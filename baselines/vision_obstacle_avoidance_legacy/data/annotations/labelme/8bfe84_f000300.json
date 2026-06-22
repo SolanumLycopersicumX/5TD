@@ -1,0 +1,222 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          62.2058823529411,
+          683.3823529411765
+        ],
+        [
+          141.61764705882342,
+          764.2647058823529
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "barrier_left",
+      "points": [
+        [
+          248.97058823529403,
+          628.970588235294
+        ],
+        [
+          6.323529411764639,
+          653.970588235294
+        ],
+        [
+          1.9117647058822058,
+          808.3823529411765
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          253.38235294117635,
+          626.0294117647059
+        ],
+        [
+          0.4411764705881751,
+          809.8529411764705
+        ],
+        [
+          1.9117647058822058,
+          839.2647058823529
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          250.44117647058806,
+          624.5588235294117
+        ],
+        [
+          720.0,
+          834.5478626233103
+        ],
+        [
+          720.0,
+          774.5588235294117
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ego_passable",
+      "points": [
+        [
+          254.8529411764705,
+          626.0294117647059
+        ],
+        [
+          720.0,
+          838.7938393022825
+        ],
+        [
+          718.0964833113634,
+          1280.0
+        ],
+        [
+          0.4411764705881751,
+          1278.9705882352941
+        ],
+        [
+          0.4411764705881751,
+          842.2058823529411
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "opposite_passable",
+      "points": [
+        [
+          260.73529411764696,
+          620.1470588235294
+        ],
+        [
+          720.0,
+          774.2042069992555
+        ],
+        [
+          720.0,
+          701.0294117647059
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "barrier_right",
+      "points": [
+        [
+          719.5588235294117,
+          648.0882352941176
+        ],
+        [
+          265.1470588235293,
+          620.1470588235294
+        ],
+        [
+          720.0,
+          703.3518651362984
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          229.8529411764705,
+          637.7941176470588
+        ],
+        [
+          265.1470588235293,
+          664.2647058823529
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          478.38235294117635,
+          636.3235294117646
+        ],
+        [
+          513.6764705882351,
+          670.1470588235294
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          647.4999999999998,
+          636.3235294117646
+        ],
+        [
+          687.205882352941,
+          701.0294117647059
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "../images/8bfe84_f000300.jpg",
+  "imageData": null,
+  "imageHeight": 1280,
+  "imageWidth": 720
+}

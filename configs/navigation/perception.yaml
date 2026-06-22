@@ -1,0 +1,7 @@
+perception:
+  rgb:
+    enabled: true
+    tasks: [free_space, hard_boundary, obstacle, person]
+  lidar:
+    enabled: false
+    tasks: [occupancy, trench_margin]

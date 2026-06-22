@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=🎤 语音输入
+Name[en]=Voice Input
+Comment=快捷键唤出，录音后自动转写 + 加标点 + 复制到剪贴板
+Comment[en]=Voice dictation with auto punctuation and clipboard copy
+Exec=__PROJECT_DIR__/.venv/bin/python3 __PROJECT_DIR__/voice_gui.py
+Path=__PROJECT_DIR__
+Icon=audio-input-microphone
+Terminal=false
+Type=Application
+Categories=Utility;AudioVideo;
+StartupNotify=false
+Keywords=voice;speech;dictation;speech-to-text;语音;转写;录音;

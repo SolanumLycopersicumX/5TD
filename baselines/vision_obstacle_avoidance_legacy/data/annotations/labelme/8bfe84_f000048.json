@@ -1,0 +1,320 @@
+{
+  "version": "6.3.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          103.0,
+          763.0
+        ],
+        [
+          321.0,
+          927.0
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {
+        "cv_confidence": true
+      },
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          104.0,
+          576.0
+        ],
+        [
+          251.0,
+          708.0
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {
+        "cv_confidence": true
+      },
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          272.4999999999998,
+          734.8529411764705
+        ],
+        [
+          307.7941176470588,
+          773.0882352941176
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          334.2647058823527,
+          701.0294117647059
+        ],
+        [
+          350.44117647058806,
+          723.0882352941176
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          235.73529411764696,
+          911.3235294117646
+        ],
+        [
+          291.6176470588234,
+          931.9117647058823
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          253.38235294117635,
+          876.0294117647059
+        ],
+        [
+          310.73529411764684,
+          899.5588235294117
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          275.44117647058806,
+          843.6764705882352
+        ],
+        [
+          319.5588235294117,
+          859.8529411764705
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          660.7352941176468,
+          702.5
+        ],
+        [
+          682.7941176470586,
+          745.1470588235294
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "obstacle",
+      "points": [
+        [
+          544.5588235294117,
+          703.970588235294
+        ],
+        [
+          562.205882352941,
+          721.6176470588235
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "barrier_left",
+      "points": [
+        [
+          3.38235294117635,
+          765.7352941176471
+        ],
+        [
+          3.38235294117635,
+          995.1470588235294
+        ],
+        [
+          365.1470588235293,
+          692.2058823529411
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          363.67647058823513,
+          701.0294117647059
+        ],
+        [
+          0.0,
+          1023.8105362626977
+        ],
+        [
+          1.9117647058822058,
+          1076.0294117647059
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ditch",
+      "points": [
+        [
+          394.5588235294117,
+          701.0294117647059
+        ],
+        [
+          720.0,
+          847.624536301007
+        ],
+        [
+          719.5588235294117,
+          803.970588235294
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "opposite_passable",
+      "points": [
+        [
+          398.9705882352939,
+          693.6764705882352
+        ],
+        [
+          720.0,
+          804.0303308823529
+        ],
+        [
+          720.0,
+          746.6176470588235
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "barrier_right",
+      "points": [
+        [
+          406.32352941176464,
+          692.2058823529411
+        ],
+        [
+          719.5588235294117,
+          705.4411764705882
+        ],
+        [
+          719.5588235294117,
+          752.5
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "ego_passable",
+      "points": [
+        [
+          368.08823529411757,
+          705.4411764705882
+        ],
+        [
+          396.02941176470586,
+          703.970588235294
+        ],
+        [
+          719.5588235294117,
+          848.0882352941176
+        ],
+        [
+          719.5588235294117,
+          1280.0
+        ],
+        [
+          3.38235294117635,
+          1280.0
+        ],
+        [
+          1.9117647058822058,
+          1073.0882352941176
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "../images/8bfe84_f000048.jpg",
+  "imageData": null,
+  "imageHeight": 1280,
+  "imageWidth": 720
+}

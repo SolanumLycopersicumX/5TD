@@ -1,0 +1,27 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime data
+logs/
+videos/
+*.wav
+*.avi
+
+# Temp files
+.tmp/
+
+# PID files (runtime state in /tmp)
+*.pid
+
+# OS
+.DS_Store
+Thumbs.db

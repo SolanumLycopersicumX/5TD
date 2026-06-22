@@ -1,0 +1,44 @@
+# 安全状态机配置
+
+safety:
+  # 状态定义
+  states:
+    - S0_NORMAL
+    - S1_CAUTIOUS
+    - S2_SLOWDOWN
+    - S3_STOP
+    - S4_MANUAL_TAKEOVER
+
+  # 置信度阈值
+  confidence:
+    normal_min: 0.5       # >= 0.5: S0
+    cautious_min: 0.3     # >= 0.3: S1
+    slowdown_min: 0.1     # >= 0.1: S2
+                           # < 0.1: S3
+
+  # 风险阈值
+  risk:
+    cautious_threshold: 0.3
+    slowdown_threshold: 0.6
+    stop_threshold: 0.9
+
+  # 距离阈值 (米)
+  distance:
+    hard_boundary_cautious_m: 1.0
+    worker_stop_m: 2.0
+    worker_emergency_m: 1.0
+
+  # 降态恢复 (帧数)
+  recovery_frames: 5
+
+  # 紧急处理 (帧数)
+  consecutive_stop_for_takeover: 10
+  consecutive_anomaly_for_takeover: 30
+
+  # 速度限制 (占最大速度比例)
+  speed_limits:
+    S0_NORMAL: 1.0
+    S1_CAUTIOUS: 0.5
+    S2_SLOWDOWN: 0.25
+    S3_STOP: 0.0
+    S4_MANUAL_TAKEOVER: 0.0

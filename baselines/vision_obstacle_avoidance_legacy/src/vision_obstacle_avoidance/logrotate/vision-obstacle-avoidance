@@ -1,0 +1,17 @@
+# vision_obstacle_avoidance logrotate 配置
+# 安装: sudo cp logrotate/vision-obstacle-avoidance /etc/logrotate.d/
+
+__PROJECT_DIR__/logs/*.csv
+__PROJECT_DIR__/videos/*.avi
+{
+    rotate 7
+    daily
+    maxsize 500M
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    dateext
+    dateformat -%Y%m%d
+}

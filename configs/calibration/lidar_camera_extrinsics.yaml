@@ -1,0 +1,6 @@
+lidar_camera_extrinsics:
+  status: uncalibrated
+  parent_frame: lidar
+  child_frame: camera
+  translation_xyz_m: [0.0, 0.0, 0.0]
+  rotation_rpy_rad: [0.0, 0.0, 0.0]
