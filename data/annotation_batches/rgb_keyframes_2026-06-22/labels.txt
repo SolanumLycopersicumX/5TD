@@ -1,0 +1,9 @@
+ego_passable
+ditch
+left_barrier
+right_barrier
+tunnel_wall
+worker
+construction_vehicle
+suspended_object
+debris

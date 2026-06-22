@@ -158,3 +158,21 @@ Verification:
 Next Actions:
 
 - Push the cleaned history and verify GitHub receives both normal Git objects and LFS assets.
+
+## 2026-06-22 - GitHub Upload Completed
+
+Scope:
+
+- Successfully pushed the cleaned `main` branch to `https://github.com/SolanumLycopersicumX/5TD.git`.
+- Uploaded all tracked Git LFS assets, including the original archive, model checkpoint, videos, and database files.
+- Preserved the legacy settings file with token values redacted instead of excluding it from Git.
+
+Verification:
+
+- `git push -u origin main` completed successfully after rebuilding local unpublished history on top of the remote initial commit.
+- GitHub accepted the push after the hidden settings token values were replaced with placeholders.
+- `git lfs ls-files` still lists 10 LFS-managed assets.
+
+Next Actions:
+
+- Start the next engineering phase: run the RGB-only baseline environment and prepare the first perception/navigation demo.
