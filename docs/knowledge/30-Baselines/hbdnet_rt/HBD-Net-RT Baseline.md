@@ -1,5 +1,5 @@
 ---
-title: HBD-Net-RT Baseline
+title: HBD-Net-RT 基线
 type: baseline
 status: active
 route: rgb-only
@@ -14,15 +14,15 @@ tags:
   - #status/active
 ---
 
-# HBD-Net-RT Baseline
+# HBD-Net-RT 基线
 
-HBD-Net-RT is the active RGB-only engineering baseline for the near-term MVP. It provides a runnable chain for perception, mapping, planning, safety-state handling, and control-command output.
+HBD-Net-RT 是近期 MVP 的活跃 RGB-only 工程基线。它提供可运行的感知、映射、规划、安全状态处理和控制命令输出链路。
 
-## Scope
+## 范围
 
-It targets a fixed post-civil tunnel half-lane scenario with single-camera RGB input. It does not currently claim multi-tunnel generalization, multisensor fusion, ROS 2 integration, or real chassis control.
+它面向固定的后土建隧道半幅通行场景，输入为单目 RGB。当前不声称多隧道泛化、多传感器融合、ROS 2 集成或真实底盘控制。
 
-## Pipeline
+## 管线
 
 - [[Perception 模块]]
 - [[Mapping 模块]]
@@ -30,14 +30,14 @@ It targets a fixed post-civil tunnel half-lane scenario with single-camera RGB i
 - [[SafetyStateMachine]]
 - [[ControlCommand]]
 
-## Operating Notes
+## 运行状态
 
-- Current implementation is an engineering skeleton with placeholder model pieces.
-- Reported benchmark target is end-to-end latency below 100 ms, with current simulated P95 around 37 ms in the baseline docs.
-- The main blocker is tunnel annotation data and real training/validation.
+- 当前实现是工程骨架，模型部分仍包含 placeholder。
+- 基线文档记录的目标是端到端延迟低于 100 ms，当前模拟 P95 约 37 ms。
+- 主要阻塞是隧道标注数据以及真实训练/验证。
 
-## Sources
+## 来源
 
 - [HBD-Net-RT README](../../../../baselines/hbdnet_rt/README.md)
-- [Engineering notes](../../../../baselines/hbdnet_rt/docs/engineering_notes.md)
-- [Latency budget](../../../../baselines/hbdnet_rt/docs/latency_budget.md)
+- [工程笔记](../../../../baselines/hbdnet_rt/docs/engineering_notes.md)
+- [延迟预算](../../../../baselines/hbdnet_rt/docs/latency_budget.md)

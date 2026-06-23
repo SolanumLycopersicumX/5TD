@@ -14,29 +14,29 @@ tags:
 
 # Git LFS 环境注意
 
-The repository tracks large assets with Git LFS. Local machines need Git LFS installed to handle large archives, videos, model checkpoints, and databases normally.
+仓库使用 Git LFS 跟踪大型资产。本地机器需要安装 Git LFS 才能正常处理大型压缩包、视频、模型权重和数据库。
 
-## Commands
+## 命令
 
 ```bash
 git lfs install
 git lfs pull
 ```
 
-## Local Caveat
+## 本机注意
 
-On this machine, plain `git status` may fail when `git-lfs` is unavailable. A read-only workaround for status is:
+如果本机没有 `git-lfs`，普通 `git status` 可能失败。只读查看状态时可以使用：
 
 ```bash
 git -c filter.lfs.process= -c filter.lfs.required=false status --short
 ```
 
-## Related
+## 相关
 
 - [[大资产与 Git LFS]]
-- [[Legacy Pure Vision Baseline]]
+- [[Legacy Pure Vision Baseline|Legacy 纯视觉基线]]
 
-## Source
+## 来源
 
-- [Repository README](../../../README.md)
-- [Progress log](../../../docs/progress/LOG.md)
+- [仓库 README](../../../README.md)
+- [项目进展日志](../../../docs/progress/LOG.md)

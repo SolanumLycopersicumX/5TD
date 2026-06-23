@@ -15,29 +15,29 @@ tags:
 
 # ControlCommand
 
-`ControlCommand` is the final baseline output format for speed, steering, braking, safety state, reason, and debug data.
+`ControlCommand` 是基线最终输出格式，包含速度、转角、刹车、安全状态、原因和调试信息。
 
-## Role
+## 作用
 
-It combines [[DWAPlanner]] output with [[SafetyStateMachine]] output. If the safety state is STOP or TAKEOVER, speed and steering are forced to zero and braking is enabled.
+它把 [[DWAPlanner]] 输出和 [[SafetyStateMachine]] 输出合并。如果安全状态是 STOP 或 TAKEOVER，则速度和转角强制为零，并启用刹车。
 
-## Fields
+## 字段
 
-- Timestamp.
-- Target speed.
-- Target steering.
-- Brake flag.
-- Safety state.
-- Reason.
-- Debug payload.
+- 时间戳。
+- 目标速度。
+- 目标转角。
+- 刹车标志。
+- 安全状态。
+- 原因。
+- 调试负载。
 
-## Related
+## 相关
 
 - [[端到端运行流程]]
 - [[Safety Filter]]
 - [[部署边界]]
 
-## Source
+## 来源
 
-- [Module interfaces](../../../../baselines/hbdnet_rt/docs/module_interfaces.md)
-- [File guide](../../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)
+- [模块接口](../../../../baselines/hbdnet_rt/docs/module_interfaces.md)
+- [文件导读](../../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)

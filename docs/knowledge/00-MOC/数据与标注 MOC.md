@@ -13,22 +13,22 @@ tags:
 
 # 数据与标注 MOC
 
-This map connects data assets, annotation batches, and the training loop.
+这张地图连接数据资产、标注批次和训练闭环。
 
-## Active Data Loop
+## 活跃数据闭环
 
 - [[RGB 标注与训练闭环]]
 - [[rgb_keyframes_2026-06-22]]
 - [[大资产与 Git LFS]]
 
-## Engineering Consumers
+## 工程消费者
 
 - [[Perception 模块]]
-- [[HBD-Net-RT Baseline]]
+- [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]
 - [[测试矩阵]]
 
-## Source Anchors
+## 源文件锚点
 
-- [Data README](../../../data/README.md)
-- [Annotation batch README](../../../data/annotation_batches/rgb_keyframes_2026-06-22/README.md)
-- [Annotation rules](../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)
+- [数据目录 README](../../../data/README.md)
+- [标注批次 README](../../../data/annotation_batches/rgb_keyframes_2026-06-22/README.md)
+- [标注规则](../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)

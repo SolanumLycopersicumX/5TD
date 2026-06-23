@@ -1,5 +1,5 @@
 ---
-title: Legacy Pure Vision Baseline
+title: Legacy 纯视觉基线
 type: legacy
 status: active
 route: legacy
@@ -12,21 +12,21 @@ tags:
   - #legacy/reference
 ---
 
-# Legacy Pure Vision Baseline
+# Legacy 纯视觉基线
 
-The legacy pure-vision project is preserved as a reference baseline and asset source, not as the current active engineering route.
+旧纯视觉项目被保留为参考基线和资产来源，不是当前活跃工程路线。
 
-## Use Cases
+## 使用场景
 
-- Compare historical pure-vision behavior with [[HBD-Net-RT Baseline]].
-- Inspect older tools and project assumptions.
-- Migrate useful utilities only after reviewing interfaces and safety implications.
+- 与 [[HBD-Net-RT Baseline|HBD-Net-RT 基线]] 对比历史纯视觉行为。
+- 查看旧工具和旧项目假设。
+- 迁移有价值工具前，先审查接口和安全影响。
 
-## Boundary
+## 边界
 
-Do not route new work through legacy code by default. New runnable engineering should target [[HBD-Net-RT Baseline]] or the future stable package described in [[基线模块晋升到 tunnel_nav]].
+新工作默认不要走 legacy 代码。新的可运行工程应落到 [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]，或通过 [[基线模块晋升到 tunnel_nav]] 进入未来稳定包。
 
-## Source
+## 来源
 
-- [Repository README](../../../../README.md)
-- [Legacy notes](../../../../docs/legacy/old_code_notes.md)
+- [仓库 README](../../../../README.md)
+- [Legacy 笔记](../../../../docs/legacy/old_code_notes.md)

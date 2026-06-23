@@ -16,21 +16,21 @@ tags:
 
 # Semantic Risk Costmap
 
-A semantic risk costmap represents traversability and obstacle risk using semantic perception signals, not only geometry.
+Semantic Risk Costmap 是融合几何占用和 RGB 语义风险的局部代价地图。
 
-## In 5TD
+## 在 5TD 中
 
-[[Perception 模块]] supplies semantic cues such as workers, vehicles, debris, passable area, and [[Hard Boundary]]. [[Mapping 模块]] turns those cues into risk values used by [[DWAPlanner]] and [[SafetyStateMachine]].
+[[Perception 模块]] 提供工人、车辆、碎石、可通行区域和 [[Hard Boundary]] 等语义线索。[[Mapping 模块]] 把这些线索转换成风险值，供 [[DWAPlanner]] 和 [[SafetyStateMachine]] 使用。
 
-## Related
+## 相关
 
 - [[Costmap 与 Risk Grid]]
-- [[Transformer Fusion Research]]
-- [[RGB Vision Research]]
+- [[Transformer Fusion Research|Transformer 融合研究]]
+- [[RGB Vision Research|RGB 视觉研究]]
 
-## Source
+## 来源
 
-- [Module interfaces](../../../baselines/hbdnet_rt/docs/module_interfaces.md)
+- [模块接口](../../../baselines/hbdnet_rt/docs/module_interfaces.md)
 - [Transformer fusion README](../../../research/transformer_fusion/README.md)
-- [Fusion config](../../../configs/navigation/fusion.yaml)
-- [LiDAR-RGB Transformer project evaluation](../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)
+- [融合配置](../../../configs/navigation/fusion.yaml)
+- [LiDAR-RGB Transformer 项目评估](../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)

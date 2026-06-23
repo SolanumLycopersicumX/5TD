@@ -1,5 +1,5 @@
 ---
-title: RGB Vision Research
+title: RGB 视觉研究
 type: research
 status: active
 route: rgb-only
@@ -15,29 +15,29 @@ tags:
   - #module/perception
 ---
 
-# RGB Vision Research
+# RGB 视觉研究
 
-RGB Vision Research covers pure-RGB improvements beyond the current HBD-Net-RT baseline.
+RGB 视觉研究面向后土建阶段隧道的纯 RGB 感知增强，覆盖可通行区域、硬边界、沟边、障碍物和人员检测。
 
-## Focus
+## 重点
 
-- Free-space segmentation.
-- [[Hard Boundary]] and trench-edge detection.
-- Obstacle, person, and engineering-vehicle perception.
-- Temporal consistency and failure detection.
-- Comparison against [[HBD-Net-RT Baseline]].
+- 自由空间分割。
+- [[Hard Boundary]] 和沟边检测。
+- 障碍物、人员、工程车辆感知。
+- 时序一致性和失败检测。
+- 与 [[HBD-Net-RT Baseline|HBD-Net-RT 基线]] 对比。
 
-## Validation Trigger
+## 验证触发条件
 
-If RGB-only trench or right-boundary visibility is not reliable enough, the route should add right-side ToF, LiDAR, or fusion support rather than weakening [[Trench Keep-out]].
+如果 RGB-only 无法可靠看到沟边或右边界，应补充右侧 ToF、LiDAR 或融合支持，而不是放松 [[Trench Keep-out]]。
 
-## Safety Boundary
+## 安全边界
 
-Outputs should improve [[Perception 模块]] or [[Costmap 与 Risk Grid]]. They still need [[Safety Filter]] validation before affecting final motion.
+输出应改进 [[Perception 模块]] 或 [[Costmap 与 Risk Grid]]。影响最终运动前仍必须经过 [[Safety Filter]] 验证。
 
-## Source
+## 来源
 
 - [RGB vision README](../../../../research/rgb_vision/README.md)
-- [RGB pure-vision addendum](../../../../docs/project_evaluation/2026-06-22-rgb-vision-route-addendum.md)
-- [RGB-only navigation config](../../../../configs/navigation/rgb_only.yaml)
-- [Perception config](../../../../configs/navigation/perception.yaml)
+- [RGB 纯视觉路线补充说明](../../../../docs/project_evaluation/2026-06-22-rgb-vision-route-addendum.md)
+- [RGB-only 导航配置](../../../../configs/navigation/rgb_only.yaml)
+- [感知配置](../../../../configs/navigation/perception.yaml)

@@ -1,5 +1,5 @@
 ---
-title: Transformer Fusion Research
+title: Transformer 融合研究
 type: research
 status: active
 route: fusion
@@ -14,30 +14,30 @@ tags:
   - #risk/safety-critical
 ---
 
-# Transformer Fusion Research
+# Transformer 融合研究
 
-Transformer Fusion Research explores LiDAR-RGB fusion and temporal scene understanding.
+Transformer 融合研究探索 LiDAR-RGB 融合和时序场景理解。
 
-## Useful Outputs
+## 有价值的输出
 
-- Risk maps.
-- Traversability maps.
-- Semantic costmaps.
-- Candidate trajectories.
-- Temporal consistency signals.
+- 风险图。
+- 可通行图。
+- 语义 costmap。
+- 候选轨迹。
+- 时序一致性信号。
 
-## Safety Boundary
+## 安全边界
 
-Fusion does not replace [[Safety Filter]]. Its outputs should feed [[Costmap 与 Risk Grid]], [[DWAPlanner]], or [[SafetyStateMachine]], not direct motor control. The shared fusion config is part of the source trail for this route.
+融合模块不替代 [[Safety Filter]]。它的输出应进入 [[Costmap 与 Risk Grid]]、[[DWAPlanner]] 或 [[SafetyStateMachine]]，不能直接控制电机。共享 fusion 配置是这条路线的重要来源。
 
-## Related
+## 相关
 
 - [[双路线技术策略]]
 - [[Semantic Risk Costmap]]
 - [[Trench Keep-out]]
 
-## Source
+## 来源
 
 - [Transformer fusion README](../../../../research/transformer_fusion/README.md)
-- [Fusion config](../../../../configs/navigation/fusion.yaml)
-- [LiDAR-RGB Transformer project evaluation](../../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)
+- [融合配置](../../../../configs/navigation/fusion.yaml)
+- [LiDAR-RGB Transformer 项目评估](../../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)

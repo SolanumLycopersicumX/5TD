@@ -16,21 +16,21 @@ tags:
 
 # Hard Boundary
 
-A hard boundary is a non-crossable physical or safety boundary, such as trench edge, separation structure, or tunnel wall.
+Hard Boundary 是不可跨越的物理或安全边界，例如沟边、隔离结构或隧道墙根。
 
-## In 5TD
+## 在 5TD 中
 
-[[Perception 模块]] estimates hard-boundary masks. [[Mapping 模块]] converts them into high-risk or occupied cells, and [[DWAPlanner]] should reject trajectories crossing them.
+[[Perception 模块]] 估计 hard-boundary mask。[[Mapping 模块]] 把它们转成高风险或占用栅格，[[DWAPlanner]] 应拒绝穿越这些区域的轨迹。
 
-## Related
+## 相关
 
 - [[Trench Keep-out]]
 - [[Safety Filter]]
 - [[Semantic Risk Costmap]]
 
-## Source
+## 来源
 
 - [HBD-Net-RT README](../../../baselines/hbdnet_rt/README.md)
-- [Engineering notes](../../../baselines/hbdnet_rt/docs/engineering_notes.md)
-- [Training guide](../../../baselines/hbdnet_rt/docs/training_guide.md)
-- [Annotation rules](../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)
+- [工程笔记](../../../baselines/hbdnet_rt/docs/engineering_notes.md)
+- [训练指南](../../../baselines/hbdnet_rt/docs/training_guide.md)
+- [标注规则](../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)

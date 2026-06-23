@@ -15,23 +15,23 @@ tags:
 
 # rgb_keyframes_2026-06-22
 
-`rgb_keyframes_2026-06-22` is the current shared RGB annotation batch for tunnel keyframes.
+`rgb_keyframes_2026-06-22` 是当前共享的隧道 RGB 关键帧标注批次。
 
-## Contents
+## 内容
 
-- Batch README.
-- Label list.
-- Annotation rules.
-- 145 JPEG keyframes.
-- 10 JSON annotations currently present.
-- Image frames without objects are still useful negative samples when masks and hard boundaries are annotated.
+- 批次 README。
+- 标签列表。
+- 标注规则。
+- 145 张 JPEG 关键帧。
+- 当前存在 10 个 JSON 标注。
+- 无目标图像也是有效负样本，只要正确标注 mask 和硬边界。
 
-## Role
+## 作用
 
-This batch supports [[RGB 标注与训练闭环]] and should be treated as training/evaluation material for [[Perception 模块]]. Do not mark the ground across a ditch as ego-passable even if it looks flat.
+这个批次服务 [[RGB 标注与训练闭环]]，应作为 [[Perception 模块]] 的训练/评估材料。即使沟对面地面看起来平整，也不要标为 ego-passable。
 
-## Source
+## 来源
 
-- [Batch README](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/README.md)
-- [Labels](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/labels.txt)
-- [Annotation rules](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)
+- [批次 README](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/README.md)
+- [标签列表](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/labels.txt)
+- [标注规则](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)

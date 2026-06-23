@@ -16,21 +16,21 @@ tags:
 
 # DWA
 
-DWA means Dynamic Window Approach, a local planning method that samples feasible velocity and steering commands and scores simulated trajectories.
+DWA 是 Dynamic Window Approach，一种局部规划方法，通过采样可行速度和转角并评分模拟轨迹来选动作。
 
-## In 5TD
+## 在 5TD 中
 
-[[DWAPlanner]] uses risk-grid information from [[Mapping 模块]] to avoid collisions and choose a local command proposal.
+[[DWAPlanner]] 使用 [[Mapping 模块]] 输出的 risk grid 避免碰撞，并产生局部控制建议。
 
-## Related
+## 相关
 
 - [[DWAPlanner]]
 - [[Safety Filter]]
 - [[Costmap 与 Risk Grid]]
 
-## Source
+## 来源
 
-- [Module interfaces](../../../baselines/hbdnet_rt/docs/module_interfaces.md)
-- [File guide](../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)
-- [Planner config](../../../baselines/hbdnet_rt/configs/planner.yaml)
-- [DWA tests](../../../baselines/hbdnet_rt/tests/test_dwa.py)
+- [模块接口](../../../baselines/hbdnet_rt/docs/module_interfaces.md)
+- [文件导读](../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)
+- [规划配置](../../../baselines/hbdnet_rt/configs/planner.yaml)
+- [DWA 测试](../../../baselines/hbdnet_rt/tests/test_dwa.py)

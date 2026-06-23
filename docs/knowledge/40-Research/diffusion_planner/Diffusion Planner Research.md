@@ -1,5 +1,5 @@
 ---
-title: Diffusion Planner Research
+title: Diffusion 轨迹规划研究
 type: research
 status: active
 route: diffusion
@@ -15,23 +15,23 @@ tags:
   - #risk/safety-critical
 ---
 
-# Diffusion Planner Research
+# Diffusion 轨迹规划研究
 
-Diffusion Planner Research generates multiple local trajectory proposals around obstacles.
+Diffusion 轨迹规划研究用于围绕障碍物生成多条局部候选轨迹。
 
-## Contract
+## 合同边界
 
-Generated trajectories are proposals. They can be conditioned on risk costmaps or short history, but they must be checked against occupancy, risk, trench keep-out zones, vehicle limits, and human-safety constraints before selection.
+生成轨迹只是 proposal。它可以基于风险 costmap 或短历史进行条件生成，但最终必须检查占用、风险、沟边 keep-out、车辆限制和人员安全约束。
 
-## Related
+## 相关
 
 - [[DWAPlanner]]
 - [[Costmap 与 Risk Grid]]
 - [[Trench Keep-out]]
 - [[Safety Filter]]
 
-## Source
+## 来源
 
 - [Diffusion planner README](../../../../research/diffusion_planner/README.md)
-- [Diffusion experiment config](../../../../configs/experiments/diffusion_default.yaml)
-- [LiDAR-RGB Transformer project evaluation](../../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)
+- [Diffusion 实验配置](../../../../configs/experiments/diffusion_default.yaml)
+- [LiDAR-RGB Transformer 项目评估](../../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)

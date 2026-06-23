@@ -13,22 +13,22 @@ tags:
 
 # 安全与风险 MOC
 
-This map collects safety-critical constraints and failure-control concepts.
+这张地图集中整理安全关键约束和故障控制概念。
 
-## Architecture
+## 架构入口
 
 - [[安全约束导航]]
 - [[Costmap 与 Risk Grid]]
 - [[端到端运行流程]]
 
-## Baseline Modules
+## 基线模块
 
 - [[SafetyStateMachine]]
 - [[ControlCommand]]
 - [[DWAPlanner]]
 - [[Mapping 模块]]
 
-## Glossary
+## 术语
 
 - [[Safety Filter]]
 - [[Hard Boundary]]
@@ -36,8 +36,8 @@ This map collects safety-critical constraints and failure-control concepts.
 - [[Semantic Risk Costmap]]
 - [[DWA]]
 
-## Open Validation Questions
+## 待验证问题
 
-- Is the right-side trench edge reliably visible with RGB-only perception?
-- What minimum trench safety distance is required?
-- Is a right-side ToF, LiDAR, or distance sensor allowed as an independent safety channel?
+- RGB-only 感知是否能稳定看清右侧沟边？
+- 项目要求的最小沟边安全距离是多少？
+- 是否允许右侧 ToF、LiDAR 或测距传感器作为独立安全通道？

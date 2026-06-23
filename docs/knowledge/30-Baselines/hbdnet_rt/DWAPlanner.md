@@ -15,33 +15,33 @@ tags:
 
 # DWAPlanner
 
-`DWAPlanner` samples local velocity and steering candidates, simulates trajectories, rejects collisions, and selects a target speed and steering angle.
+`DWAPlanner` 采样局部速度和转角候选，模拟轨迹，拒绝碰撞轨迹，并选择目标速度和转角。
 
-## Inputs
+## 输入
 
-- Current pose and velocity.
-- Risk grid and grid extent from [[Mapping 模块]].
-- Optional goal direction.
+- 当前位姿和速度。
+- 来自 [[Mapping 模块]] 的 risk grid 和 grid extent。
+- 可选目标方向。
 
-## Outputs
+## 输出
 
-- Target speed.
-- Target steering.
-- Selected trajectory.
-- Planner status such as `OK` or `NO_PATH`.
-- Cost breakdown and candidate counts.
+- 目标速度。
+- 目标转角。
+- 被选中的轨迹。
+- `OK` 或 `NO_PATH` 等规划状态。
+- 代价拆分和候选数量。
 
-## Safety Role
+## 安全作用
 
-Trajectories crossing high-risk regions, especially [[Hard Boundary]] and [[Trench Keep-out]], are infeasible. `NO_PATH` becomes a safety signal for [[SafetyStateMachine]].
+穿越高风险区域，尤其是 [[Hard Boundary]] 和 [[Trench Keep-out]] 的轨迹不可行。`NO_PATH` 会成为 [[SafetyStateMachine]] 的安全输入。
 
-## Related
+## 相关
 
 - [[DWA]]
 - [[Costmap 与 Risk Grid]]
 - [[ControlCommand]]
 
-## Source
+## 来源
 
-- [Module interfaces](../../../../baselines/hbdnet_rt/docs/module_interfaces.md)
-- [File guide](../../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)
+- [模块接口](../../../../baselines/hbdnet_rt/docs/module_interfaces.md)
+- [文件导读](../../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)

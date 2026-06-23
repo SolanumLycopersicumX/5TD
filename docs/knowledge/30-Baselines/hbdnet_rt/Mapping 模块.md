@@ -14,28 +14,28 @@ tags:
 
 # Mapping 模块
 
-The mapping module projects perception outputs into ground-plane occupancy and risk grids.
+Mapping 模块把感知输出投影为地面坐标系下的占用栅格和风险栅格。
 
-## Responsibilities
+## 职责
 
-- Use calibration and BEV projection to map image masks to grid coordinates.
-- Create occupancy from hard boundaries, non-passable regions, and detection areas.
-- Create continuous risk for [[DWAPlanner]] and [[SafetyStateMachine]].
+- 使用标定和 BEV 投影把图像 mask 映射到栅格坐标。
+- 根据硬边界、不可通行区域和检测区域生成占用。
+- 为 [[DWAPlanner]] 和 [[SafetyStateMachine]] 生成连续风险。
 
-## Key Files
+## 关键文件
 
 - `mapping/calibration.py`
 - `mapping/bev_projector.py`
 - `mapping/occupancy_grid.py`
 - `mapping/risk_grid.py`
 
-## Related
+## 相关
 
 - [[BEV]]
 - [[Costmap 与 Risk Grid]]
 - [[Semantic Risk Costmap]]
 
-## Source
+## 来源
 
-- [Module interfaces](../../../../baselines/hbdnet_rt/docs/module_interfaces.md)
-- [File guide](../../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)
+- [模块接口](../../../../baselines/hbdnet_rt/docs/module_interfaces.md)
+- [文件导读](../../../../baselines/hbdnet_rt/docs/FILE_GUIDE.md)

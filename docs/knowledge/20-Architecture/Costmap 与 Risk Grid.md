@@ -15,31 +15,31 @@ tags:
 
 # Costmap 与 Risk Grid
 
-The costmap/risk-grid layer is the contract between perception and planning. It converts image-level results into ground-plane costs that the planner can reject or prefer.
+Costmap / Risk Grid 是感知和规划之间的契约层。它把图像级结果转换成地面坐标系下的代价，让规划器判断哪些轨迹应拒绝、哪些更优。
 
-## Inputs
+## 输入
 
-- Hard-boundary mask from [[Perception 模块]]
-- Ego-passable mask from [[Perception 模块]]
-- Detection boxes and classes
-- Confidence values
+- [[Perception 模块]] 输出的 hard-boundary mask。
+- [[Perception 模块]] 输出的 ego-passable mask。
+- 检测框和类别。
+- 置信度。
 
-## Outputs
+## 输出
 
-- Occupancy grid: binary blocked/free space used by [[Mapping 模块]].
-- Risk grid: continuous risk values used by [[DWAPlanner]] and [[SafetyStateMachine]].
+- 占用栅格：[[Mapping 模块]] 使用的二值 blocked/free 表达。
+- 风险栅格：[[DWAPlanner]] 和 [[SafetyStateMachine]] 使用的连续风险值。
 
-## Rule of Thumb
+## 规则要点
 
-[[Hard Boundary]] and space outside ego-passable regions should become high-risk or occupied space. Candidate trajectories crossing risk values near `1.0` should be treated as collision candidates.
+[[Hard Boundary]] 和 ego-passable 之外的区域应成为高风险或占用区域。穿越接近 `1.0` 风险值的候选轨迹应按碰撞处理。
 
-## Related
+## 相关
 
 - [[BEV]]
 - [[Semantic Risk Costmap]]
 - [[Trench Keep-out]]
 
-## Source
+## 来源
 
-- [Module interfaces](../../../baselines/hbdnet_rt/docs/module_interfaces.md)
-- [Engineering notes](../../../baselines/hbdnet_rt/docs/engineering_notes.md)
+- [模块接口](../../../baselines/hbdnet_rt/docs/module_interfaces.md)
+- [工程笔记](../../../baselines/hbdnet_rt/docs/engineering_notes.md)

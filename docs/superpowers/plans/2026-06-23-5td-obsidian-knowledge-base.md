@@ -1,18 +1,18 @@
-# 5TD Obsidian Knowledge Base Implementation Plan
+# 5TD Obsidian 知识库实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **给 agentic workers：** 必须使用 superpowers:subagent-driven-development（推荐）或 superpowers:executing-plans 按任务执行本计划。步骤使用 checkbox（`- [ ]`）语法便于追踪。
 
-**Goal:** Build a first-version Obsidian-style markdown knowledge vault for the 5TD repository under `docs/knowledge/`.
+**目标：** 在 `docs/knowledge/` 下构建第一版 Obsidian 风格 Markdown 知识库。
 
-**Architecture:** The vault is MOC-driven: `Home.md` and `00-MOC/` provide navigation, while focused notes summarize project decisions, architecture, baselines, research tracks, data workflows, commands, and glossary concepts. Notes use YAML frontmatter, Obsidian wiki links, and relative markdown links back to source files.
+**架构：** 采用 MOC 驱动结构：`Home.md` 和 `00-MOC/` 提供导航，领域笔记总结项目决策、架构、基线、研究路线、数据工作流、命令和术语。笔记使用 YAML frontmatter、Obsidian wiki links，并用相对路径链接回源文件。
 
-**Tech Stack:** Markdown, Obsidian wiki links, YAML frontmatter, shell-based verification with `find`, `rg`, and `git`.
+**技术栈：** Markdown、Obsidian wiki links、YAML frontmatter、基于 `find`、`rg`、`git` 的 shell 验证。
 
 ---
 
-## File Map
+## 文件地图
 
-Create:
+创建：
 
 - `docs/knowledge/Home.md`
 - `docs/knowledge/00-MOC/5TD 项目总览 MOC.md`
@@ -60,52 +60,45 @@ Create:
 - `docs/knowledge/90-Glossary/Semantic Risk Costmap.md`
 - `docs/knowledge/90-Glossary/MOC.md`
 
-Modify:
+修改：
 
-- No existing project files.
+- 不修改既有项目文件。
 
-## Task 1: Write Red Verification Command
+## 任务 1：先写红色验证命令
 
-**Files:**
-- Read: `docs/superpowers/specs/2026-06-23-5td-obsidian-knowledge-base-design.md`
-- Create: no files
-- Test: shell command only
+**文件：**
+- 读取：`docs/superpowers/specs/2026-06-23-5td-obsidian-knowledge-base-design.md`
+- 创建：无
+- 测试：仅 shell 命令
 
-- [ ] **Step 1: Run expected-file check before vault creation**
+- [ ] **步骤 1：创建 vault 前运行预期文件检查**
 
-Run:
+运行：
 
 ```bash
 missing=0
-for file in \
-  "docs/knowledge/Home.md" \
-  "docs/knowledge/00-MOC/5TD 项目总览 MOC.md" \
-  "docs/knowledge/30-Baselines/hbdnet_rt/HBD-Net-RT Baseline.md" \
-  "docs/knowledge/40-Research/transformer_fusion/Transformer Fusion Research.md" \
-  "docs/knowledge/50-Data/annotation_batches/RGB 标注与训练闭环.md" \
-  "docs/knowledge/80-Commands/HBD-Net-RT 快速开始.md" \
-  "docs/knowledge/90-Glossary/Safety Filter.md"
+for file in   "docs/knowledge/Home.md"   "docs/knowledge/00-MOC/5TD 项目总览 MOC.md"   "docs/knowledge/30-Baselines/hbdnet_rt/HBD-Net-RT Baseline.md"   "docs/knowledge/40-Research/transformer_fusion/Transformer Fusion Research.md"   "docs/knowledge/50-Data/annotation_batches/RGB 标注与训练闭环.md"   "docs/knowledge/80-Commands/HBD-Net-RT 快速开始.md"   "docs/knowledge/90-Glossary/Safety Filter.md"
 do
   test -f "$file" || { echo "missing: $file"; missing=1; }
 done
 exit "$missing"
 ```
 
-Expected before implementation: exit code `1` with missing file lines.
+实施前预期：退出码 `1`，并输出缺失文件。
 
-- [ ] **Step 2: Record red check result in the implementation notes**
+- [ ] **步骤 2：在实施记录中记录红色检查结果**
 
-Expected note: the command fails because the vault has not been created yet.
+预期记录：命令失败是因为 vault 尚未创建。
 
-## Task 2: Create Home and MOC Layer
+## 任务 2：创建首页和 MOC 层
 
-**Files:**
-- Create: `docs/knowledge/Home.md`
-- Create: all files under `docs/knowledge/00-MOC/`
+**文件：**
+- 创建：`docs/knowledge/Home.md`
+- 创建：`docs/knowledge/00-MOC/` 下所有文件
 
-- [ ] **Step 1: Create `Home.md`**
+- [ ] **步骤 1：创建 `Home.md`**
 
-Include links to all MOC files and core notes:
+包含所有 MOC 和核心笔记链接：
 
 ```markdown
 [[5TD 项目总览 MOC]]
@@ -117,71 +110,71 @@ Include links to all MOC files and core notes:
 [[Legacy 参考 MOC]]
 ```
 
-- [ ] **Step 2: Create MOC files**
+- [ ] **步骤 2：创建 MOC 文件**
 
-Each MOC must include frontmatter with `type: moc`, `status: active`, and `route: shared`, then short link groups to the notes in its domain.
+每个 MOC 都应包含 `type: moc`、`status: active`、`route: shared` 的 frontmatter，并用简短链接组连接领域笔记。
 
-- [ ] **Step 3: Verify MOC files exist**
+- [ ] **步骤 3：验证 MOC 文件存在**
 
-Run:
+运行：
 
 ```bash
 find docs/knowledge/00-MOC -maxdepth 1 -type f -name '*.md' | sort
 ```
 
-Expected: seven MOC files listed.
+预期：列出 7 个 MOC 文件。
 
-## Task 3: Create Decision and Architecture Notes
+## 任务 3：创建决策和架构笔记
 
-**Files:**
-- Create: `docs/knowledge/10-Decisions/当前优先级与路线决策.md`
-- Create: `docs/knowledge/10-Decisions/双路线技术策略.md`
-- Create: all files under `docs/knowledge/20-Architecture/`
+**文件：**
+- 创建：`docs/knowledge/10-Decisions/当前优先级与路线决策.md`
+- 创建：`docs/knowledge/10-Decisions/双路线技术策略.md`
+- 创建：`docs/knowledge/20-Architecture/` 下所有文件
 
-- [ ] **Step 1: Create decision notes**
+- [ ] **步骤 1：创建决策笔记**
 
-Summarize the current RGB-only MVP priority, LiDAR-RGB enhancement path, and safety-filter rule. Link to:
+总结当前 RGB-only MVP 优先级、LiDAR-RGB 增强路线和 safety-filter 规则。链接到：
 
 ```markdown
 [README.md](../../../README.md)
-[RGB Pure-Vision Route Addendum](../../../docs/project_evaluation/2026-06-22-rgb-vision-route-addendum.md)
-[Progress Log](../../../docs/progress/LOG.md)
+[RGB 纯视觉路线补充说明](../../../docs/project_evaluation/2026-06-22-rgb-vision-route-addendum.md)
+[项目进展日志](../../../docs/progress/LOG.md)
 ```
 
-- [ ] **Step 2: Create architecture notes**
+- [ ] **步骤 2：创建架构笔记**
 
-Capture the pipeline:
+记录管线：
 
 ```text
 RGB frame -> Perception -> OccupancyGrid/RiskGrid -> DWAPlanner -> SafetyStateMachine -> ControlCommand
 ```
 
-Link each stage with wiki links to the baseline notes.
+每个阶段都用 wiki link 指向对应 baseline 笔记。
 
-- [ ] **Step 3: Verify core architecture links**
+- [ ] **步骤 3：验证核心架构链接**
 
-Run:
+运行：
 
 ```bash
-rg -n "\[\[(Perception 模块|Mapping 模块|DWAPlanner|SafetyStateMachine|ControlCommand)\]\]" docs/knowledge/20-Architecture docs/knowledge/10-Decisions
+rg -n "\[\[(Perception 模块|Mapping 模块|DWAPlanner|SafetyStateMachine|ControlCommand)" docs/knowledge/20-Architecture docs/knowledge/10-Decisions
 ```
 
-Expected: each listed module appears at least once.
+预期：每个核心模块至少出现一次。
 
-## Task 4: Create Baseline and Command Notes
+## 任务 4：创建基线和命令笔记
 
-**Files:**
-- Create: all files under `docs/knowledge/30-Baselines/hbdnet_rt/`
-- Create: `docs/knowledge/30-Baselines/legacy_vision/Legacy Pure Vision Baseline.md`
-- Create: all files under `docs/knowledge/80-Commands/`
+**文件：**
+- 创建：`docs/knowledge/30-Baselines/hbdnet_rt/` 下所有文件
+- 创建：`docs/knowledge/30-Baselines/legacy_vision/Legacy Pure Vision Baseline.md`
+- 创建：`docs/knowledge/80-Commands/` 下所有文件
 
-- [ ] **Step 1: Create HBD-Net-RT baseline notes**
+- [ ] **步骤 1：创建 HBD-Net-RT 基线笔记**
 
-Use `baselines/hbdnet_rt/README.md`, `baselines/hbdnet_rt/docs/module_interfaces.md`, `baselines/hbdnet_rt/docs/FILE_GUIDE.md`, `baselines/hbdnet_rt/docs/latency_budget.md`, and `baselines/hbdnet_rt/docs/engineering_notes.md` as sources.
+使用 `baselines/hbdnet_rt/README.md`、`baselines/hbdnet_rt/docs/module_interfaces.md`、`baselines/hbdnet_rt/docs/FILE_GUIDE.md`、`baselines/hbdnet_rt/docs/latency_budget.md` 和 `baselines/hbdnet_rt/docs/engineering_notes.md` 作为来源。
 
-- [ ] **Step 2: Create command notes**
+- [ ] **步骤 2：创建命令笔记**
 
-Include commands exactly as repository docs describe:
+保留仓库文档中的命令：
 
 ```bash
 cd baselines/hbdnet_rt
@@ -194,94 +187,108 @@ python scripts/benchmark_latency.py -n 200
 pytest tests/ -v
 ```
 
-- [ ] **Step 3: Verify command notes cite runnable paths**
+- [ ] **步骤 3：验证命令笔记引用可运行路径**
 
-Run:
+运行：
 
 ```bash
 rg -n "scripts/run_pipeline.py|scripts/run_dashboard.py|pytest tests" docs/knowledge/80-Commands docs/knowledge/30-Baselines/hbdnet_rt
 ```
 
-Expected: command references appear in command or baseline notes.
+预期：命令或 baseline 笔记中出现相关引用。
 
-## Task 5: Create Research, Data, Experiment, Deployment, and Glossary Notes
+## 任务 5：创建研究、数据、实验、部署和术语笔记
 
-**Files:**
-- Create: all files under `docs/knowledge/40-Research/`
-- Create: all files under `docs/knowledge/50-Data/`
-- Create: all files under `docs/knowledge/60-Experiments/`
-- Create: all files under `docs/knowledge/70-Deployment/`
-- Create: all files under `docs/knowledge/90-Glossary/`
+**文件：**
+- 创建：`docs/knowledge/40-Research/` 下所有文件
+- 创建：`docs/knowledge/50-Data/` 下所有文件
+- 创建：`docs/knowledge/60-Experiments/` 下所有文件
+- 创建：`docs/knowledge/70-Deployment/` 下所有文件
+- 创建：`docs/knowledge/90-Glossary/` 下所有文件
 
-- [ ] **Step 1: Create research notes**
+- [ ] **步骤 1：创建研究笔记**
 
-Keep each research note concise. State that research outputs must pass through planner and safety-filter validation.
+研究笔记保持简洁，并明确研究输出必须经过 planner 和 safety filter 验证。
 
-- [ ] **Step 2: Create data and asset notes**
+- [ ] **步骤 2：创建数据和资产笔记**
 
-Link the current annotation batch and state that large assets stay in Git LFS, not inside the vault.
+链接当前标注批次，并说明大型资产留在 Git LFS，不进入 vault。
 
-- [ ] **Step 3: Create experiment and deployment notes**
+- [ ] **步骤 3：创建实验和部署笔记**
 
-Summarize the expected experiment report fields and deployment boundary from existing README files.
+从现有 README 总结实验报告字段和部署边界。
 
-- [ ] **Step 4: Create glossary notes**
+- [ ] **步骤 4：创建术语笔记**
 
-Each glossary note must define the term, link to at least one related architecture or baseline note, and cite source files where applicable.
+每个术语笔记都应定义概念，链接至少一个相关架构或 baseline 笔记，并在适用时引用源文件。
 
-## Task 6: Full Verification and Commit
+## 任务 6：中文化修正
 
-**Files:**
-- Read: `docs/knowledge/**/*.md`
-- Modify: no existing project files
+**文件：**
+- 修改：`docs/knowledge/**/*.md`
+- 修改：本计划文件
+- 修改：设计文档
 
-- [ ] **Step 1: Run expected-file verification**
+- [ ] **步骤 1：把正文改为中文**
 
-Run the command from Task 1 again.
+正文、说明性标题、决策说明、验证说明统一使用中文。技术名词、命令、路径、类名、frontmatter 枚举值保持原文。
 
-Expected after implementation: exit code `0` and no missing file lines.
+- [ ] **步骤 2：验证英文式正文已减少到技术名词范围**
 
-- [ ] **Step 2: Verify no empty notes**
+运行中文化检查脚本，确认不再出现明显英文说明句。
 
-Run:
+## 任务 7：完整验证和提交
+
+**文件：**
+- 读取：`docs/knowledge/**/*.md`
+- 修改：不修改既有项目文件
+
+- [ ] **步骤 1：运行预期文件验证**
+
+再次运行任务 1 的命令。
+
+实施后预期：退出码 `0`，没有缺失文件输出。
+
+- [ ] **步骤 2：验证没有空笔记**
+
+运行：
 
 ```bash
 find docs/knowledge -name '*.md' -type f -size 0 -print
 ```
 
-Expected: no output.
+预期：无输出。
 
-- [ ] **Step 3: Verify source links use relative paths**
+- [ ] **步骤 3：验证 source links 使用相对路径**
 
-Run:
+运行：
 
 ```bash
 rg -n "file://|/home/jiaming|https://github.com" docs/knowledge
 ```
 
-Expected: no output.
+预期：无输出。
 
-- [ ] **Step 4: Verify no binary assets in vault**
+- [ ] **步骤 4：验证 vault 中没有二进制资产**
 
-Run:
+运行：
 
 ```bash
 find docs/knowledge -type f ! -name '*.md' -print
 ```
 
-Expected: no output.
+预期：无输出。
 
-- [ ] **Step 5: Verify wiki links resolve by note basename**
+- [ ] **步骤 5：验证 wiki links 可按笔记 basename 解析**
 
-Run:
+运行：
 
 ```bash
 tmp_notes="$(mktemp)"
 tmp_links="$(mktemp)"
-find docs/knowledge -name '*.md' -type f -printf '%f\n' | sed 's/\.md$//' | sort -u > "$tmp_notes"
-rg -o "\[\[[^]]+\]\]" docs/knowledge \
-  | sed 's/^.*\[\[//; s/\]\]$//; s/|.*$//; s/#.*$//' \
-  | sort -u > "$tmp_links"
+find docs/knowledge -name '*.md' -type f -printf '%f
+' | sed 's/\.md$//' | sort -u > "$tmp_notes"
+rg -o "\[\[[^]]+\]\]" docs/knowledge   | sed 's/^.*\[\[//; s/\]\]$//; s/|.*$//; s/#.*$//'   | sort -u > "$tmp_links"
 missing=0
 while IFS= read -r link
 do
@@ -295,24 +302,24 @@ rm -f "$tmp_notes" "$tmp_links"
 exit "$missing"
 ```
 
-Expected: no unresolved wiki links.
+预期：没有 unresolved wiki link。
 
-- [ ] **Step 6: Review git diff**
+- [ ] **步骤 6：检查 git diff**
 
-Run:
+运行：
 
 ```bash
 git -c filter.lfs.process= -c filter.lfs.required=false status --short
-git -c filter.lfs.process= -c filter.lfs.required=false diff -- docs/knowledge docs/superpowers/plans/2026-06-23-5td-obsidian-knowledge-base.md
+git -c filter.lfs.process= -c filter.lfs.required=false diff -- docs/knowledge docs/superpowers/plans/2026-06-23-5td-obsidian-knowledge-base.md docs/superpowers/specs/2026-06-23-5td-obsidian-knowledge-base-design.md
 ```
 
-Expected: only the new plan and new vault files are part of this implementation, aside from pre-existing unrelated user changes shown by status.
+预期：只包含知识库、计划和设计文档的中文化变更；预先存在的无关未跟踪文件不纳入提交。
 
-- [ ] **Step 7: Commit the knowledge base**
+- [ ] **步骤 7：提交中文化修正**
 
-Run:
+运行：
 
 ```bash
-git -c filter.lfs.process= -c filter.lfs.required=false add docs/knowledge docs/superpowers/plans/2026-06-23-5td-obsidian-knowledge-base.md
-git -c filter.lfs.process= -c filter.lfs.required=false commit -m "Add Obsidian knowledge vault"
+git -c filter.lfs.process= -c filter.lfs.required=false add docs/knowledge docs/superpowers/plans/2026-06-23-5td-obsidian-knowledge-base.md docs/superpowers/specs/2026-06-23-5td-obsidian-knowledge-base-design.md
+git -c filter.lfs.process= -c filter.lfs.required=false commit -m "Localize knowledge vault docs to Chinese"
 ```

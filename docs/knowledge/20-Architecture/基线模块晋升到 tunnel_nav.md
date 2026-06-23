@@ -13,30 +13,30 @@ tags:
 
 # 基线模块晋升到 tunnel_nav
 
-`src/tunnel_nav/` is the future integrated engineering package. Stable modules can be promoted there after their interfaces, tests, and safety behavior are clear.
+`src/tunnel_nav/` 是未来集成工程包。只有接口、测试和安全行为稳定的模块才应晋升到这里。
 
-## Candidate Responsibilities
+## 候选职责
 
-- Sensor adapters
-- Calibration
-- Perception
-- Mapping and costmaps
-- Planning
-- Safety filtering
-- Control-command interfaces
-- Evaluation utilities
-- ROS 2 interfaces
+- 传感器适配。
+- 标定。
+- 感知。
+- Mapping 和 costmap。
+- 规划。
+- 安全过滤。
+- 控制命令接口。
+- 评估工具。
+- ROS 2 接口。
 
-## Promotion Rule
+## 晋升规则
 
-Keep experimental work in `baselines/` or `research/` until the interface is stable. Promote only modules that have clear inputs, outputs, validation commands, and safety boundaries.
+在接口稳定前，实验性工作应留在 `baselines/` 或 `research/`。只有具备清晰输入输出、验证命令和安全边界的模块才应进入稳定包。
 
-## Related
+## 相关
 
-- [[HBD-Net-RT Baseline]]
+- [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]
 - [[双路线技术策略]]
 - [[部署边界]]
 
-## Source
+## 来源
 
 - [tunnel_nav README](../../../src/tunnel_nav/README.md)

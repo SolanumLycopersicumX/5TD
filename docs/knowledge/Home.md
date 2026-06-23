@@ -1,5 +1,5 @@
 ---
-title: Home
+title: 首页
 type: moc
 status: active
 route: shared
@@ -11,11 +11,11 @@ tags:
   []
 ---
 
-# Home
+# 首页
 
-This is the entry point for the 5TD Obsidian knowledge vault. Start here when you need the project map rather than a file tree.
+这是 5TD Obsidian 知识库入口。需要从项目关系、决策和工作流理解仓库时，从这里开始，而不是直接从文件树开始。
 
-## Main Maps
+## 主要地图
 
 - [[5TD 项目总览 MOC]]
 - [[RGB-only 工程路线 MOC]]
@@ -25,17 +25,17 @@ This is the entry point for the 5TD Obsidian knowledge vault. Start here when yo
 - [[实验与验收 MOC]]
 - [[Legacy 参考 MOC]]
 
-## Fast Entrypoints
+## 快速入口
 
 - [[当前优先级与路线决策]]
 - [[双路线技术策略]]
-- [[HBD-Net-RT Baseline]]
+- [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]
 - [[端到端运行流程]]
-- [[Safety Filter]]
+- [[Safety Filter|Safety Filter]]
 - [[HBD-Net-RT 快速开始]]
 
-## Source Anchors
+## 源文件锚点
 
-- [Repository README](../../README.md)
-- [Project progress log](../progress/LOG.md)
+- [仓库 README](../../README.md)
+- [项目进展日志](../progress/LOG.md)
 - [HBD-Net-RT README](../../baselines/hbdnet_rt/README.md)

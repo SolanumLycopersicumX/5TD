@@ -13,18 +13,18 @@ tags:
 
 # RGB-only 工程路线 MOC
 
-This map follows the near-term runnable RGB-only engineering route.
+这张地图追踪近期可运行的 RGB-only 工程路线。
 
-## Baseline
+## 基线模块
 
-- [[HBD-Net-RT Baseline]]
+- [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]
 - [[Perception 模块]]
 - [[Mapping 模块]]
 - [[DWAPlanner]]
 - [[SafetyStateMachine]]
 - [[ControlCommand]]
 
-## Running and Verifying
+## 运行与验证
 
 - [[HBD-Net-RT 快速开始]]
 - [[常用脚本命令]]
@@ -32,12 +32,12 @@ This map follows the near-term runnable RGB-only engineering route.
 - [[测试矩阵]]
 - [[延迟基准]]
 
-## Data Loop
+## 数据闭环
 
 - [[RGB 标注与训练闭环]]
 - [[rgb_keyframes_2026-06-22]]
 
-## Related Concepts
+## 相关概念
 
 - [[BEV]]
 - [[DWA]]

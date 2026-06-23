@@ -13,17 +13,17 @@ tags:
 
 # Legacy 参考 MOC
 
-This map keeps legacy material discoverable without treating it as the active route.
+这张地图保留旧工程材料的可发现性，但不把它当作当前活跃路线。
 
-## Reference Baseline
+## 参考基线
 
-- [[Legacy Pure Vision Baseline]]
+- [[Legacy Pure Vision Baseline|Legacy 纯视觉基线]]
 
-## Active Route for Contrast
+## 对照的活跃路线
 
-- [[HBD-Net-RT Baseline]]
+- [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]
 - [[RGB-only 工程路线 MOC]]
 
-## Use Boundary
+## 使用边界
 
-Legacy code can provide comparison ideas, assets, and migration candidates. New work should target the active baseline or stable future package path through [[基线模块晋升到 tunnel_nav]].
+Legacy 代码可以提供对比思路、资产和可迁移工具。新工程默认应落到活跃基线，或通过 [[基线模块晋升到 tunnel_nav]] 进入未来稳定包。

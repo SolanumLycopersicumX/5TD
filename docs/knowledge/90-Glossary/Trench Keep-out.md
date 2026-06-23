@@ -16,21 +16,21 @@ tags:
 
 # Trench Keep-out
 
-Trench keep-out is the safety rule that the vehicle must not enter or cross the protected area around a trench or hard boundary.
+Trench Keep-out 是围绕深沟或硬边界设置的禁入区和安全裕度规则。
 
-## In 5TD
+## 在 5TD 中
 
-The exact distance requirement remains an open project-owner question. The implementation principle is clear: keep-out regions should be represented in [[Costmap 与 Risk Grid]] and enforced by [[DWAPlanner]] and [[Safety Filter]].
+具体距离仍需项目负责人确认。实现原则明确：keep-out 区域应进入 [[Costmap 与 Risk Grid]]，并由 [[DWAPlanner]] 和 [[Safety Filter]] 强制执行。
 
-## Related
+## 相关
 
 - [[Hard Boundary]]
 - [[安全与风险 MOC]]
 - [[验收指标]]
 
-## Source
+## 来源
 
-- [Navigation safety config](../../../configs/navigation/safety.yaml)
-- [RGB pure-vision route addendum](../../../docs/project_evaluation/2026-06-22-rgb-vision-route-addendum.md)
-- [RL navigation project evaluation](../../../docs/project_evaluation/tunnel_ugv_rl_navigation_project_evaluation.md)
-- [LiDAR-RGB Transformer project evaluation](../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)
+- [导航安全配置](../../../configs/navigation/safety.yaml)
+- [RGB 纯视觉路线补充说明](../../../docs/project_evaluation/2026-06-22-rgb-vision-route-addendum.md)
+- [RL 导航项目评估](../../../docs/project_evaluation/tunnel_ugv_rl_navigation_project_evaluation.md)
+- [LiDAR-RGB Transformer 项目评估](../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)

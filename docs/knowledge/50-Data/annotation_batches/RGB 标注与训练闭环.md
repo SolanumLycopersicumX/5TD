@@ -16,22 +16,22 @@ tags:
 
 # RGB 标注与训练闭环
 
-The RGB annotation and training loop turns tunnel frames into labels that can train and validate the RGB-only perception baseline.
+RGB 标注与训练闭环把隧道帧转成标签，用于训练和验证 RGB-only 感知基线。
 
-## Loop
+## 闭环步骤
 
-1. Extract and curate representative tunnel frames.
-2. Annotate free space, [[Hard Boundary]], obstacles, workers, engineering vehicles, and risk-relevant regions.
-3. Train or fine-tune [[Perception 模块]].
-4. Evaluate outputs through [[Mapping 模块]], [[DWAPlanner]], and [[SafetyStateMachine]].
-5. Record results using [[实验记录格式]] and compare against [[验收指标]].
+1. 抽取并筛选有代表性的隧道帧。
+2. 标注自由空间、[[Hard Boundary]]、障碍物、工人、工程车辆和风险相关区域。
+3. 训练或微调 [[Perception 模块]]。
+4. 通过 [[Mapping 模块]]、[[DWAPlanner]] 和 [[SafetyStateMachine]] 评估输出。
+5. 用 [[实验记录格式]] 记录结果，并与 [[验收指标]] 对比。
 
-## Active Batch
+## 活跃批次
 
 - [[rgb_keyframes_2026-06-22]]
 
-## Source
+## 来源
 
-- [Data README](../../../../data/README.md)
-- [Training guide](../../../../baselines/hbdnet_rt/docs/training_guide.md)
-- [Annotation rules](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)
+- [数据目录 README](../../../../data/README.md)
+- [训练指南](../../../../baselines/hbdnet_rt/docs/training_guide.md)
+- [标注规则](../../../../data/annotation_batches/rgb_keyframes_2026-06-22/annotation_rules.md)

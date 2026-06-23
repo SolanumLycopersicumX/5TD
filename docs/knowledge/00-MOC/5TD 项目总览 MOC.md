@@ -13,31 +13,31 @@ tags:
 
 # 5TD 项目总览 MOC
 
-This map connects project purpose, current priorities, runnable baseline, and research routes.
+这张地图连接项目目标、当前优先级、可运行基线和研究路线。
 
-## Core Direction
+## 核心方向
 
 - [[当前优先级与路线决策]]
 - [[双路线技术策略]]
 - [[RGB-only 工程路线 MOC]]
 - [[研究路线 MOC]]
 
-## System Shape
+## 系统形态
 
 - [[端到端运行流程]]
 - [[安全约束导航]]
 - [[Costmap 与 Risk Grid]]
 - [[基线模块晋升到 tunnel_nav]]
 
-## Engineering Assets
+## 工程资产
 
-- [[HBD-Net-RT Baseline]]
+- [[HBD-Net-RT Baseline|HBD-Net-RT 基线]]
 - [[入口脚本索引]]
 - [[测试矩阵]]
 - [[延迟基准]]
 - [[Git LFS 环境注意]]
 
-## Source Anchors
+## 源文件锚点
 
-- [Repository README](../../../README.md)
-- [Progress log](../../progress/LOG.md)
+- [仓库 README](../../../README.md)
+- [项目进展日志](../../progress/LOG.md)

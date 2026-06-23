@@ -1,5 +1,5 @@
 ---
-title: VLM Supervisor Research
+title: VLM 监督研究
 type: research
 status: active
 route: vlm
@@ -14,22 +14,22 @@ tags:
   - #data/annotation
 ---
 
-# VLM Supervisor Research
+# VLM 监督研究
 
-VLM Supervisor Research uses open-vocabulary and large-model support for annotation, risk explanation, and low-frequency supervision.
+VLM 监督研究用开放词汇和大模型能力支持标注、风险解释和低频监督。
 
-## Good Uses
+## 合适用途
 
-- Help annotation and label review.
-- Explain risk or failure cases.
-- Provide low-frequency supervisory signals.
+- 辅助标注和标签复核。
+- 解释风险或失败案例。
+- 提供低频监督信号。
 
-## Safety Boundary
+## 安全边界
 
-VLM output is not a real-time motor-control command. It can support [[RGB 标注与训练闭环]], [[实验记录格式]], or supervisory review, but final motion still goes through [[Safety Filter]].
+VLM 输出不是实时电机控制命令。它可以支持 [[RGB 标注与训练闭环]]、[[实验记录格式]] 或监督复核，但最终运动仍必须通过 [[Safety Filter]]。
 
-## Source
+## 来源
 
 - [VLM supervisor README](../../../../research/vlm_supervisor/README.md)
-- [RL navigation project evaluation](../../../../docs/project_evaluation/tunnel_ugv_rl_navigation_project_evaluation.md)
-- [LiDAR-RGB Transformer project evaluation](../../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)
+- [RL 导航项目评估](../../../../docs/project_evaluation/tunnel_ugv_rl_navigation_project_evaluation.md)
+- [LiDAR-RGB Transformer 项目评估](../../../../docs/project_evaluation/tunnel_ugv_lidar_rgb_transformer_navigation_plan.md)
