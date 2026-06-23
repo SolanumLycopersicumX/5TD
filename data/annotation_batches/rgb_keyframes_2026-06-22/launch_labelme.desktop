@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Launch RGB Keyframe Labelme
+Comment=Open Labelme for the RGB keyframe annotation batch
+Exec=/home/tomato/5TD/data/annotation_batches/rgb_keyframes_2026-06-22/launch_labelme.sh
+Path=/home/tomato/5TD
+Terminal=false
+Categories=Development;Graphics;
