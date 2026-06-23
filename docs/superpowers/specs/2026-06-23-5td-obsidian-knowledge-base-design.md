@@ -107,7 +107,7 @@ Use this minimal schema:
 ```yaml
 ---
 title:
-type: moc | decision | architecture | baseline | interface | experiment | dataset | command | legacy | glossary
+type: moc | decision | architecture | baseline | interface | research | experiment | dataset | command | legacy | glossary
 status: draft | active | validated | archived
 route: rgb-only | fusion | rl | diffusion | vlm | legacy | shared
 source:
