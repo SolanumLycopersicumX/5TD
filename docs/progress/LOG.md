@@ -321,3 +321,26 @@ Next Actions:
 
 - Continue using top-of-file tunable parameters for training script changes.
 - After the second annotation batch is complete, regenerate the dual-label dataset and rerun `train_passable_ditch.py`.
+
+## 2026-06-24 - GitHub Sync and Knowledge Vault Download
+
+Scope:
+
+- Fetched remote `main` from `https://github.com/SolanumLycopersicumX/5TD.git`.
+- Downloaded and integrated the remote knowledge-base updates into the local workspace.
+- Committed the current local training progress, including current segmentation tools, tests, style-cleanup work, extracted keyframes, derived datasets, run summaries, overlays, and model checkpoints.
+- Restored the missing GitHub CLI binary at the path referenced by the local Git credential helper.
+- Pushed the rebased local progress commit to GitHub.
+
+Verification:
+
+- Remote `origin/main` had four incoming commits before sync: Obsidian knowledge-base design, knowledge vault, Chinese localization, and UGV navigation research report.
+- Local `docs/knowledge/` exists after sync and contains 46 files.
+- Local progress commit after rebase: `fb61328 Add passable segmentation training progress`.
+- GitHub CLI authentication was restored through the existing system keyring for account `SolanumLycopersicumX`.
+- `git push origin main` uploaded 4 Git LFS model checkpoint objects and advanced remote `main` from `c10afe3` to `fb61328`.
+
+Next Actions:
+
+- Keep using `git fetch` before future upload work to detect teammate changes early.
+- If `/tmp` is cleaned again, use `/home/tomato/.local/bin/gh` or reinstall GitHub CLI before pushing.
