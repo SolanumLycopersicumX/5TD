@@ -403,3 +403,40 @@ class Rs232AdapterTest(unittest.TestCase):
 
         self.assertEqual(record["registers"]["linear"], 0)
         self.assertEqual(record["registers"]["angular"], 0)
+
+
+class OfflineBridgeCliTest(unittest.TestCase):
+    def test_offline_bridge_writes_command_rs232_and_overlay(self):
+        from tools.navigation_bridge.run_offline_bev_dwa_bridge import run_offline_bev_dwa_bridge
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image_dir = root / "images"
+            mask_dir = root / "masks"
+            output_dir = root / "out"
+            image_dir.mkdir()
+            for label in ["safe_passable", "ditch", "left_barrier", "tunnel_wall"]:
+                (mask_dir / label).mkdir(parents=True)
+
+            Image.new("RGB", (120, 80), "black").save(image_dir / "frame_001.jpg")
+            safe = np.zeros((80, 120), dtype=np.uint8)
+            safe[:, 35:85] = 255
+            Image.fromarray(safe).save(mask_dir / "safe_passable" / "frame_001.png")
+            for label in ["ditch", "left_barrier", "tunnel_wall"]:
+                Image.fromarray(np.zeros((80, 120), dtype=np.uint8)).save(mask_dir / label / "frame_001.png")
+
+            count = run_offline_bev_dwa_bridge(
+                image_dir=image_dir,
+                mask_dir=mask_dir,
+                output_dir=output_dir,
+                max_speed_mps=0.10,
+                max_angular_radps=0.50,
+            )
+
+            self.assertEqual(count, 1)
+            command = json.loads((output_dir / "commands" / "frame_001.json").read_text())
+            rs232 = json.loads((output_dir / "rs232_dry_run" / "frame_001.json").read_text())
+            self.assertFalse(command["brake"])
+            self.assertEqual(command["safety_state"], "S0_NORMAL")
+            self.assertTrue(rs232["dry_run"])
+            self.assertTrue((output_dir / "overlays" / "frame_001_bev_dwa.jpg").exists())
