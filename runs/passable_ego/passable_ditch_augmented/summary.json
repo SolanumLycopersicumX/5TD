@@ -1,0 +1,21 @@
+{
+  "device": "cuda",
+  "labels": [
+    "ego_passable",
+    "ditch"
+  ],
+  "train_samples": 34,
+  "val_samples": 7,
+  "best_checkpoint": "runs/passable_ego/passable_ditch_augmented/best_model.pt",
+  "final_val": {
+    "loss": 0.36011019349098206,
+    "passable_iou": 0.9498857869394749,
+    "passable_dice": 0.9742988982245905,
+    "ditch_iou": 0.7992414572845906,
+    "ditch_dice": 0.8884204552386967,
+    "safe_iou": 0.9500463224766883,
+    "safe_dice": 0.9743833380019927,
+    "ditch_as_passable_rate": 0.044732818479447496,
+    "passable_ditch_overlap_rate": 1.2231952060518522e-12
+  }
+}

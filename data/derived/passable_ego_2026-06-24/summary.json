@@ -1,0 +1,20 @@
+{
+  "source_image_dir": "data/annotation_batches/rgb_keyframes_2026-06-22/images",
+  "output_dir": "data/derived/passable_ego_2026-06-24",
+  "label": "ego_passable",
+  "labels": [
+    "ego_passable"
+  ],
+  "excluded_prefixes": [
+    "demo_video"
+  ],
+  "val_prefixes": [
+    "test_video"
+  ],
+  "total": 41,
+  "train": 34,
+  "val": 7,
+  "empty_masks": {
+    "ego_passable": []
+  }
+}

@@ -176,3 +176,148 @@ Verification:
 Next Actions:
 
 - Start the next engineering phase: run the RGB-only baseline environment and prepare the first perception/navigation demo.
+
+## 2026-06-24 - Annotation, First Training, and Safety Review
+
+Scope:
+
+- Validated the first non-demo Labelme annotation set from `data/annotation_batches/rgb_keyframes_2026-06-22/images`.
+- Confirmed the demo-video frames are not useful for training and kept them out of the current dataset.
+- Installed a user-local `git-lfs` binary so normal `git lfs`, `git push`, and `git pull` workflows can run without sudo.
+- Pushed the completed first annotation JSONs to GitHub in commit `b85fcab`.
+- Extracted a second batch of non-demo JPEG keyframes at original 720x1280 resolution into `data/annotation_batches/rgb_keyframes_2026-06-24_more_keyframes/`.
+- Added the first passable-road segmentation tooling under `tools/passable_segmentation/`.
+- Prepared the first derived binary `ego_passable` dataset in `data/derived/passable_ego_2026-06-24/`.
+- Trained the first augmented small U-Net model in `runs/passable_ego/first_augmented/`.
+- Generated visual overlays for the labeled set and the newly extracted frames.
+
+Decisions:
+
+- Use the 41 completed non-demo annotations as the initial training set while more data is manually labeled.
+- Use augmentation for the small initial dataset, including blur, water-stain simulation, brightness changes, shadowing, and horizontal flips.
+- Keep `demo_video_*` frames out of training unless a future review finds a specific usable subset.
+- Treat the right drainage channel as the existing `ditch` class, not `right_barrier`.
+- For the next model, train `ego_passable` and `ditch` together; the safe passable mask should be `ego_passable AND NOT ditch`.
+- Update this progress log immediately after each completed work item going forward.
+
+Verification:
+
+- First non-demo annotation set: 41 images, 41 JSON labels, no image-dimension mismatch, no out-of-bounds polygon points.
+- Label counts in the first set: `ego_passable=41`, `ditch=40`, `left_barrier=197`, `tunnel_wall=41`, `debris=18`, `construction_vehicle=7`, `worker=3`, `right_barrier=0`.
+- First derived dataset: 41 total images, 34 train, 7 validation, 0 empty `ego_passable` masks.
+- First model final validation metrics: IoU about 0.988 and Dice about 0.994 on the small held-out validation split.
+- Unit tests for the first passable-segmentation tools passed with `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'`.
+- Second keyframe batch contains 41 JPEG images at 720x1280 resolution.
+
+Caveats:
+
+- The first model is not deployment-ready. Visual review showed ceiling false positives, and the user identified a safety-critical false positive where right-side drainage channel regions were predicted as passable road.
+- The validation metrics are over-optimistic because the dataset is very small and visually similar across frames.
+
+Next Actions:
+
+- Finish and train the dual-output `ego_passable + ditch` model.
+- Generate overlays for the dual-output model and inspect whether predicted passable regions are removed from the drainage channel.
+- Continue manual Labelme annotation on `data/annotation_batches/rgb_keyframes_2026-06-24_more_keyframes/images`, especially marking the drainage channel as `ditch`.
+- Add another log entry immediately after the dual-output training run is complete.
+
+## 2026-06-24 - Dual Passable and Ditch Training
+
+Scope:
+
+- Added dual-output segmentation support for `ego_passable` and `ditch`.
+- Updated dataset preparation so repeated `--label` arguments create per-class mask folders and 4-column manifests.
+- Added `tools/passable_segmentation/train_passable_ditch.py` for two-head training, safety-aware metrics, and validation overlays.
+- Reused the small U-Net backbone with `out_channels=2`.
+- Added loss terms that penalize predicted passable pixels on true ditch pixels and direct overlap between predicted passable and predicted ditch.
+- Prepared `data/derived/passable_ditch_2026-06-24/`.
+- Trained the dual-output model into `runs/passable_ego/passable_ditch_augmented/`.
+
+Decisions:
+
+- Use the model's safe passable output as predicted `ego_passable` minus predicted `ditch`.
+- Keep `ditch` as a separate semantic output instead of folding it into background, because the right drainage channel is a safety-critical negative class.
+- Continue using the existing 41 annotated non-demo frames until the second manual annotation batch is ready.
+
+Verification:
+
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 8 tests OK.
+- Dual derived dataset: 41 total images, 34 train, 7 validation.
+- Empty masks: `ego_passable=[]`; `ditch=["11d80f_0001"]`.
+- Training ran on CUDA for 90 epochs.
+- Best checkpoint: `runs/passable_ego/passable_ditch_augmented/best_model.pt`.
+- Final validation from the best checkpoint: `passable_iou=0.9499`, `ditch_iou=0.7992`, `safe_iou=0.9500`, `ditch_as_passable_rate=0.0447`, `passable_ditch_overlap_rate` approximately 0.
+- Validation overlays were written to `runs/passable_ego/passable_ditch_augmented/overlays_val/`.
+
+Caveats:
+
+- The dataset is still only 41 annotated frames, so these validation metrics should be treated as a smoke test rather than proof of robustness.
+- The first annotation set has one frame without `ditch`, and the visual distribution is still narrow.
+
+Next Actions:
+
+- Generate dual-output overlays on the newly extracted non-demo frames.
+- Visually inspect whether the right drainage channel is removed from the safe passable region.
+- Keep annotating the second batch, marking drainage channels as `ditch`.
+
+## 2026-06-24 - Dual Model Visualization Review
+
+Scope:
+
+- Added `tools/passable_segmentation/visualize_passable_ditch.py` for repeatable dual-output visualization.
+- Generated labeled-set overlays in `runs/passable_ego/passable_ditch_augmented/overlays_all_labeled/`.
+- Generated new-keyframe overlays in `runs/passable_ego/passable_ditch_augmented/overlays_more_keyframes/`.
+- Performed a quick visual spot check on representative labeled and newly extracted frames.
+
+Verification:
+
+- Unit tests passed again after adding the dual-output overlay test: 9 tests OK.
+- `overlays_all_labeled/` contains 41 JPEG overlays.
+- `overlays_more_keyframes/` contains 41 JPEG overlays.
+- New-keyframe overlays are 1280x384 two-panel images.
+- Labeled-set overlays are 1920x384 three-panel images.
+- Spot checks showed the right drainage channel predicted as red `ditch` and removed from green safe passable area on inspected samples.
+
+Caveats:
+
+- A ceiling false positive remains visible in at least one newly extracted frame.
+- More annotations are needed for ceiling/high-wall negatives and varied drainage-channel appearances before this can be trusted beyond a demo-level smoke test.
+
+Next Actions:
+
+- Continue annotating the second keyframe batch.
+- During annotation, keep all drainage channels as `ditch` and avoid labeling ceiling or high-wall regions as `ego_passable`.
+- Retrain after the second batch is complete.
+
+## 2026-06-24 - Training Code Style Cleanup
+
+Scope:
+
+- Applied the company code-writing guidance from `代码规范.md` to the current maintained training and annotation-helper code.
+- Limited the cleanup to `tools/passable_segmentation/`, `tools/extract_more_keyframes.py`, and the matching passable-segmentation tests.
+- Did not modify HBD-Net-RT or the legacy OpenCV/SAM code in this pass.
+- Removed `argparse` from the current training utilities.
+- Replaced training config dataclasses with top-of-file tunable parameters and small `build_train_config()` helpers.
+- Kept PyTorch `Dataset` and `nn.Module` classes because they hold required framework state.
+- Added one-line module/function/class docstrings where they clarify public entry points.
+- Standardized script logs with `[OK]`, `[DATA]`, and `[TRAIN]` prefixes.
+- Changed `prepare_dataset.py` defaults to the current dual-label `ego_passable + ditch` workflow, with the old single-label default left as a comment switch.
+
+Verification:
+
+- Syntax check passed: `python -m py_compile tools/passable_segmentation/*.py tools/extract_more_keyframes.py tests/test_passable_segmentation_tools.py`.
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 10 tests OK.
+- Current training code grep check found no `argparse`, `@dataclass`, `class TrainConfig`, or `class PassableDitchConfig`.
+- Default data preparation entry ran successfully and generated the dual-label dataset summary for 41 images, 34 train, 7 validation.
+- Default binary visualization entry wrote 41 overlays.
+- Default dual-output visualization entry wrote 41 overlays.
+
+Caveats:
+
+- This was a style and maintainability cleanup, not a retraining run.
+- Existing checkpoints still load because checkpoint configs were already saved as dictionaries.
+
+Next Actions:
+
+- Continue using top-of-file tunable parameters for training script changes.
+- After the second annotation batch is complete, regenerate the dual-label dataset and rerun `train_passable_ditch.py`.

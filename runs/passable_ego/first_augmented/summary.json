@@ -1,0 +1,11 @@
+{
+  "device": "cuda",
+  "train_samples": 34,
+  "val_samples": 7,
+  "best_checkpoint": "runs/passable_ego/first_augmented/best_model.pt",
+  "final_val": {
+    "loss": 0.12025423347949982,
+    "iou": 0.987977272399951,
+    "dice": 0.9939522811618756
+  }
+}

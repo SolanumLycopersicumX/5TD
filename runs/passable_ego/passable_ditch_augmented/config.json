@@ -1,0 +1,13 @@
+{
+  "dataset_dir": "data/derived/passable_ditch_2026-06-24",
+  "run_dir": "runs/passable_ego/passable_ditch_augmented",
+  "epochs": 90,
+  "batch_size": 8,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "base_channels": 16,
+  "overlap_weight": 1.5,
+  "seed": 11,
+  "num_workers": 2,
+  "overlay_count": 12
+}

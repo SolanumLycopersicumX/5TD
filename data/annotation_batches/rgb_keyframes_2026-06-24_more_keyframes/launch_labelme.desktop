@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Labelme More RGB Keyframes
+Exec=/home/tomato/5TD/data/annotation_batches/rgb_keyframes_2026-06-24_more_keyframes/launch_labelme.sh
+Terminal=true
+Categories=Development;

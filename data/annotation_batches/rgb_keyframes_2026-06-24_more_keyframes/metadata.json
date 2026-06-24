@@ -1,0 +1,380 @@
+{
+  "batch": "rgb_keyframes_2026-06-24_more_keyframes",
+  "purpose": "Additional non-demo keyframes for manual Labelme annotation.",
+  "sampling": "Frames at odd seconds, approximately frame 30, 90, 150... for 30fps videos.",
+  "format": "High-quality JPEG, decoded at source video resolution without resizing.",
+  "excluded": [
+    "demo_video.mp4"
+  ],
+  "frames": [
+    {
+      "file": "11d80f_f000030.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 30,
+      "timestamp_sec": 1.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "11d80f_f000090.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 90,
+      "timestamp_sec": 3.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "11d80f_f000150.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 150,
+      "timestamp_sec": 5.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "11d80f_f000210.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 210,
+      "timestamp_sec": 7.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "11d80f_f000270.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 270,
+      "timestamp_sec": 9.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "11d80f_f000330.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 330,
+      "timestamp_sec": 11.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "11d80f_f000390.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/11d80f9597761d8b57be06f702d03861.mp4",
+      "source_prefix": "11d80f",
+      "frame_idx": 390,
+      "timestamp_sec": 13.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "335344_f000030.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/33534475b7346c374d2076f99995cbe0.mp4",
+      "source_prefix": "335344",
+      "frame_idx": 30,
+      "timestamp_sec": 1.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "335344_f000090.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/33534475b7346c374d2076f99995cbe0.mp4",
+      "source_prefix": "335344",
+      "frame_idx": 90,
+      "timestamp_sec": 3.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "335344_f000150.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/33534475b7346c374d2076f99995cbe0.mp4",
+      "source_prefix": "335344",
+      "frame_idx": 150,
+      "timestamp_sec": 5.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "8bfe84_f000030.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/8bfe843b17120d212e625d2637d7c7c1.mp4",
+      "source_prefix": "8bfe84",
+      "frame_idx": 30,
+      "timestamp_sec": 1.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "8bfe84_f000090.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/8bfe843b17120d212e625d2637d7c7c1.mp4",
+      "source_prefix": "8bfe84",
+      "frame_idx": 90,
+      "timestamp_sec": 3.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "8bfe84_f000150.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/8bfe843b17120d212e625d2637d7c7c1.mp4",
+      "source_prefix": "8bfe84",
+      "frame_idx": 150,
+      "timestamp_sec": 5.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "8bfe84_f000210.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/8bfe843b17120d212e625d2637d7c7c1.mp4",
+      "source_prefix": "8bfe84",
+      "frame_idx": 210,
+      "timestamp_sec": 7.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "8bfe84_f000270.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/8bfe843b17120d212e625d2637d7c7c1.mp4",
+      "source_prefix": "8bfe84",
+      "frame_idx": 270,
+      "timestamp_sec": 9.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "8bfe84_f000330.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/8bfe843b17120d212e625d2637d7c7c1.mp4",
+      "source_prefix": "8bfe84",
+      "frame_idx": 330,
+      "timestamp_sec": 11.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000030.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 30,
+      "timestamp_sec": 1.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000090.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 90,
+      "timestamp_sec": 3.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000150.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 150,
+      "timestamp_sec": 5.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000210.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 210,
+      "timestamp_sec": 7.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000270.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 270,
+      "timestamp_sec": 9.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000330.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 330,
+      "timestamp_sec": 11.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "b0c37d_f000390.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/b0c37d56037822b2cc6e37cbcb337640.mp4",
+      "source_prefix": "b0c37d",
+      "frame_idx": 390,
+      "timestamp_sec": 13.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000030.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 30,
+      "timestamp_sec": 1.002,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000090.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 90,
+      "timestamp_sec": 3.005,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000150.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 150,
+      "timestamp_sec": 5.008,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000210.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 210,
+      "timestamp_sec": 7.011,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000270.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 270,
+      "timestamp_sec": 9.014,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000330.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 330,
+      "timestamp_sec": 11.017,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000390.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 390,
+      "timestamp_sec": 13.02,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000450.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 450,
+      "timestamp_sec": 15.023,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000510.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 510,
+      "timestamp_sec": 17.026,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000570.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 570,
+      "timestamp_sec": 19.029,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "ccb5ac_f000630.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/media/samples/ccb5acbde9da473c291cda3d3d064245.mp4",
+      "source_prefix": "ccb5ac",
+      "frame_idx": 630,
+      "timestamp_sec": 21.032,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000030.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 30,
+      "timestamp_sec": 1.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000090.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 90,
+      "timestamp_sec": 3.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000150.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 150,
+      "timestamp_sec": 5.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000210.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 210,
+      "timestamp_sec": 7.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000270.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 270,
+      "timestamp_sec": 9.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000330.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 330,
+      "timestamp_sec": 11.0,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "test_video_f000390.jpg",
+      "source_video": "baselines/vision_obstacle_avoidance_legacy/src/vision_obstacle_avoidance/test_video.mp4",
+      "source_prefix": "test_video",
+      "frame_idx": 390,
+      "timestamp_sec": 13.0,
+      "width": 720,
+      "height": 1280
+    }
+  ]
+}
