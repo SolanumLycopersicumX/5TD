@@ -645,3 +645,62 @@ Commit:
 Next Actions:
 
 - Start designing the pipeline that converts the fused `safe_passable` mask into a motion trajectory and driver command interface.
+
+## 2026-06-24 - RS232 Navigation Bridge Plan and ChatGPT Summary
+
+Scope:
+
+- Recorded the implementation plan for converting fused passable-road masks into conservative motion commands.
+- Recorded the RS232 driver decision for the next vehicle-control bridge.
+- Summarized why the old baseline should remain reference-only and not become a runtime dependency.
+- Created a Chinese-facing project summary suitable for uploading to ChatGPT or another external review context.
+
+Files:
+
+- `docs/superpowers/plans/2026-06-24-rs232-navigation-bridge.md`
+- `docs/progress/2026-06-24-rs232-navigation-bridge-summary.md`
+
+Key Decisions:
+
+- New runtime code should live under `src/tunnel_nav`.
+- The first implementation should run offline from saved masks and output command JSON plus overlays.
+- RS232 support should start as a dry-run adapter only.
+- Live serial writes should remain disabled until angular sign, emergency stop, and low-speed behavior are physically validated.
+
+## 2026-06-24 - BEV / DWA External Plan Comparison
+
+Scope:
+
+- Reviewed `tunnel_ugv_plan_A_BEV_DWA_trajectory.md`.
+- Compared the external BEV / Risk Grid / DWA proposal with the current local RS232 navigation bridge plan.
+- Recorded a feasibility comparison and recommended merged roadmap.
+
+Result:
+
+- The external plan is the stronger medium-term architecture for real navigation safety.
+- The current local plan remains the better immediate Stage 0 because it is testable now, requires no camera calibration, and keeps RS232 in dry-run mode.
+- Recommended sequence: offline mask-to-command bridge first, then calibrated BEV / Risk Grid, then DWA and safety state machine, then live RS232 bring-up.
+
+Document:
+
+- `docs/progress/2026-06-24-bev-dwa-plan-comparison.md`.
+
+## 2026-06-24 - Active Plan Switched to BEV / DWA Offline Bridge
+
+Scope:
+
+- Accepted the user's request to follow ChatGPT plan A0/A1 more directly.
+- Replaced the image-space-first implementation plan with a simplified BEV / Risk Grid / DWA offline prototype plan.
+- Kept the RS232 adapter as dry-run only.
+- Marked the earlier RS232/image-space bridge plan as superseded, but retained it as reference.
+
+Active Plan:
+
+- `docs/superpowers/plans/2026-06-24-bev-dwa-rs232-navigation-bridge.md`
+
+Key Constraints:
+
+- First BEV is pseudo-BEV, not calibrated IPM.
+- DWA runs offline over generated risk grids.
+- Output remains command JSON, overlay visualization, and RS232 dry-run JSON.
+- Live serial writes remain blocked until calibration, emergency stop, angular sign, and low-speed behavior are validated.
