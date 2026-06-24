@@ -621,3 +621,27 @@ Caveats:
 
 - This is still post-processing around a small-data model. It fixes the observed large blobs/gaps, but more real annotated frames are still needed for stronger raw model behavior.
 - `test_video*` remains excluded from training/model selection and should be treated as demo/inference-only material.
+
+## 2026-06-24 - GitHub Upload of Staged Fusion Work
+
+Scope:
+
+- Uploaded the v4 experiments, boundary-wall auxiliary model, staged fusion visualizations, post-processing fixes, tests, derived datasets, overlays, and checkpoints to GitHub.
+- Kept model checkpoints under Git LFS.
+- Pushed directly to `origin/main`, matching the previous project sync workflow.
+
+Verification:
+
+- `git fetch origin` completed before committing.
+- Unit tests passed before upload: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 26 tests OK.
+- Syntax check passed before upload: `conda run -n lerobot python -m py_compile tools/passable_segmentation/*.py tests/test_passable_segmentation_tools.py`.
+- First `git push origin main` uploaded LFS objects but failed ordinary Git object transfer with HTTP 408.
+- Retried `git push origin main`; retry succeeded and advanced GitHub from `30fcbaa` to `64ba2fc`.
+
+Commit:
+
+- `64ba2fc Add staged boundary fusion experiments`.
+
+Next Actions:
+
+- Start designing the pipeline that converts the fused `safe_passable` mask into a motion trajectory and driver command interface.
