@@ -266,3 +266,72 @@ class DWAPlannerTest(unittest.TestCase):
         for x_m, y_m, _yaw in selected.points:
             row, col = metric_to_grid_cell(grid, float(x_m), float(y_m))
             self.assertFalse(grid.occupancy[row, col])
+
+
+class SafetyFilterTest(unittest.TestCase):
+    def _trajectory(self, *, max_risk=0.1, linear=0.08, angular=0.0, feasible=True):
+        return Trajectory(
+            points=np.array([[0.0, 0.0, 0.0], [0.0, 0.1, 0.0]], dtype=np.float32),
+            linear_mps=linear,
+            angular_radps=angular,
+            score=1.0,
+            max_risk=max_risk,
+            min_clearance_m=1.0,
+            feasible=feasible,
+            reason="test",
+        )
+
+    def test_no_feasible_trajectory_returns_stop(self):
+        from src.tunnel_nav.safety import command_from_dwa_result
+
+        command = command_from_dwa_result(None, [], NavigationConfig(), source_frame="frame_001")
+
+        self.assertTrue(command.brake)
+        self.assertEqual(command.linear_mps, 0.0)
+        self.assertEqual(command.angular_radps, 0.0)
+        self.assertEqual(command.safety_state, "S3_STOP")
+        self.assertIn("no feasible", command.reason)
+
+    def test_high_risk_trajectory_returns_stop(self):
+        from src.tunnel_nav.safety import command_from_dwa_result
+
+        command = command_from_dwa_result(
+            self._trajectory(max_risk=0.98),
+            [],
+            NavigationConfig(),
+            source_frame="frame_002",
+        )
+
+        self.assertTrue(command.brake)
+        self.assertEqual(command.safety_state, "S3_STOP")
+        self.assertEqual(command.linear_mps, 0.0)
+
+    def test_medium_risk_trajectory_slows_down(self):
+        from src.tunnel_nav.safety import command_from_dwa_result
+
+        config = NavigationConfig(max_speed_mps=0.10)
+        command = command_from_dwa_result(
+            self._trajectory(max_risk=0.70, linear=0.10),
+            [],
+            config,
+            source_frame="frame_003",
+        )
+
+        self.assertFalse(command.brake)
+        self.assertEqual(command.safety_state, "S2_SLOWDOWN")
+        self.assertLess(command.linear_mps, 0.10)
+
+    def test_low_risk_trajectory_returns_normal_command(self):
+        from src.tunnel_nav.safety import command_from_dwa_result
+
+        command = command_from_dwa_result(
+            self._trajectory(max_risk=0.12, linear=0.08, angular=0.15),
+            [],
+            NavigationConfig(max_speed_mps=0.10, max_angular_radps=0.50),
+            source_frame="frame_004",
+        )
+
+        self.assertFalse(command.brake)
+        self.assertEqual(command.safety_state, "S0_NORMAL")
+        self.assertEqual(command.linear_mps, 0.08)
+        self.assertEqual(command.angular_radps, 0.15)

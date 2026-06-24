@@ -11,6 +11,7 @@ from .motion import (
     RiskGrid,
     Trajectory,
 )
+from .safety import command_from_dwa_result
 
 __all__ = [
     "BEVGrid",
@@ -21,6 +22,7 @@ __all__ = [
     "RiskGrid",
     "Trajectory",
     "build_pseudo_bev_grid",
+    "command_from_dwa_result",
     "dilate_binary",
     "metric_to_grid_cell",
     "select_dwa_trajectory",
