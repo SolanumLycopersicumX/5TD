@@ -1,0 +1,19 @@
+{
+  "dataset_dir": "data/derived/passable_ditch_left_barrier_2026-06-24",
+  "run_dir": "runs/passable_ego/passable_ditch_left_barrier_v4",
+  "init_checkpoint": "runs/passable_ego/passable_ditch_artifact_v3_finetune/best_model.pt",
+  "epochs": 70,
+  "batch_size": 8,
+  "lr": 0.0002,
+  "weight_decay": 0.0001,
+  "base_channels": 16,
+  "overlap_weight": 1.5,
+  "ditch_safety_weight": 2.0,
+  "left_barrier_weight": 2.5,
+  "boundary_confusion_weight": 2.5,
+  "artifact_weight": 1.5,
+  "seed": 23,
+  "num_workers": 2,
+  "overlay_count": 12,
+  "min_ditch_component_area": 500
+}

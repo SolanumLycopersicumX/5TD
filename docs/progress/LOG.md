@@ -441,3 +441,183 @@ Next Actions:
 - For v4, prepare a dataset with `ego_passable`, `ditch`, `left_barrier`, and auxiliary `surface_artifact_passable`.
 - Train a three-output model: passable road, drainage channel, and left hard boundary.
 - Use `left_barrier` for left curb and crash-block correction; only use `ditch` for real trenches or deep drainage channels.
+
+## 2026-06-24 - GitHub Upload Before V4
+
+Scope:
+
+- Uploaded the third-round artifact-corrected training progress to GitHub before starting v4 work.
+- Included corrected Labelme JSONs, v3/v3-finetune checkpoints, derived v3 datasets, filtered overlays, training scripts, tests, and progress notes.
+- Kept model checkpoints under Git LFS.
+
+Verification:
+
+- `git fetch origin` completed before commit.
+- Syntax check passed: `conda run -n lerobot python -m py_compile tools/passable_segmentation/*.py tools/extract_more_keyframes.py tests/test_passable_segmentation_tools.py`.
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 15 tests OK.
+- Commit pushed to GitHub: `30fcbaa Add artifact-corrected passable segmentation progress`.
+- `git push origin main` uploaded 4 LFS checkpoint objects and advanced `origin/main` from `8cdd6d5` to `30fcbaa`.
+
+Next Actions:
+
+- Start v4 training locally after the upload.
+
+## 2026-06-24 - V4 Left-Barrier Training Experiment
+
+Scope:
+
+- Added `train_passable_ditch_left_barrier.py` for a three-output model: `ego_passable`, `ditch`, and `left_barrier`.
+- Prepared v4 derived datasets from the corrected 41 images.
+- First v4 dataset used `ego_passable`, `ditch`, `left_barrier`, and auxiliary `surface_artifact_passable`.
+- First v4 run reduced `left_barrier_as_ditch_rate`, but over-predicted `left_barrier` across ceiling/wall regions.
+- Added `tunnel_wall` as an auxiliary negative target for a second v4 wall-aux run.
+
+Outputs:
+
+- First v4 run: `runs/passable_ego/passable_ditch_left_barrier_v4/`.
+- Wall-aux v4 dataset: `data/derived/passable_ditch_left_barrier_wall_aux_2026-06-24/`.
+- Wall-aux v4 run: `runs/passable_ego/passable_ditch_left_barrier_v4_wall_aux/`.
+- Wall-aux all-labeled overlays: `runs/passable_ego/passable_ditch_left_barrier_v4_wall_aux/overlays_all_labeled/`.
+
+Results:
+
+- First v4 run final validation:
+  - `safe_iou`: 0.9046.
+  - `ditch_iou`: 0.8057.
+  - `left_barrier_iou`: 0.0320.
+  - `left_barrier_as_ditch_rate`: 0.0067.
+  - Problem: predicted `left_barrier` over large ceiling/wall regions.
+- Wall-aux v4 run final validation:
+  - `safe_iou`: 0.8115.
+  - `ditch_iou`: 0.6437.
+  - `left_barrier_iou`: 0.0722.
+  - `left_barrier_as_ditch_rate`: 0.0497.
+  - `wall_left_barrier_false_positive_rate`: 0.0344.
+  - Problem: many true `ditch` pixels also activated the `left_barrier` head.
+- With a simple ditch-priority post-processing check, effective `ditch_as_left_barrier_rate` dropped from 0.962 to about 0.033, and effective `left_barrier_iou` rose to about 0.139. This was measured but not yet made the default inference behavior.
+
+Verification:
+
+- Added regression tests for left-boundary/ditch confusion and wall-as-left-boundary loss.
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 18 tests OK.
+- Syntax check passed: `conda run -n lerobot python -m py_compile tools/passable_segmentation/*.py tests/test_passable_segmentation_tools.py`.
+- Confirmed wall-aux dataset has 41 images, 34 train, 7 validation.
+- Confirmed `left_barrier` and `tunnel_wall` are non-empty in every train and validation image.
+
+Caveats:
+
+- V4 is not ready to replace v3-finetune. It is an experiment showing that `left_barrier` can reduce left-boundary-as-ditch confusion, but the new class still needs better separation from both `ditch` and `tunnel_wall`.
+- The current v3-finetune model remains the safer model for passable-road and ditch behavior.
+
+Next Actions:
+
+- Make ditch-priority post-processing explicit for v4 inference and overlays.
+- Consider a staged or separate left-boundary head so passable/ditch performance from v3-finetune is not degraded.
+- Add more focused labels or samples where left curb/crash-block, wall-base, and true ditch are simultaneously visible.
+
+## 2026-06-24 - Staged Boundary-Wall Fusion Experiment
+
+Scope:
+
+- Kept the stable v3-finetune model as the main `ego_passable`/`ditch` model.
+- Added an auxiliary two-output model for `left_barrier` and `tunnel_wall` only.
+- Added rule-based fusion:
+  - `ditch` has priority over `left_barrier`.
+  - `tunnel_wall` always removes passability.
+  - `left_barrier` is kept as a boundary cue and does not remove passability.
+- Excluded `test_video*` from the new boundary-wall training dataset because it represents demo footage, not useful training data.
+- Added inference post-processing for small connected components:
+  - remove tiny isolated `ditch`, `left_barrier`, and `tunnel_wall` predictions.
+  - fill small enclosed `ego_passable` holes when they are not `ditch` or `tunnel_wall`.
+
+Outputs:
+
+- Clean boundary-wall dataset: `data/derived/passable_ditch_left_barrier_wall_aux_no_testvideo_2026-06-24/`.
+- Boundary-wall auxiliary run: `runs/passable_ego/boundary_wall_aux_v2_no_testvideo/`.
+- Fused valid-label overlays: `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/overlays_valid_labeled/`.
+- Fused additional-keyframe overlays: `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/overlays_more_keyframes/`.
+- New scripts:
+  - `tools/passable_segmentation/train_boundary_wall.py`.
+  - `tools/passable_segmentation/visualize_fused_passable_boundary.py`.
+
+Results:
+
+- Boundary-wall auxiliary validation on real-video prefix `b0c37d`:
+  - `left_barrier_iou`: 0.4963.
+  - `tunnel_wall_iou`: 0.7308.
+  - `wall_as_left_barrier_rate`: 0.00033.
+  - `left_wall_overlap_rate`: near zero.
+- Fused evaluation on 34 valid labeled images:
+  - `safe_passable_iou`: 0.9583.
+  - `ditch_iou`: 0.4455.
+  - `left_barrier_iou`: 0.4738.
+  - `tunnel_wall_iou`: 0.7978.
+- Visual checks:
+  - Right-side drainage-channel predictions stayed red and kept priority.
+  - The previous v4-style `left_barrier` full-image spread was not observed in inspected samples.
+  - Small road holes in `safe_passable` were filled after the fusion post-processing, while ditch and wall remained protected.
+
+Verification:
+
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 23 tests OK.
+- Syntax check passed: `conda run -n lerobot python -m py_compile tools/passable_segmentation/*.py tests/test_passable_segmentation_tools.py`.
+- Generated 34 valid-label fused overlays and 41 additional-keyframe fused overlays.
+
+Caveats:
+
+- `ditch_iou` is still weaker than desired on the 34-image fused evaluation, so more right-side drainage-channel labels are still needed.
+- The staged structure is better than v4 for avoiding task interference, but it is still data-limited.
+- The current best deployment candidate remains v3-finetune plus the staged fusion/post-processing layer, not the three-output v4 model.
+
+Next Actions:
+
+- Review `overlays_valid_labeled` and `overlays_more_keyframes` before deciding whether to continue tuning thresholds or collect more labels.
+- Add more non-demo frames where right-side ditch, left curb/barrier, tunnel wall, and small road artifacts appear together.
+- Keep `test_video*` excluded from future training and model-selection datasets unless it is intentionally being used only as a visual demo.
+
+## 2026-06-24 - Fused Overlay Post-Processing Fixes for f000030/f000090/f000210
+
+Scope:
+
+- Investigated the reported large false blobs in `f000030` and `f000090`, plus the large missed passable-road region in `f000210`.
+- Confirmed these were fusion/post-processing issues, not a reason to retrain:
+  - floating `ego_passable` islands caused ceiling/edge green blobs.
+  - medium isolated `ditch` blobs caused false red patches on passable road.
+  - the passable-road hole filling threshold was too small for the large `f000210` road gap.
+- Updated fused inference post-processing:
+  - keep only passable components connected to the bottom road region, with a largest-component fallback.
+  - raise the default small-ditch filter to 2000 pixels at `384x640`.
+  - raise the default passable-hole fill limit to 10000 pixels, still protecting `ditch` and `tunnel_wall`.
+
+Outputs:
+
+- Refreshed additional-keyframe overlays: `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/overlays_more_keyframes/`.
+- Refreshed valid-label overlays: `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/overlays_valid_labeled/`.
+- Contact sheets for manual review:
+  - `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/debug_contact_sheets/f000030_contact.jpg`.
+  - `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/debug_contact_sheets/f000090_contact.jpg`.
+  - `runs/passable_ego/fused_passable_boundary_v2_no_testvideo/debug_contact_sheets/f000210_contact.jpg`.
+
+Results:
+
+- Visual review confirmed:
+  - `f000090` top green false blob was removed.
+  - `f000030` and `f000090` demo-frame red road blobs were removed.
+  - `f000210` large passable-road gap was filled back to green.
+  - right-side main drainage-channel predictions remained red.
+- Fused evaluation on 34 valid labeled images after the fix:
+  - `safe_passable_iou`: 0.9605.
+  - `ditch_iou`: 0.4699.
+  - `left_barrier_iou`: 0.4976.
+  - `tunnel_wall_iou`: 0.7978.
+
+Verification:
+
+- Added regression tests for bottom-connected passable filtering, default medium ditch-blob filtering, and default larger passable-hole filling.
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 26 tests OK.
+- Syntax check passed: `conda run -n lerobot python -m py_compile tools/passable_segmentation/*.py tests/test_passable_segmentation_tools.py`.
+
+Caveats:
+
+- This is still post-processing around a small-data model. It fixes the observed large blobs/gaps, but more real annotated frames are still needed for stronger raw model behavior.
+- `test_video*` remains excluded from training/model selection and should be treated as demo/inference-only material.

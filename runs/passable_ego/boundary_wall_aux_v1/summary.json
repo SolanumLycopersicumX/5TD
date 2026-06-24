@@ -1,0 +1,20 @@
+{
+  "device": "cuda",
+  "labels": [
+    "left_barrier",
+    "tunnel_wall"
+  ],
+  "train_samples": 34,
+  "val_samples": 7,
+  "best_checkpoint": "runs/passable_ego/boundary_wall_aux_v1/best_model.pt",
+  "final_val": {
+    "loss": 1.4982694387435913,
+    "left_barrier_iou": 0.37771293093400393,
+    "left_barrier_dice": 0.5483187715416786,
+    "tunnel_wall_iou": 0.7377086280130776,
+    "tunnel_wall_dice": 0.8490590610169783,
+    "left_barrier_as_wall_rate": 0.00011314788412388006,
+    "wall_as_left_barrier_rate": 0.001653499938708632,
+    "left_wall_overlap_rate": 2.853881278457366e-11
+  }
+}

@@ -28,6 +28,12 @@ from tools.passable_segmentation.train_passable_ditch_artifact import (
     artifact_safe_metrics,
     passable_ditch_artifact_loss,
 )
+from tools.passable_segmentation.train_passable_ditch_left_barrier import (
+    left_barrier_safe_metrics,
+    passable_ditch_left_barrier_loss,
+)
+from tools.passable_segmentation.train_boundary_wall import boundary_wall_metrics, boundary_wall_loss
+from tools.passable_segmentation.visualize_fused_passable_boundary import fuse_passable_boundary_predictions
 from tools.passable_segmentation.visualize_passable import collect_image_paths, make_overlay_canvas
 
 
@@ -123,6 +129,7 @@ class PassableSegmentationToolsTest(unittest.TestCase):
                 image_dir=image_dir,
                 output_dir=output_dir,
                 val_prefixes=("test_video",),
+                exclude_prefixes=("demo_video",),
             )
 
             self.assertEqual(summary["total"], 2)
@@ -132,6 +139,30 @@ class PassableSegmentationToolsTest(unittest.TestCase):
             self.assertTrue((output_dir / "masks/scene_0001.png").exists())
             self.assertIn("scene_0001", (output_dir / "train.tsv").read_text())
             self.assertIn("test_video_0001", (output_dir / "val.tsv").read_text())
+
+    def test_prepare_dataset_can_exclude_test_video_prefix(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            image_dir = tmp_path / "labelme"
+            output_dir = tmp_path / "derived"
+            image_dir.mkdir()
+
+            for stem in ["scene_0001", "test_video_0001"]:
+                Image.new("RGB", (10, 8), "black").save(image_dir / f"{stem}.jpg")
+                annotation = {"imagePath": f"{stem}.jpg", "imageWidth": 10, "imageHeight": 8, "shapes": []}
+                (image_dir / f"{stem}.json").write_text(json.dumps(annotation))
+
+            summary = prepare_dataset(
+                image_dir=image_dir,
+                output_dir=output_dir,
+                val_prefixes=("test_video",),
+                exclude_prefixes=("test_video",),
+            )
+
+            self.assertEqual(summary["total"], 1)
+            self.assertEqual(summary["excluded_prefixes"], ["test_video"])
+            self.assertIn("scene_0001", (output_dir / "manifest.tsv").read_text())
+            self.assertNotIn("test_video_0001", (output_dir / "manifest.tsv").read_text())
 
     def test_prepare_dataset_can_write_ego_passable_and_ditch_masks(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -259,6 +290,176 @@ class PassableSegmentationToolsTest(unittest.TestCase):
         )
 
         self.assertGreater(float(safe_loss), float(weak_loss) + 1.0)
+
+    def test_left_barrier_metrics_penalize_left_boundary_as_ditch(self):
+        import torch
+
+        logits = torch.zeros(1, 3, 4, 4)
+        logits[:, 1] = 10.0
+        targets = torch.zeros(1, 4, 4, 4)
+        targets[:, 2, :, :2] = 1.0
+
+        metrics = left_barrier_safe_metrics(logits, targets)
+
+        self.assertGreater(metrics["left_barrier_as_ditch_rate"], 0.9)
+
+    def test_left_barrier_loss_is_higher_when_left_boundary_is_predicted_as_ditch(self):
+        import torch
+
+        targets = torch.zeros(1, 4, 4, 4)
+        targets[:, 2, :, :2] = 1.0
+
+        good_logits = torch.zeros(1, 3, 4, 4)
+        good_logits[:, 1] = -10.0
+        good_logits[:, 2] = 10.0
+        bad_logits = torch.zeros(1, 3, 4, 4)
+        bad_logits[:, 1] = 10.0
+        bad_logits[:, 2] = -10.0
+
+        good_loss = passable_ditch_left_barrier_loss(good_logits, targets)
+        bad_loss = passable_ditch_left_barrier_loss(bad_logits, targets)
+
+        self.assertGreater(float(bad_loss), float(good_loss) + 1.0)
+
+    def test_left_barrier_loss_penalizes_wall_predicted_as_left_boundary(self):
+        import torch
+
+        targets = torch.zeros(1, 5, 4, 4)
+        targets[:, 4, :2, :] = 1.0
+
+        good_logits = torch.zeros(1, 3, 4, 4)
+        good_logits[:, 2] = -10.0
+        bad_logits = torch.zeros(1, 3, 4, 4)
+        bad_logits[:, 2] = 10.0
+
+        good_loss = passable_ditch_left_barrier_loss(good_logits, targets, wall_negative_weight=3.0)
+        bad_loss = passable_ditch_left_barrier_loss(bad_logits, targets, wall_negative_weight=3.0)
+
+        self.assertGreater(float(bad_loss), float(good_loss) + 1.0)
+
+    def test_boundary_wall_loss_penalizes_wall_predicted_as_left_boundary(self):
+        import torch
+
+        targets = torch.zeros(1, 2, 4, 4)
+        targets[:, 1, :2, :] = 1.0
+
+        good_logits = torch.zeros(1, 2, 4, 4)
+        good_logits[:, 0] = -10.0
+        good_logits[:, 1] = 10.0
+        bad_logits = torch.zeros(1, 2, 4, 4)
+        bad_logits[:, 0] = 10.0
+        bad_logits[:, 1] = -10.0
+
+        good_loss = boundary_wall_loss(good_logits, targets)
+        bad_loss = boundary_wall_loss(bad_logits, targets)
+
+        self.assertGreater(float(bad_loss), float(good_loss) + 1.0)
+
+        metrics = boundary_wall_metrics(bad_logits, targets)
+        self.assertGreater(metrics["wall_as_left_barrier_rate"], 0.9)
+
+    def test_fusion_keeps_ditch_priority_and_uses_wall_as_not_passable(self):
+        passable_probs = np.zeros((2, 4, 5), dtype=np.float32)
+        boundary_probs = np.zeros((2, 4, 5), dtype=np.float32)
+        passable_probs[0, :, :] = 0.9
+        passable_probs[1, 1, 1] = 0.95
+        boundary_probs[0, 1, 1] = 0.95
+        boundary_probs[0, 2, 2] = 0.95
+        boundary_probs[1, 0, :] = 0.95
+
+        fused = fuse_passable_boundary_predictions(
+            passable_probs,
+            boundary_probs,
+            min_ditch_area=1,
+            min_left_barrier_area=1,
+            min_wall_area=1,
+            max_passable_hole_area=0,
+        )
+
+        self.assertTrue(fused["ditch"][1, 1])
+        self.assertFalse(fused["left_barrier"][1, 1])
+        self.assertTrue(fused["left_barrier"][2, 2])
+        self.assertTrue(fused["safe_passable"][2, 2])
+        self.assertFalse(fused["safe_passable"][0, 2])
+
+    def test_fusion_filters_tiny_wall_and_left_barrier_components(self):
+        passable_probs = np.zeros((2, 6, 6), dtype=np.float32)
+        boundary_probs = np.zeros((2, 6, 6), dtype=np.float32)
+        passable_probs[0, :, :] = 0.9
+        boundary_probs[0, 1, 1] = 0.95
+        boundary_probs[0, 4:6, 0:3] = 0.95
+        boundary_probs[1, 2, 2] = 0.95
+        boundary_probs[1, 0:2, 4:6] = 0.95
+
+        fused = fuse_passable_boundary_predictions(
+            passable_probs,
+            boundary_probs,
+            min_ditch_area=1,
+            min_left_barrier_area=4,
+            min_wall_area=4,
+            max_passable_hole_area=0,
+        )
+
+        self.assertFalse(fused["left_barrier"][1, 1])
+        self.assertTrue(fused["left_barrier"][4, 1])
+        self.assertFalse(fused["tunnel_wall"][2, 2])
+        self.assertTrue(fused["tunnel_wall"][0, 4])
+        self.assertTrue(fused["safe_passable"][2, 2])
+        self.assertFalse(fused["safe_passable"][0, 4])
+
+    def test_fusion_fills_tiny_passable_holes_without_overriding_ditch_or_wall(self):
+        passable_probs = np.zeros((2, 6, 6), dtype=np.float32)
+        boundary_probs = np.zeros((2, 6, 6), dtype=np.float32)
+        passable_probs[0, 1:5, 1:5] = 0.9
+        passable_probs[0, 2, 2] = 0.1
+        passable_probs[0, 3, 3] = 0.1
+        passable_probs[1, 3, 3] = 0.95
+        boundary_probs[1, 2, 3] = 0.95
+
+        fused = fuse_passable_boundary_predictions(
+            passable_probs,
+            boundary_probs,
+            min_ditch_area=1,
+            min_left_barrier_area=1,
+            min_wall_area=1,
+            max_passable_hole_area=4,
+        )
+
+        self.assertTrue(fused["safe_passable"][2, 2])
+        self.assertFalse(fused["safe_passable"][3, 3])
+        self.assertFalse(fused["safe_passable"][2, 3])
+
+    def test_fusion_removes_default_medium_ditch_blob_on_passable_surface(self):
+        passable_probs = np.zeros((2, 80, 80), dtype=np.float32)
+        boundary_probs = np.zeros((2, 80, 80), dtype=np.float32)
+        passable_probs[0, :, :] = 0.9
+        passable_probs[1, 30:60, 20:60] = 0.95
+
+        fused = fuse_passable_boundary_predictions(passable_probs, boundary_probs)
+
+        self.assertFalse(fused["ditch"][40, 40])
+        self.assertTrue(fused["safe_passable"][40, 40])
+
+    def test_fusion_fills_default_large_enclosed_passable_hole(self):
+        passable_probs = np.zeros((2, 80, 80), dtype=np.float32)
+        boundary_probs = np.zeros((2, 80, 80), dtype=np.float32)
+        passable_probs[0, :, :] = 0.9
+        passable_probs[0, 25:55, 15:65] = 0.1
+
+        fused = fuse_passable_boundary_predictions(passable_probs, boundary_probs)
+
+        self.assertTrue(fused["safe_passable"][40, 40])
+
+    def test_fusion_removes_passable_islands_not_connected_to_bottom(self):
+        passable_probs = np.zeros((2, 20, 20), dtype=np.float32)
+        boundary_probs = np.zeros((2, 20, 20), dtype=np.float32)
+        passable_probs[0, 14:20, :] = 0.9
+        passable_probs[0, 2:5, 3:8] = 0.9
+
+        fused = fuse_passable_boundary_predictions(passable_probs, boundary_probs)
+
+        self.assertTrue(fused["safe_passable"][18, 10])
+        self.assertFalse(fused["safe_passable"][3, 5])
 
     def test_dual_overlay_can_show_prediction_and_targets(self):
         image = np.zeros((8, 10, 3), dtype=np.uint8)

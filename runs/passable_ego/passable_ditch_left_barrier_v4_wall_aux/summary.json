@@ -1,0 +1,42 @@
+{
+  "device": "cuda",
+  "labels": [
+    "ego_passable",
+    "ditch",
+    "left_barrier"
+  ],
+  "target_labels": [
+    "ego_passable",
+    "ditch",
+    "left_barrier",
+    "surface_artifact_passable",
+    "tunnel_wall"
+  ],
+  "init_checkpoint": "runs/passable_ego/passable_ditch_artifact_v3_finetune/best_model.pt",
+  "train_samples": 34,
+  "val_samples": 7,
+  "best_checkpoint": "runs/passable_ego/passable_ditch_left_barrier_v4_wall_aux/best_model.pt",
+  "final_val": {
+    "loss": 12.23957347869873,
+    "passable_iou": 0.8111603263495569,
+    "passable_dice": 0.8957355288191519,
+    "ditch_iou": 0.6436927223815717,
+    "ditch_dice": 0.7832275626870135,
+    "left_barrier_iou": 0.07217891122039874,
+    "left_barrier_dice": 0.13463967712458577,
+    "safe_iou": 0.8115383965207655,
+    "safe_dice": 0.8959659900991782,
+    "ditch_as_passable_rate": 0.0008233034460805543,
+    "left_barrier_as_passable_rate": 0.0014709211358371892,
+    "left_barrier_as_ditch_rate": 0.04967187157165966,
+    "ditch_as_left_barrier_rate": 0.9617359940423517,
+    "passable_ditch_overlap_rate": 1.4108153101657554e-12,
+    "passable_left_barrier_overlap_rate": 1.3709672996860882e-12,
+    "artifact_ditch_false_positive_rate": 0.00614515155198147,
+    "artifact_left_barrier_false_positive_rate": 0.03139814965374881,
+    "artifact_passable_false_negative_rate": 0.4933824718532196,
+    "wall_passable_false_positive_rate": 0.0006736481413229944,
+    "wall_ditch_false_positive_rate": 0.000979851828006006,
+    "wall_left_barrier_false_positive_rate": 0.034417294413790885
+  }
+}

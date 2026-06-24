@@ -1,0 +1,14 @@
+{
+  "dataset_dir": "data/derived/passable_ditch_left_barrier_wall_aux_no_testvideo_2026-06-24",
+  "run_dir": "runs/passable_ego/boundary_wall_aux_v2_no_testvideo",
+  "epochs": 80,
+  "batch_size": 8,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "base_channels": 16,
+  "overlap_weight": 1.5,
+  "confusion_weight": 2.5,
+  "seed": 31,
+  "num_workers": 2,
+  "overlay_count": 12
+}

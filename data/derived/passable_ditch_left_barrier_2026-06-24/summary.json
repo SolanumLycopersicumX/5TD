@@ -1,0 +1,60 @@
+{
+  "source_image_dir": "data/annotation_batches/rgb_keyframes_2026-06-22/images",
+  "output_dir": "data/derived/passable_ditch_left_barrier_2026-06-24",
+  "label": "ego_passable",
+  "labels": [
+    "ego_passable",
+    "ditch",
+    "left_barrier",
+    "surface_artifact_passable"
+  ],
+  "excluded_prefixes": [
+    "demo_video"
+  ],
+  "val_prefixes": [
+    "test_video"
+  ],
+  "total": 41,
+  "train": 34,
+  "val": 7,
+  "empty_masks": {
+    "ego_passable": [],
+    "ditch": [
+      "11d80f_0001"
+    ],
+    "left_barrier": [],
+    "surface_artifact_passable": [
+      "11d80f_0001",
+      "11d80f_0002",
+      "11d80f_0003",
+      "11d80f_0004",
+      "11d80f_0005",
+      "11d80f_0006",
+      "11d80f_0007",
+      "335344_0001",
+      "335344_0002",
+      "335344_0003",
+      "8bfe84_0004",
+      "8bfe84_0005",
+      "8bfe84_0006",
+      "b0c37d_0001",
+      "b0c37d_0002",
+      "b0c37d_0003",
+      "b0c37d_0004",
+      "b0c37d_0005",
+      "b0c37d_0006",
+      "b0c37d_0007",
+      "ccb5ac_0001",
+      "ccb5ac_0002",
+      "ccb5ac_0003",
+      "ccb5ac_0004",
+      "ccb5ac_0005",
+      "ccb5ac_0006",
+      "ccb5ac_0008",
+      "ccb5ac_0009",
+      "ccb5ac_0010",
+      "ccb5ac_0011",
+      "test_video_0001"
+    ]
+  }
+}
