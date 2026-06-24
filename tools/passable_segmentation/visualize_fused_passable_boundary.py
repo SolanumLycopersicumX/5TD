@@ -154,6 +154,20 @@ def make_fused_overlay(image: np.ndarray, fused: dict[str, np.ndarray]) -> np.nd
     return np.concatenate([image, pred_overlay], axis=1)
 
 
+def write_fused_masks(output_dir: Path | str, stem: str, fused: dict[str, np.ndarray]) -> list[Path]:
+    """Write fused binary masks as 8-bit PNGs grouped by label."""
+    output_dir = Path(output_dir)
+    written = []
+    for label in ("safe_passable", "ditch", "left_barrier", "tunnel_wall"):
+        label_dir = output_dir / label
+        label_dir.mkdir(parents=True, exist_ok=True)
+        out_path = label_dir / f"{stem}.png"
+        mask = fused[label].astype(np.uint8) * 255
+        cv2.imwrite(str(out_path), mask)
+        written.append(out_path)
+    return written
+
+
 def read_manifest_images(path: Path | str) -> list[tuple[str, Path]]:
     """Read image records from any current derived segmentation manifest."""
     path = Path(path)
@@ -172,6 +186,7 @@ def write_fused_visualizations(
     output_dir: Path | str,
     image_dir: Path | str | None = None,
     manifest_path: Path | str | None = None,
+    mask_output_dir: Path | str | None = None,
     min_ditch_area: int = MIN_DITCH_COMPONENT_AREA,
     min_left_barrier_area: int = MIN_LEFT_BARRIER_COMPONENT_AREA,
     min_wall_area: int = MIN_WALL_COMPONENT_AREA,
@@ -208,6 +223,8 @@ def write_fused_visualizations(
             min_wall_area=min_wall_area,
             max_passable_hole_area=max_passable_hole_area,
         )
+        if mask_output_dir is not None:
+            write_fused_masks(mask_output_dir, stem, fused)
         canvas = make_fused_overlay(image_resized, fused)
         out_path = output_dir / f"{stem}_fused_overlay.jpg"
         cv2.imwrite(str(out_path), cv2.cvtColor(canvas, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, 95])

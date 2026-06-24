@@ -1,7 +1,10 @@
 import json
+import tempfile
 import unittest
+from pathlib import Path
 
 import numpy as np
+from PIL import Image
 
 from src.tunnel_nav.motion import (
     BEVGrid,
@@ -108,3 +111,45 @@ class CoreModelTest(unittest.TestCase):
         self.assertEqual(bundle.shape, (8, 10))
         self.assertEqual(risk.shape, (80, 50))
         self.assertEqual(trajectory.points.shape, (2, 3))
+
+
+class FusedMaskExportTest(unittest.TestCase):
+    def test_write_fused_masks_writes_expected_label_directories(self):
+        from tools.passable_segmentation.visualize_fused_passable_boundary import write_fused_masks
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output_dir = Path(tmp) / "masks"
+            fused = {
+                "safe_passable": np.array([[False, True], [True, True]], dtype=bool),
+                "ditch": np.array([[False, False], [False, True]], dtype=bool),
+                "left_barrier": np.array([[True, False], [False, False]], dtype=bool),
+                "tunnel_wall": np.array([[False, True], [False, False]], dtype=bool),
+            }
+
+            written = write_fused_masks(output_dir, "frame_001", fused)
+
+            self.assertEqual(len(written), 4)
+            for label in ["safe_passable", "ditch", "left_barrier", "tunnel_wall"]:
+                path = output_dir / label / "frame_001.png"
+                self.assertIn(path, written)
+                self.assertTrue(path.exists())
+                image = Image.open(path)
+                self.assertEqual(image.mode, "L")
+                self.assertEqual(np.asarray(image).dtype, np.uint8)
+
+    def test_write_fused_masks_uses_255_for_true_and_0_for_false(self):
+        from tools.passable_segmentation.visualize_fused_passable_boundary import write_fused_masks
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output_dir = Path(tmp) / "masks"
+            fused = {
+                "safe_passable": np.array([[False, True]], dtype=bool),
+                "ditch": np.array([[True, False]], dtype=bool),
+                "left_barrier": np.array([[False, False]], dtype=bool),
+                "tunnel_wall": np.array([[True, True]], dtype=bool),
+            }
+
+            write_fused_masks(output_dir, "frame_002", fused)
+
+            safe = np.asarray(Image.open(output_dir / "safe_passable" / "frame_002.png"))
+            self.assertEqual(safe.tolist(), [[0, 255]])
