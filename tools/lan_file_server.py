@@ -3,9 +3,11 @@ import argparse
 import email.policy
 import html
 import io
+import ipaddress
 import os
 import posixpath
 import socket
+import subprocess
 import sys
 import urllib.parse
 from email.parser import BytesParser
@@ -18,6 +20,11 @@ from pathlib import Path
 DEFAULT_SHARE_DIR = "lan_share"
 DEFAULT_HOST = "0.0.0.0"
 DEFAULT_PORT = 8000
+LAN_IPV4_NETWORKS = (
+    ipaddress.ip_network("10.0.0.0/8"),
+    ipaddress.ip_network("172.16.0.0/12"),
+    ipaddress.ip_network("192.168.0.0/16"),
+)
 
 
 def resolve_within_root(root, request_path):
@@ -50,26 +57,92 @@ def unique_destination(directory, filename):
         index += 1
 
 
+def is_lan_ipv4_address(address):
+    try:
+        ip = ipaddress.ip_address(address)
+    except ValueError:
+        return False
+    if ip.version != 4:
+        return False
+    return any(ip in network for network in LAN_IPV4_NETWORKS)
+
+
+def prioritize_lan_addresses(addresses, primary=None):
+    unique_addresses = sorted({address for address in addresses if is_lan_ipv4_address(address)})
+    if primary and is_lan_ipv4_address(primary) and primary in unique_addresses:
+        unique_addresses.remove(primary)
+        return [primary] + unique_addresses
+    return unique_addresses
+
+
+def default_route_source(route_output):
+    for line in route_output.splitlines():
+        parts = line.split()
+        if not parts or parts[0] != "default" or "src" not in parts:
+            continue
+        src_index = parts.index("src")
+        if src_index + 1 >= len(parts):
+            continue
+        address = parts[src_index + 1]
+        if is_lan_ipv4_address(address):
+            return address
+    return None
+
+
 def lan_ipv4_addresses():
     addresses = set()
+    primary = None
     try:
         hostname = socket.gethostname()
         for address in socket.gethostbyname_ex(hostname)[2]:
-            if not address.startswith("127."):
+            if is_lan_ipv4_address(address):
                 addresses.add(address)
     except OSError:
+        pass
+
+    try:
+        output = subprocess.run(
+            ["hostname", "-I"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=1,
+        ).stdout
+        for address in output.split():
+            if is_lan_ipv4_address(address):
+                addresses.add(address)
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+    try:
+        output = subprocess.run(
+            ["ip", "-4", "route", "show", "default"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=1,
+        ).stdout
+        address = default_route_source(output)
+        if address:
+            primary = address
+            addresses.add(address)
+    except (OSError, subprocess.SubprocessError):
         pass
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
             sock.connect(("8.8.8.8", 80))
             address = sock.getsockname()[0]
-            if not address.startswith("127."):
+            if is_lan_ipv4_address(address):
+                primary = address
                 addresses.add(address)
     except OSError:
         pass
 
-    return sorted(addresses)
+    prioritized = prioritize_lan_addresses(addresses, primary=primary)
+    if primary and prioritized and prioritized[0] == primary:
+        return [primary]
+    return prioritized
 
 
 class LanFileRequestHandler(SimpleHTTPRequestHandler):

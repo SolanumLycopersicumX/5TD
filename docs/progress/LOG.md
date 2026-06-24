@@ -740,3 +740,24 @@ Caveats:
 - The current BEV is pseudo-BEV and is not meter-accurate calibrated IPM.
 - This bridge is for offline command/trajectory validation only.
 - Live RS232 remains disabled until camera calibration, emergency stop, angular sign, and low-speed real-vehicle behavior are validated.
+
+## 2026-06-24 - LAN File Server Address Fix
+
+Scope:
+
+- Fixed the LAN file server address selection after `192.18.0.1` / `198.18.0.1` appeared as misleading share URLs.
+- Restricted displayed LAN candidates to RFC1918 private network ranges: `10.0.0.0/8`, `172.16.0.0/12`, and `192.168.0.0/16`.
+- Added Linux default-route parsing through `ip -4 route show default` so the server prefers the actual Wi-Fi LAN source address instead of virtual tunnel or bridge addresses.
+- Restarted the local file server on port `8000`.
+
+Result:
+
+- Current local share URL: `http://192.168.110.16:8000/`.
+- The server log now shows only `LAN: http://192.168.110.16:8000/`.
+
+Verification:
+
+- `conda run -n lerobot python -m unittest discover -s tests -p 'test_lan_file_server.py' -v`
+- `conda run -n lerobot python -m py_compile tools/lan_file_server.py tests/test_lan_file_server.py`
+- Direct helper check returned `['192.168.110.16']`.
+- `curl -sSf http://127.0.0.1:8000/` returned the upload page HTML.
