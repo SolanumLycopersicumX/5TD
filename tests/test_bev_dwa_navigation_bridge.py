@@ -335,3 +335,71 @@ class SafetyFilterTest(unittest.TestCase):
         self.assertEqual(command.safety_state, "S0_NORMAL")
         self.assertEqual(command.linear_mps, 0.08)
         self.assertEqual(command.angular_radps, 0.15)
+
+
+class Rs232AdapterTest(unittest.TestCase):
+    def test_modbus_crc16_matches_known_request(self):
+        from src.tunnel_nav.rs232 import modbus_crc16
+
+        frame = bytes.fromhex("01030000000A")
+
+        self.assertEqual(modbus_crc16(frame), 0xCDC5)
+
+    def test_velocity_conversion_clamps_and_applies_sign(self):
+        from src.tunnel_nav.rs232 import clamp_int16, velocity_to_registers
+
+        lin, ang = velocity_to_registers(
+            linear_mps=99.0,
+            angular_radps=0.25,
+            max_speed_mps=0.10,
+            max_angular_radps=0.50,
+            angular_sign=-1,
+        )
+
+        self.assertEqual(lin, 100)
+        self.assertEqual(ang, -250)
+        self.assertEqual(clamp_int16(40000), 32767)
+        self.assertEqual(clamp_int16(-40000), -32768)
+
+    def test_dry_run_adapter_reports_registers_without_serial(self):
+        from src.tunnel_nav.rs232 import Rs232DryRunAdapter
+
+        adapter = Rs232DryRunAdapter(node_addr=0x06)
+        command = MotionCommand(
+            linear_mps=0.05,
+            angular_radps=0.10,
+            brake=False,
+            safety_state="S0_NORMAL",
+            reason="test",
+            confidence=1.0,
+            source_frame="frame_001",
+            dry_run=True,
+        )
+
+        record = adapter.send(command, NavigationConfig(max_speed_mps=0.10, max_angular_radps=0.50))
+
+        self.assertEqual(record["node_addr"], 0x06)
+        self.assertEqual(record["register_start"], 1040)
+        self.assertEqual(record["registers"]["linear"], 50)
+        self.assertEqual(record["registers"]["angular"], 100)
+        self.assertTrue(record["dry_run"])
+
+    def test_brake_command_converts_to_zero_velocity_registers(self):
+        from src.tunnel_nav.rs232 import Rs232DryRunAdapter
+
+        adapter = Rs232DryRunAdapter(node_addr=0x06)
+        command = MotionCommand(
+            linear_mps=0.05,
+            angular_radps=0.10,
+            brake=True,
+            safety_state="S3_STOP",
+            reason="stop",
+            confidence=0.0,
+            source_frame="frame_002",
+            dry_run=True,
+        )
+
+        record = adapter.send(command, NavigationConfig(max_speed_mps=0.10, max_angular_radps=0.50))
+
+        self.assertEqual(record["registers"]["linear"], 0)
+        self.assertEqual(record["registers"]["angular"], 0)

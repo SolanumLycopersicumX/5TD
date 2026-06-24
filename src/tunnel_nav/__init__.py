@@ -11,6 +11,7 @@ from .motion import (
     RiskGrid,
     Trajectory,
 )
+from .rs232 import Rs232DryRunAdapter
 from .safety import command_from_dwa_result
 
 __all__ = [
@@ -19,6 +20,7 @@ __all__ = [
     "MaskBundle",
     "MotionCommand",
     "NavigationConfig",
+    "Rs232DryRunAdapter",
     "RiskGrid",
     "Trajectory",
     "build_pseudo_bev_grid",
