@@ -153,3 +153,63 @@ class FusedMaskExportTest(unittest.TestCase):
 
             safe = np.asarray(Image.open(output_dir / "safe_passable" / "frame_002.png"))
             self.assertEqual(safe.tolist(), [[0, 255]])
+
+
+class BEVGridTest(unittest.TestCase):
+    def _bundle(self, safe, ditch=None, wall=None, left=None):
+        shape = safe.shape
+        return MaskBundle(
+            safe_passable=safe.astype(bool),
+            ditch=np.zeros(shape, dtype=bool) if ditch is None else ditch.astype(bool),
+            tunnel_wall=np.zeros(shape, dtype=bool) if wall is None else wall.astype(bool),
+            left_barrier=np.zeros(shape, dtype=bool) if left is None else left.astype(bool),
+            source_frame="synthetic",
+        )
+
+    def test_center_passable_corridor_becomes_low_risk_free_space(self):
+        from src.tunnel_nav.bev import build_pseudo_bev_grid
+
+        safe = np.zeros((80, 120), dtype=bool)
+        safe[:, 35:85] = True
+
+        grid = build_pseudo_bev_grid(self._bundle(safe), resolution_m=0.1)
+        center_col = grid.occupancy.shape[1] // 2
+
+        self.assertFalse(grid.occupancy[-1, center_col])
+        self.assertLess(grid.risk[-1, center_col], 0.3)
+        self.assertTrue(grid.occupancy[-1, 0])
+        self.assertEqual(grid.risk[-1, 0], 1.0)
+
+    def test_ditch_and_wall_are_occupied_high_risk(self):
+        from src.tunnel_nav.bev import build_pseudo_bev_grid
+
+        safe = np.ones((80, 120), dtype=bool)
+        ditch = np.zeros_like(safe)
+        wall = np.zeros_like(safe)
+        ditch[:, 90:110] = True
+        wall[:, 0:12] = True
+
+        grid = build_pseudo_bev_grid(self._bundle(safe, ditch=ditch, wall=wall), resolution_m=0.1)
+
+        self.assertTrue(grid.occupancy[-1, -4])
+        self.assertEqual(grid.risk[-1, -4], 1.0)
+        self.assertTrue(grid.occupancy[-1, 2])
+        self.assertEqual(grid.risk[-1, 2], 1.0)
+
+    def test_boundary_dilation_creates_high_risk_keepout_band(self):
+        from src.tunnel_nav.bev import build_pseudo_bev_grid
+
+        safe = np.ones((80, 120), dtype=bool)
+        ditch = np.zeros_like(safe)
+        ditch[:, 75:80] = True
+
+        grid = build_pseudo_bev_grid(
+            self._bundle(safe, ditch=ditch),
+            resolution_m=0.1,
+            boundary_dilation_m=0.3,
+        )
+        hard_cols = np.flatnonzero(grid.risk[-1] == 1.0)
+        high_risk_cols = np.flatnonzero((grid.risk[-1] >= 0.65) & (grid.risk[-1] < 1.0))
+
+        self.assertGreater(len(hard_cols), 0)
+        self.assertGreater(len(high_risk_cols), 0)

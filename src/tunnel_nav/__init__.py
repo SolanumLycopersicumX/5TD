@@ -1,5 +1,6 @@
 """Tunnel navigation engineering package."""
 
+from .bev import build_pseudo_bev_grid, dilate_binary
 from .motion import (
     BEVGrid,
     DWAConfig,
@@ -18,4 +19,6 @@ __all__ = [
     "NavigationConfig",
     "RiskGrid",
     "Trajectory",
+    "build_pseudo_bev_grid",
+    "dilate_binary",
 ]
