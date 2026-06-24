@@ -704,3 +704,39 @@ Key Constraints:
 - DWA runs offline over generated risk grids.
 - Output remains command JSON, overlay visualization, and RS232 dry-run JSON.
 - Live serial writes remain blocked until calibration, emergency stop, angular sign, and low-speed behavior are validated.
+
+## 2026-06-24 - Offline BEV / DWA / RS232 Dry-Run Bridge Implementation
+
+Scope:
+
+- Added a new `src/tunnel_nav` runtime path for the first offline navigation bridge.
+- Added core data structures for masks, pseudo-BEV grids, DWA trajectories, safety-filtered motion commands, and conservative navigation configuration.
+- Added fused mask export from the existing segmentation fusion script.
+- Added pseudo-BEV occupancy/risk grid generation from `safe_passable`, `ditch`, `tunnel_wall`, and `left_barrier` masks.
+- Added a conservative low-speed DWA planner over the risk grid.
+- Added a safety filter with `S0_NORMAL`, `S1_CAUTIOUS`, `S2_SLOWDOWN`, and `S3_STOP` command behavior.
+- Added an RS232 dry-run adapter that converts physical velocity commands to Modbus register values without opening serial.
+- Added an offline CLI that writes command JSON, RS232 dry-run JSON, and BEV/DWA overlay images.
+- Updated `configs/robot/vehicle.yaml` with differential-drive, RS232 dry-run, and pseudo-BEV/DWA defaults.
+
+Key Files:
+
+- `src/tunnel_nav/motion.py`
+- `src/tunnel_nav/bev.py`
+- `src/tunnel_nav/dwa.py`
+- `src/tunnel_nav/safety.py`
+- `src/tunnel_nav/rs232.py`
+- `tools/navigation_bridge/run_offline_bev_dwa_bridge.py`
+- `tests/test_bev_dwa_navigation_bridge.py`
+
+Verification:
+
+- `conda run -n lerobot python -m unittest discover -s tests -p 'test_bev_dwa_navigation_bridge.py' -v`
+- `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable_segmentation_tools.py' -v`
+- `conda run -n lerobot python -m py_compile src/tunnel_nav/*.py tools/navigation_bridge/run_offline_bev_dwa_bridge.py tools/passable_segmentation/visualize_fused_passable_boundary.py tests/test_bev_dwa_navigation_bridge.py`
+
+Caveats:
+
+- The current BEV is pseudo-BEV and is not meter-accurate calibrated IPM.
+- This bridge is for offline command/trajectory validation only.
+- Live RS232 remains disabled until camera calibration, emergency stop, angular sign, and low-speed real-vehicle behavior are validated.
