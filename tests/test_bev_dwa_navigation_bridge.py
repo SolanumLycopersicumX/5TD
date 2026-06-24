@@ -213,3 +213,56 @@ class BEVGridTest(unittest.TestCase):
 
         self.assertGreater(len(hard_cols), 0)
         self.assertGreater(len(high_risk_cols), 0)
+
+
+class DWAPlannerTest(unittest.TestCase):
+    def _grid(self, occupancy=None, risk=None):
+        if occupancy is None:
+            occupancy = np.zeros((80, 50), dtype=bool)
+        if risk is None:
+            risk = np.where(occupancy, 1.0, 0.1).astype(np.float32)
+        return BEVGrid(
+            occupancy=occupancy.astype(bool),
+            risk=risk.astype(np.float32),
+            x_min_m=-2.5,
+            x_max_m=2.5,
+            y_min_m=0.0,
+            y_max_m=8.0,
+            resolution_m=0.1,
+        )
+
+    def test_clear_grid_selects_forward_trajectory(self):
+        from src.tunnel_nav.dwa import select_dwa_trajectory
+
+        selected, candidates = select_dwa_trajectory(self._grid(), DWAConfig())
+
+        self.assertIsNotNone(selected)
+        self.assertTrue(selected.feasible)
+        self.assertGreater(selected.linear_mps, 0.0)
+        self.assertAlmostEqual(selected.angular_radps, 0.0, delta=0.13)
+        self.assertGreater(len(candidates), 0)
+
+    def test_all_occupied_grid_has_no_feasible_trajectory(self):
+        from src.tunnel_nav.dwa import select_dwa_trajectory
+
+        occupancy = np.ones((80, 50), dtype=bool)
+        selected, candidates = select_dwa_trajectory(self._grid(occupancy=occupancy), DWAConfig())
+
+        self.assertIsNone(selected)
+        self.assertGreater(len(candidates), 0)
+        self.assertTrue(all(not candidate.feasible for candidate in candidates))
+
+    def test_selected_trajectory_never_enters_occupied_cells(self):
+        from src.tunnel_nav.dwa import metric_to_grid_cell, select_dwa_trajectory
+
+        occupancy = np.zeros((80, 50), dtype=bool)
+        occupancy[70:79, 24:26] = True
+        grid = self._grid(occupancy=occupancy)
+
+        selected, _ = select_dwa_trajectory(grid, DWAConfig())
+
+        if selected is None:
+            return
+        for x_m, y_m, _yaw in selected.points:
+            row, col = metric_to_grid_cell(grid, float(x_m), float(y_m))
+            self.assertFalse(grid.occupancy[row, col])
