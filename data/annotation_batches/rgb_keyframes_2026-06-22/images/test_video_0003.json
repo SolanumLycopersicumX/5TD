@@ -287,6 +287,58 @@
       "shape_type": "polygon",
       "flags": {},
       "mask": null
+    },
+    {
+      "label": "surface_artifact_passable",
+      "points": [
+        [
+          303.8461538461538,
+          760.7692307692307
+        ],
+        [
+          397.6923076923076,
+          763.8461538461538
+        ],
+        [
+          385.38461538461536,
+          850.0
+        ],
+        [
+          274.6153846153846,
+          857.6923076923077
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "surface_artifact_passable",
+      "points": [
+        [
+          114.61538461538458,
+          702.3076923076923
+        ],
+        [
+          223.8461538461538,
+          706.9230769230769
+        ],
+        [
+          203.8461538461538,
+          782.3076923076923
+        ],
+        [
+          34.61538461538461,
+          779.2307692307693
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
     }
   ],
   "imagePath": "test_video_0003.jpg",

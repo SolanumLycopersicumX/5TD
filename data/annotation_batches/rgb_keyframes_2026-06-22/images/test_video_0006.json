@@ -307,6 +307,32 @@
       "shape_type": "rectangle",
       "flags": {},
       "mask": null
+    },
+    {
+      "label": "surface_artifact_passable",
+      "points": [
+        [
+          186.9230769230769,
+          983.8461538461538
+        ],
+        [
+          159.23076923076923,
+          1188.4615384615383
+        ],
+        [
+          314.61538461538464,
+          1203.8461538461538
+        ],
+        [
+          346.9230769230769,
+          1000.7692307692307
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
     }
   ],
   "imagePath": "test_video_0006.jpg",

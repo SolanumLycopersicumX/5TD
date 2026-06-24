@@ -23,10 +23,12 @@ from tools.passable_segmentation.common import (
 
 # ==== TUNABLE PARAMETERS ====
 IMAGE_DIR = Path("data/annotation_batches/rgb_keyframes_2026-06-22/images")
-OUTPUT_DIR = Path("data/derived/passable_ditch_2026-06-24")
+OUTPUT_DIR = Path("data/derived/passable_ditch_artifact_2026-06-24")
 VAL_PREFIXES = ("test_video",)
 EXCLUDE_PREFIXES = ("demo_video",)
-LABELS = ("ego_passable", "ditch")
+LABELS = ("ego_passable", "ditch", "surface_artifact_passable")
+# OUTPUT_DIR = Path("data/derived/passable_ditch_2026-06-24")
+# LABELS = ("ego_passable", "ditch")
 # OUTPUT_DIR = Path("data/derived/passable_ego_2026-06-24")
 # LABELS = ("ego_passable",)
 

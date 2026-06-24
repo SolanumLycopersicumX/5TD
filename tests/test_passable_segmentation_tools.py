@@ -18,9 +18,15 @@ from tools.passable_segmentation.train_passable import (
     build_train_config,
 )
 from tools.passable_segmentation.train_passable_ditch import (
+    filter_small_binary_components,
     build_train_config as build_dual_train_config,
     make_dual_overlay,
+    postprocess_dual_probabilities,
     safe_passable_metrics,
+)
+from tools.passable_segmentation.train_passable_ditch_artifact import (
+    artifact_safe_metrics,
+    passable_ditch_artifact_loss,
 )
 from tools.passable_segmentation.visualize_passable import collect_image_paths, make_overlay_canvas
 
@@ -195,6 +201,65 @@ class PassableSegmentationToolsTest(unittest.TestCase):
 
         self.assertGreater(metrics["ditch_as_passable_rate"], 0.9)
 
+    def test_artifact_metrics_penalize_ditch_on_drivable_surface_artifacts(self):
+        import torch
+
+        logits = torch.zeros(1, 2, 4, 4)
+        logits[:, 0] = -10.0
+        logits[:, 1] = 10.0
+        targets = torch.zeros(1, 3, 4, 4)
+        targets[:, 0, :, :] = 1.0
+        targets[:, 2, :, 1:3] = 1.0
+
+        metrics = artifact_safe_metrics(logits, targets)
+
+        self.assertGreater(metrics["artifact_ditch_false_positive_rate"], 0.9)
+        self.assertGreater(metrics["artifact_passable_false_negative_rate"], 0.9)
+
+    def test_artifact_loss_is_higher_when_artifact_is_predicted_as_ditch(self):
+        import torch
+
+        targets = torch.zeros(1, 3, 4, 4)
+        targets[:, 0, :, :] = 1.0
+        targets[:, 2, :, 1:3] = 1.0
+
+        good_logits = torch.zeros(1, 2, 4, 4)
+        good_logits[:, 0] = 10.0
+        good_logits[:, 1] = -10.0
+        bad_logits = torch.zeros(1, 2, 4, 4)
+        bad_logits[:, 0] = -10.0
+        bad_logits[:, 1] = 10.0
+
+        good_loss = passable_ditch_artifact_loss(good_logits, targets)
+        bad_loss = passable_ditch_artifact_loss(bad_logits, targets)
+
+        self.assertGreater(float(bad_loss), float(good_loss) + 1.0)
+
+    def test_artifact_loss_keeps_true_ditch_from_being_marked_passable(self):
+        import torch
+
+        targets = torch.zeros(1, 3, 4, 4)
+        targets[:, 1, :, 2:] = 1.0
+
+        bad_logits = torch.zeros(1, 2, 4, 4)
+        bad_logits[:, 0] = 10.0
+        bad_logits[:, 1] = -10.0
+
+        weak_loss = passable_ditch_artifact_loss(
+            bad_logits,
+            targets,
+            ditch_safety_weight=0.0,
+            artifact_weight=0.0,
+        )
+        safe_loss = passable_ditch_artifact_loss(
+            bad_logits,
+            targets,
+            ditch_safety_weight=2.0,
+            artifact_weight=0.0,
+        )
+
+        self.assertGreater(float(safe_loss), float(weak_loss) + 1.0)
+
     def test_dual_overlay_can_show_prediction_and_targets(self):
         image = np.zeros((8, 10, 3), dtype=np.uint8)
         probs = np.zeros((2, 8, 10), dtype=np.float32)
@@ -207,6 +272,29 @@ class PassableSegmentationToolsTest(unittest.TestCase):
         canvas = make_dual_overlay(image, probs, target)
 
         self.assertEqual(canvas.shape, (8, 30, 3))
+
+    def test_filter_small_binary_components_removes_only_tiny_ditch_islands(self):
+        mask = np.zeros((8, 10), dtype=bool)
+        mask[1, 1] = True
+        mask[4:6, 6:9] = True
+
+        filtered = filter_small_binary_components(mask, min_area=4)
+
+        self.assertFalse(filtered[1, 1])
+        self.assertTrue(filtered[4:6, 6:9].all())
+
+    def test_postprocess_dual_probabilities_filters_ditch_without_changing_passable(self):
+        probs = np.zeros((2, 8, 10), dtype=np.float32)
+        probs[0, :, :] = 0.75
+        probs[1, 1, 1] = 0.9
+        probs[1, 4:6, 6:9] = 0.9
+
+        processed = postprocess_dual_probabilities(probs, min_ditch_area=4)
+
+        np.testing.assert_array_equal(processed[0], probs[0])
+        self.assertEqual(float(processed[1, 1, 1]), 0.0)
+        self.assertAlmostEqual(float(processed[1, 4, 6]), 0.9)
+        self.assertAlmostEqual(float(probs[1, 1, 1]), 0.9)
 
     def test_visualization_collects_images_and_builds_canvas(self):
         with tempfile.TemporaryDirectory() as tmp:

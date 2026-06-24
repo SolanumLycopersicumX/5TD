@@ -213,6 +213,32 @@
       "shape_type": "polygon",
       "flags": {},
       "mask": null
+    },
+    {
+      "label": "surface_artifact_passable",
+      "points": [
+        [
+          71.53846153846155,
+          911.5384615384615
+        ],
+        [
+          165.38461538461542,
+          816.1538461538462
+        ],
+        [
+          211.53846153846155,
+          823.8461538461538
+        ],
+        [
+          163.84615384615387,
+          919.2307692307692
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
     }
   ],
   "imagePath": "8bfe84_0002.jpg",

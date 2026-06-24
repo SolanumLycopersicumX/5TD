@@ -1,0 +1,29 @@
+{
+  "device": "cuda",
+  "labels": [
+    "ego_passable",
+    "ditch"
+  ],
+  "target_labels": [
+    "ego_passable",
+    "ditch",
+    "surface_artifact_passable"
+  ],
+  "init_checkpoint": "runs/passable_ego/passable_ditch_augmented/best_model.pt",
+  "train_samples": 34,
+  "val_samples": 7,
+  "best_checkpoint": "runs/passable_ego/passable_ditch_artifact_v3_finetune/best_model.pt",
+  "final_val": {
+    "loss": 0.901305615901947,
+    "passable_iou": 0.9726616691558043,
+    "passable_dice": 0.9861413990692526,
+    "ditch_iou": 0.5226729818879186,
+    "ditch_dice": 0.6865203337838748,
+    "safe_iou": 0.9729602531288453,
+    "safe_dice": 0.9862948344609123,
+    "ditch_as_passable_rate": 0.00023522958402653272,
+    "passable_ditch_overlap_rate": 2.4522827832211875e-05,
+    "artifact_ditch_false_positive_rate": 0.005642985428623104,
+    "artifact_passable_false_negative_rate": 0.03107472062514512
+  }
+}

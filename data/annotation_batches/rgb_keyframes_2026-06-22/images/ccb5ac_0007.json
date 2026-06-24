@@ -299,6 +299,32 @@
       "shape_type": "polygon",
       "flags": {},
       "mask": null
+    },
+    {
+      "label": "surface_artifact_passable",
+      "points": [
+        [
+          2.307692307692321,
+          1068.4615384615383
+        ],
+        [
+          2.307692307692321,
+          1199.230769230769
+        ],
+        [
+          110.0,
+          1183.8461538461538
+        ],
+        [
+          122.30769230769232,
+          1057.6923076923076
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
     }
   ],
   "imagePath": "ccb5ac_0007.jpg",

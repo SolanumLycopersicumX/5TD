@@ -7,3 +7,4 @@ worker
 construction_vehicle
 suspended_object
 debris
+surface_artifact_passable

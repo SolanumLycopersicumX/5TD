@@ -176,6 +176,41 @@ def safe_passable_metrics(logits: torch.Tensor, targets: torch.Tensor) -> dict[s
     return metrics
 
 
+def filter_small_binary_components(mask: np.ndarray, *, min_area: int) -> np.ndarray:
+    """Remove connected components smaller than the configured pixel area."""
+    mask_bool = mask.astype(bool)
+    if min_area <= 1:
+        return mask_bool.copy()
+
+    component_count, labels, stats, _ = cv2.connectedComponentsWithStats(
+        mask_bool.astype(np.uint8),
+        connectivity=8,
+    )
+    filtered = np.zeros_like(mask_bool, dtype=bool)
+    for component_id in range(1, component_count):
+        area = int(stats[component_id, cv2.CC_STAT_AREA])
+        if area >= min_area:
+            filtered[labels == component_id] = True
+    return filtered
+
+
+def postprocess_dual_probabilities(
+    probs: np.ndarray,
+    *,
+    ditch_threshold: float = 0.5,
+    min_ditch_area: int = 0,
+) -> np.ndarray:
+    """Suppress tiny isolated ditch components without changing passable probabilities."""
+    processed = probs.copy()
+    if min_ditch_area <= 1:
+        return processed
+
+    ditch_mask = processed[1] > ditch_threshold
+    filtered_ditch = filter_small_binary_components(ditch_mask, min_area=min_ditch_area)
+    processed[1][ditch_mask & ~filtered_ditch] = 0.0
+    return processed
+
+
 def train_one_epoch(
     model: nn.Module,
     loader: DataLoader,
@@ -233,8 +268,15 @@ def denormalize_image(image: torch.Tensor) -> np.ndarray:
     return arr
 
 
-def make_dual_overlay(image: np.ndarray, probs: np.ndarray, target: np.ndarray | None = None) -> np.ndarray:
+def make_dual_overlay(
+    image: np.ndarray,
+    probs: np.ndarray,
+    target: np.ndarray | None = None,
+    *,
+    min_ditch_area: int = 0,
+) -> np.ndarray:
     """Build original, prediction, and optional target panels."""
+    probs = postprocess_dual_probabilities(probs, min_ditch_area=min_ditch_area)
     passable = probs[0] > 0.5
     ditch = probs[1] > 0.5
     safe = passable & ~ditch

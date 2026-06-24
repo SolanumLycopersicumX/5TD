@@ -344,3 +344,100 @@ Next Actions:
 
 - Keep using `git fetch` before future upload work to detect teammate changes early.
 - If `/tmp` is cleaned again, use `/home/tomato/.local/bin/gh` or reinstall GitHub CLI before pushing.
+
+## 2026-06-24 - Third-Round Artifact Correction Label
+
+Scope:
+
+- Added `surface_artifact_passable` to both RGB keyframe Labelme label lists.
+- Updated annotation rules for third-round correction of small rocks, shallow pits, stains, cracks, and other drivable surface texture artifacts.
+- Clarified that drivable surface artifacts must remain inside `ego_passable` and must not be labeled as `ditch`.
+- Clarified that only large avoidable objects should be labeled as `debris`, and only real deep channels or drainage grooves should be labeled as `ditch`.
+
+Verification:
+
+- Confirmed the two active annotation batches have matching `labels.txt` files.
+- Confirmed `surface_artifact_passable` appears in both label lists and in the annotation guidance.
+
+Next Actions:
+
+- Use Labelme to mark current model false-positive regions with `surface_artifact_passable`.
+- After correction annotations are available, update the dataset preparation and third-round training loss to penalize `ditch` predictions on these regions.
+
+## 2026-06-24 - Third-Round Artifact-Corrected Training
+
+Scope:
+
+- Trained a third-round passable-road model using the corrected 41 Labelme images and the new `surface_artifact_passable` label.
+- Updated `prepare_dataset.py` defaults to generate a three-target derived dataset: `ego_passable`, `ditch`, and `surface_artifact_passable`.
+- Added `train_passable_ditch_artifact.py`, which keeps the model output as two classes (`ego_passable`, `ditch`) while using the artifact mask only as a training constraint.
+- Added a true-ditch safety loss so real drainage channels must stay non-passable and be predicted as `ditch`.
+- Switched the useful third-round run to fine-tune from the previous v2 checkpoint instead of training from scratch. The scratch v3 run collapsed the ditch head and was not considered usable.
+
+Results:
+
+- Dataset: `data/derived/passable_ditch_artifact_2026-06-24`.
+- Final checkpoint: `runs/passable_ego/passable_ditch_artifact_v3_finetune/best_model.pt`.
+- Summary: `runs/passable_ego/passable_ditch_artifact_v3_finetune/summary.json`.
+- All 41 labeled overlays: `runs/passable_ego/passable_ditch_artifact_v3_finetune/overlays_all_labeled/`.
+- Validation metrics for the fine-tuned model:
+  - `passable_iou`: 0.9727.
+  - `safe_iou`: 0.9730.
+  - `ditch_iou`: 0.5227.
+  - `ditch_as_passable_rate`: 0.00024.
+  - `artifact_ditch_false_positive_rate`: 0.00564.
+  - `artifact_passable_false_negative_rate`: 0.03107.
+- Compared with v2 on the same artifact validation labels, the artifact passable-gap rate improved from 0.2261 to 0.0311, and true ditch marked as passable improved from 0.0447 to 0.00024.
+
+Verification:
+
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 13 tests OK.
+- Confirmed the corrected dataset has 41 images, with 34 training and 7 validation samples.
+- Confirmed train split label coverage: 34 `ego_passable`, 33 `ditch`, 4 `surface_artifact_passable`.
+- Confirmed validation split label coverage: 7 `ego_passable`, 7 `ditch`, 6 `surface_artifact_passable`.
+- Visually inspected validation overlays including `test_video_0002`, `test_video_0004`, and `test_video_0005`.
+
+Caveats:
+
+- The fine-tuned model is safer around real drainage channels, but `ditch_iou` is lower than v2, which means the predicted ditch shape is less complete.
+- A few isolated red speckles still remain on road texture in some overlays. This should be handled next with more focused labels and/or small connected-component filtering in inference.
+
+Next Actions:
+
+- Review `overlays_all_labeled` before deciding whether this checkpoint is good enough for a demo.
+- Add a post-processing option to remove tiny isolated ditch components if the remaining red speckles affect driving behavior.
+- Continue adding new annotated frames when more data is available.
+
+## 2026-06-24 - Ditch Speckle Post-Processing and V4 Direction
+
+Scope:
+
+- Added post-processing for two-head passable-road predictions to remove small isolated `ditch` connected components.
+- Kept this as inference/visualization post-processing only; it does not change training masks or saved checkpoints.
+- Set the default visualization threshold to `MIN_DITCH_COMPONENT_AREA = 500` pixels at the resized `384x640` model resolution.
+- Regenerated filtered overlays for the corrected 41 labeled images and the 41 additional extracted keyframes.
+- Clarified annotation guidance for v4: far-left curbs, wall-base edges, isolation blocks, and crash blocks should remain `left_barrier`, not `ditch`.
+
+Outputs:
+
+- Filtered 41 labeled overlays: `runs/passable_ego/passable_ditch_artifact_v3_finetune/overlays_all_labeled_filtered/`.
+- Filtered additional-keyframe overlays: `runs/passable_ego/passable_ditch_artifact_v3_finetune/overlays_more_keyframes_filtered/`.
+- Updated visualization default: `tools/passable_segmentation/visualize_passable_ditch.py`.
+
+Verification:
+
+- Added regression tests for small connected-component filtering and probability post-processing.
+- Unit tests passed: `conda run -n lerobot python -m unittest discover -s tests -p 'test_passable*.py'` reported 15 tests OK.
+- Syntax check passed: `conda run -n lerobot python -m py_compile tools/passable_segmentation/*.py tests/test_passable_segmentation_tools.py`.
+- Visually inspected filtered `test_video_0004_overlay.jpg`; small isolated red components were removed while long right-side drainage-channel predictions remained.
+
+Caveats:
+
+- The filter removes only small isolated `ditch` blobs. It will not fix large connected false positives, such as a far-left wall or curb being consistently predicted as a long ditch segment.
+- V4 should add `left_barrier` as an explicit model output class, using the existing `left_barrier` annotations, so the network can separate left-side hard boundaries from true drainage channels.
+
+Next Actions:
+
+- For v4, prepare a dataset with `ego_passable`, `ditch`, `left_barrier`, and auxiliary `surface_artifact_passable`.
+- Train a three-output model: passable road, drainage channel, and left hard boundary.
+- Use `left_barrier` for left curb and crash-block correction; only use `ditch` for real trenches or deep drainage channels.

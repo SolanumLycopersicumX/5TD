@@ -1,0 +1,16 @@
+{
+  "dataset_dir": "data/derived/passable_ditch_artifact_2026-06-24",
+  "run_dir": "runs/passable_ego/passable_ditch_artifact_v3_finetune",
+  "init_checkpoint": "runs/passable_ego/passable_ditch_augmented/best_model.pt",
+  "epochs": 45,
+  "batch_size": 8,
+  "lr": 0.0002,
+  "weight_decay": 0.0001,
+  "base_channels": 16,
+  "overlap_weight": 1.5,
+  "ditch_safety_weight": 2.0,
+  "artifact_weight": 2.0,
+  "seed": 17,
+  "num_workers": 2,
+  "overlay_count": 12
+}

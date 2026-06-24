@@ -37,6 +37,7 @@ labelme data/annotation_batches/rgb_keyframes_2026-06-22/images \
 | 工程车、卡车、铲车等 | `construction_vehicle` | rectangle | 同类工程车辆都用这个标签。 |
 | 可能进入车体通行空间的悬挂物 | `suspended_object` | rectangle | 只标可能影响车辆通过的悬挂物。 |
 | 碎石、工具、箱体、线缆、电机等障碍物 | `debris` | rectangle | 当前无法细分的小型或未知障碍统一用这个标签。 |
+| 可通行地面上的小石子、浅坑、污渍、裂纹等误判纠错区域 | `surface_artifact_passable` | polygon 或 rectangle | 只标车辆应正常通过、但模型容易误判成不可通行/沟槽的小区域。 |
 
 当前无障碍帧不要为了凑标签画框。没有目标框就是正确的负样本。
 
@@ -47,8 +48,13 @@ labelme data/annotation_batches/rgb_keyframes_2026-06-22/images \
 3. 沟边、隔离带、轨道边、墙根等不能跨越的位置，优先标成对应 hard-boundary 标签。
 4. 如果边界是一条窄线，polygon 可以沿边界画成一条窄带，不需要精确到单像素。
 5. 反光、水渍、阴影如果仍然能安全通行，可以包含在 `ego_passable` 中；如果会遮挡沟边判断，额外保守地把不可确认区域排除。
-6. 遮挡严重、看不清类别的障碍物，后续采集时先用 `debris`。
-7. 不要手工标 `edge_mask` 或 `surface_risk`；`edge_mask` 后续会从 hard-boundary polygon 自动生成，`surface_risk` 第二阶段再补。
+6. 小石子、浅坑、浅裂纹、地面污渍、小块纹理变化，如果车辆可以正常压过去，必须包含在 `ego_passable` 中，不要挖空。
+7. 对模型已经误判为不可通行或 `ditch` 的小石子/浅坑/污渍，额外用 `surface_artifact_passable` 框住或圈住。
+8. `surface_artifact_passable` 必须完全落在 `ego_passable` 内，不要覆盖真正的 `ditch`、墙根、边界或大障碍物。
+9. 如果石块/坑洼大到车辆必须绕行，才标为 `debris`；如果是深沟、排水沟、沟边，才标为 `ditch`。
+10. 远端左侧墙根、路牙、隔离墩、防撞块被模型误判为 `ditch` 时，仍然标为 `left_barrier`，不要扩大 `ditch`。
+11. 遮挡严重、看不清类别的障碍物，后续采集时先用 `debris`。
+12. 不要手工标 `edge_mask` 或 `surface_risk`；`edge_mask` 后续会从 hard-boundary polygon 自动生成，`surface_risk` 第二阶段再补。
 
 ## 每张图的最低要求
 
@@ -56,6 +62,8 @@ labelme data/annotation_batches/rgb_keyframes_2026-06-22/images \
 
 - 一个 `ego_passable` polygon。
 - 可见的 `ditch`、`left_barrier`、`right_barrier`、`tunnel_wall` polygon。
+- 如果有模型误判的小石子、浅坑、污渍或裂纹，补 `surface_artifact_passable` 小区域。
+- 如果有模型误判成 `ditch` 的左侧路牙、防撞块或墙根边界，确认它们已包含在 `left_barrier` 中。
 - 没有障碍物时，不画任何 rectangle。
 
 如果某张图某类边界完全不可见，就不要凭空补画。

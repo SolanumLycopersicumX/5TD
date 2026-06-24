@@ -16,16 +16,17 @@ from tools.passable_segmentation.train_passable import IMAGE_SIZE, MEAN, STD, Sm
 from tools.passable_segmentation.train_passable_ditch import (
     LABELS,
     make_dual_overlay,
-    read_multilabel_manifest,
+    postprocess_dual_probabilities,
 )
 from tools.passable_segmentation.visualize_passable import collect_image_paths
 
 
 # ==== TUNABLE PARAMETERS ====
-CHECKPOINT_PATH = Path("runs/passable_ego/passable_ditch_augmented/best_model.pt")
-OUTPUT_DIR = Path("runs/passable_ego/passable_ditch_augmented/overlays_more_keyframes")
+CHECKPOINT_PATH = Path("runs/passable_ego/passable_ditch_artifact_v3_finetune/best_model.pt")
+OUTPUT_DIR = Path("runs/passable_ego/passable_ditch_artifact_v3_finetune/overlays_more_keyframes_filtered")
 IMAGE_DIR = Path("data/annotation_batches/rgb_keyframes_2026-06-24_more_keyframes/images")
-MANIFEST_PATH = Path("data/derived/passable_ditch_2026-06-24/manifest.tsv")
+MANIFEST_PATH = Path("data/derived/passable_ditch_artifact_2026-06-24/manifest.tsv")
+MIN_DITCH_COMPONENT_AREA = 500
 
 
 # ==== CORE ====
@@ -63,6 +64,20 @@ def predict_probabilities(model: SmallPassableUNet, image_rgb: np.ndarray, devic
     return probs.astype(np.float32)
 
 
+def read_visualization_manifest(path: Path | str) -> list[tuple[str, Path, tuple[Path, Path]]]:
+    """Read manifests with at least passable-road and ditch target masks."""
+    path = Path(path)
+    root = path.parent
+    records = []
+    for row in path.read_text(encoding="utf-8").splitlines():
+        parts = row.split("\t")
+        if len(parts) < 4:
+            raise ValueError(f"{path} must have at least 4 columns: stem, image, passable_mask, ditch_mask")
+        stem, image_rel, passable_rel, ditch_rel = parts[:4]
+        records.append((stem, root / image_rel, (root / passable_rel, root / ditch_rel)))
+    return records
+
+
 def read_target_stack(mask_paths: tuple[Path, Path], size_hw: tuple[int, int]) -> np.ndarray:
     """Read and resize passable-road and ditch target masks."""
     height, width = size_hw
@@ -82,6 +97,7 @@ def write_visualizations(
     output_dir: Path | str,
     image_dir: Path | str | None = None,
     manifest_path: Path | str | None = None,
+    min_ditch_area: int = MIN_DITCH_COMPONENT_AREA,
 ) -> int:
     """Write dual-output visualization JPEGs for a manifest or image directory."""
     output_dir = Path(output_dir)
@@ -90,7 +106,7 @@ def write_visualizations(
     model = load_dual_model(checkpoint_path, device)
 
     if manifest_path is not None:
-        records = read_multilabel_manifest(manifest_path)
+        records = read_visualization_manifest(manifest_path)
     elif image_dir is not None:
         records = [(p.stem, p, None) for p in collect_image_paths(image_dir)]
     else:
@@ -102,6 +118,7 @@ def write_visualizations(
             raise FileNotFoundError(image_path)
         image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
         probs = predict_probabilities(model, image_rgb, device)
+        probs = postprocess_dual_probabilities(probs, min_ditch_area=min_ditch_area)
         height, width = probs.shape[1:]
         image_resized = cv2.resize(image_rgb, (width, height), interpolation=cv2.INTER_AREA)
         target = read_target_stack(mask_paths, (height, width)) if mask_paths is not None else None
@@ -118,8 +135,14 @@ def main() -> None:
         checkpoint_path=CHECKPOINT_PATH,
         output_dir=OUTPUT_DIR,
         image_dir=IMAGE_DIR,
+        min_ditch_area=MIN_DITCH_COMPONENT_AREA,
     )
-    # count = write_visualizations(checkpoint_path=CHECKPOINT_PATH, output_dir=OUTPUT_DIR, manifest_path=MANIFEST_PATH)
+    # count = write_visualizations(
+    #     checkpoint_path=CHECKPOINT_PATH,
+    #     output_dir=OUTPUT_DIR,
+    #     manifest_path=MANIFEST_PATH,
+    #     min_ditch_area=MIN_DITCH_COMPONENT_AREA,
+    # )
     print(f"[OK] Wrote {count} overlays to {OUTPUT_DIR}")
 
 
