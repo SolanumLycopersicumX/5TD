@@ -1,0 +1,12 @@
+{
+  "dry_run": true,
+  "node_addr": 6,
+  "reason": "DWA trajectory accepted",
+  "register_start": 1040,
+  "registers": {
+    "angular": 0,
+    "linear": 100
+  },
+  "safety_state": "S0_NORMAL",
+  "source_frame": "335344_f000090"
+}

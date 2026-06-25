@@ -12,6 +12,7 @@ from .motion import (
     Trajectory,
 )
 from .rs232 import Rs232DryRunAdapter
+from .gazebo_control import GazeboCmdVelAdapter
 from .safety import command_from_dwa_result
 
 __all__ = [
@@ -21,6 +22,7 @@ __all__ = [
     "MotionCommand",
     "NavigationConfig",
     "Rs232DryRunAdapter",
+    "GazeboCmdVelAdapter",
     "RiskGrid",
     "Trajectory",
     "build_pseudo_bev_grid",

@@ -1,0 +1,10 @@
+{
+  "angular_radps": 0.0,
+  "brake": false,
+  "confidence": 0.9,
+  "dry_run": true,
+  "linear_mps": 0.1,
+  "reason": "DWA trajectory accepted",
+  "safety_state": "S0_NORMAL",
+  "source_frame": "test_video_f000150"
+}

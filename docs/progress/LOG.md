@@ -761,3 +761,448 @@ Verification:
 - `conda run -n lerobot python -m py_compile tools/lan_file_server.py tests/test_lan_file_server.py`
 - Direct helper check returned `['192.168.110.16']`.
 - `curl -sSf http://127.0.0.1:8000/` returned the upload page HTML.
+
+## 2026-06-24 - Warthog Chassis CAD Archive Received
+
+Scope:
+
+- Received `Warthog-02M-Pro 4WD Chassis (2).zip` under `/home/tomato/5TD`.
+- Inspected the archive contents and confirmed it contains CAD files, not a ready-to-run Gazebo model.
+- Extracted the CAD files to `assets/cad/warthog_02m_pro_4wd_chassis/`.
+
+Files:
+
+- `Warthog-02M-Pro 4WD Chassis.IGS`
+- `Warthog-02M-Pro 4WD Chassis.STEP`
+- `Warthog-02M-Pro 4WD Chassis.x_t`
+
+Findings:
+
+- The STEP file was exported by SolidWorks 2024 as STEP AP214.
+- The CAD unit is millimeters, so Gazebo/URDF conversion must scale meshes to meters.
+- The current machine does not have FreeCAD, Blender, assimp, gmsh, or Python CAD libraries installed for direct CAD-to-mesh conversion.
+- The archive has no URDF, Xacro, SDF, STL, DAE, or OBJ files.
+
+Next Actions:
+
+- Convert STEP/IGS/x_t to STL or DAE using a CAD-capable tool before Gazebo use.
+- Build a URDF/SDF wrapper with collision geometry, wheel joints, differential-drive plugin settings, and camera pose.
+- Add Git LFS rules for `.STEP`, `.IGS`, and `.x_t` before uploading extracted CAD files to GitHub.
+
+## 2026-06-25 - CAD Conversion Tool Installation
+
+Scope:
+
+- Installed system CAD and mesh conversion tools for the Warthog chassis model.
+- Installed `gmsh`, `assimp-utils`, `python3-gmsh`, and `python3-meshio` through `apt`.
+- Installed FreeCAD through `snap` after resuming the interrupted download.
+
+Installed Tools:
+
+- FreeCAD snap: `1.1-g0108fd4b`, command line reports `FreeCAD 1.1.1 Revision: 44227 +647`.
+- Gmsh: `4.12.1`.
+- Assimp command-line tools: `5.3`.
+- Python Gmsh for system Python: `4.12.1`.
+
+Verification:
+
+- `snap list freecad kf6-core24 lxqt-support-core24` confirms FreeCAD and its snap dependencies are installed.
+- `which freecad freecad.cmd gmsh assimp meshio` confirms all required commands are available.
+- `freecad.cmd --version` runs successfully.
+- `/usr/bin/python3` can import `gmsh` and reports version `4.12.1`.
+- FreeCAD successfully read `assets/cad/warthog_02m_pro_4wd_chassis/Warthog-02M-Pro 4WD Chassis.STEP`.
+- FreeCAD STEP import reported 18 solids and a model bounding box of about `1308.556 x 1608.0 x 999.246 mm`.
+
+Notes:
+
+- Use `/usr/bin/python3` for `python3-gmsh`; the conda Python environments do not automatically see Ubuntu system Python packages.
+- The next step is to export a visual mesh, likely STL first, then build a simplified URDF/SDF wrapper for Gazebo.
+
+## 2026-06-25 - Warthog CAD STL and Gazebo Model Export
+
+Scope:
+
+- Exported the Warthog STEP chassis assembly to an STL visual mesh using FreeCAD.
+- Normalized the mesh by centering it in X/Y, placing the lowest CAD point near ground, and rotating the CAD long axis into Gazebo X.
+- Generated a Gazebo Sim SDF model wrapper with simplified collision geometry and four wheel joints.
+- Generated a local URDF wrapper for ROS/RViz-style inspection.
+- Added Git LFS rules for CAD and mesh formats: STL, DAE, OBJ, STEP/STP, IGS/IGES, and x_t.
+
+Generated Files:
+
+- `tools/cad/export_warthog_stl.py`
+- `sim/gazebo/models/warthog_02m_pro_4wd_chassis/meshes/chassis_visual.stl`
+- `sim/gazebo/models/warthog_02m_pro_4wd_chassis/meshes/chassis_visual.metadata.json`
+- `sim/gazebo/models/warthog_02m_pro_4wd_chassis/model.sdf`
+- `sim/gazebo/models/warthog_02m_pro_4wd_chassis/model.config`
+- `sim/gazebo/models/warthog_02m_pro_4wd_chassis/README.md`
+- `sim/urdf/warthog_02m_pro_4wd_chassis.urdf`
+
+Export Result:
+
+- STL size: about 7.0 MB.
+- STL units: millimeters.
+- SDF/URDF mesh scale: `0.001 0.001 0.001`.
+- Normalized mesh bounding box: about `1608.0 x 1206.5 x 999.0 mm`.
+- Mesh facets: `145223`.
+- Assimp-readable vertices/faces: `342929` vertices and `145223` faces.
+
+Verification:
+
+- `freecad.cmd` successfully exported the mesh from STEP.
+- `assimp info` successfully imported the generated STL.
+- Python XML parsing succeeded for `model.sdf`, `model.config`, and the URDF.
+- `python3 -m py_compile tools/cad/export_warthog_stl.py` succeeded.
+- `git check-attr` confirms the new STL and source CAD files match Git LFS rules.
+
+Caveats:
+
+- Wheel radius, wheel separation, collision boxes, inertia, and mass values are initial simulation placeholders.
+- The SDF targets Gazebo Sim and uses the `gz-sim-diff-drive-system` plugin.
+- The model has not yet been launched in Gazebo on this machine.
+
+## 2026-06-25 - Warthog Wheel Placeholder Alignment Fix
+
+Scope:
+- Investigated the Gazebo/RViz visual mismatch where the black simplified front wheel cylinders did not overlap the gray CAD chassis frame.
+
+Root Cause:
+- The gray chassis is the exported CAD STL, while the black wheels are simplified SDF/URDF cylinder placeholders. Their earlier positions were estimated and sat ahead of/outside the CAD wheel mounting plates.
+
+Fix:
+- Aligned wheel placeholder centers to CAD mounting plate solids: front x `0.343 m`, rear x `-0.498 m`, y `+/-0.500 m`, z `0.285 m`.
+- Updated SDF and URDF wheel radius to `0.285 m`, wheel width to `0.220 m`, and SDF DiffDrive wheel separation to `1.000 m`.
+
+Verification:
+- Added and ran `tests/test_warthog_gazebo_model.py` to lock SDF/URDF wheel pose and geometry consistency.
+
+Caveat:
+- These are still simplified simulation placeholders, not final measured dynamics parameters. Measure the physical chassis before controller tuning.
+
+## 2026-06-25 - Warthog Duplicate Wheel Visual Removal
+
+Scope:
+- Investigated the remaining visual mismatch after wheel center alignment.
+
+Root Cause:
+- The exported CAD STL already contains detailed wheel geometry, while the SDF/URDF wheel links still rendered black simplified cylinder visuals on top of the CAD wheels.
+
+Fix:
+- Removed wheel link visual cylinder elements from SDF and URDF.
+- Kept wheel cylinder collision geometry, wheel joints, and DiffDrive parameters for simulation.
+
+Verification:
+- Extended `tests/test_warthog_gazebo_model.py` to require wheel links to keep collision elements but not render duplicate visual elements.
+
+## 2026-06-25 - Gazebo Flat Ground Test World
+
+Scope:
+- Investigated the Warthog model falling when Gazebo simulation starts.
+
+Root Cause:
+- The model was being inserted into an empty/default scene without a ground collision plane, so gravity pulled the chassis downward.
+
+Fix:
+- Added `sim/gazebo/worlds/warthog_flat_test.sdf` with a static ground plane, directional light, physics settings, and the Warthog model include.
+- Documented the launch command with `GZ_SIM_RESOURCE_PATH`, `SDF_PATH`, and `gz sim -r`.
+
+Verification:
+- Added a regression test requiring the flat test world to include ground plane collision/visual geometry and the Warthog model include.
+
+## 2026-06-25 - Gazebo Launch Script ROS Setup Fix
+
+Scope:
+- Fixed `sim/gazebo/run_warthog_flat_test.sh` failing at ROS setup with `AMENT_TRACE_SETUP_FILES: unbound variable`.
+
+Root Cause:
+- The script enabled Bash nounset with `set -u` before sourcing `/opt/ros/jazzy/setup.bash`; ROS setup scripts may read optional unset environment variables.
+
+Fix:
+- Temporarily disable nounset around the ROS setup source step, then re-enable it for the rest of the script.
+
+Verification:
+- Added a regression test requiring the launch script to source ROS with nounset disabled.
+
+## 2026-06-25 - Gazebo Driver-Style Keyboard Adapter
+
+Scope:
+- Added a Gazebo simulation adapter that mirrors the main RS232 driver velocity interface without opening serial or CAN hardware.
+
+Implementation:
+- Created `src/tunnel_nav/gazebo_control.py` with `GazeboCmdVelAdapter.set_velocity(linear_mps, angular_radps)` and driver-style helper methods: `forward`, `backward`, `turn_left`, `turn_right`, `arc_left`, `arc_right`, and `stop`.
+- Created `tools/sim/gazebo_driver_keyboard.py`, a W/A/S/D keyboard controller that publishes Gazebo `/cmd_vel` directly through the adapter.
+
+Verification:
+- Added `tests/test_gazebo_cmd_vel_adapter.py` for command payload construction and helper-method mappings.
+
+## 2026-06-25 - Gazebo Keyboard Deadman Stop
+
+Scope:
+- Investigated the simulation keyboard control continuing to move after `K` or `Space` and the vehicle sliding while a forward command remained active.
+
+Root Cause:
+- `tools/sim/gazebo_driver_keyboard.py` latched the last nonzero command. If the terminal did not capture the stop key, or no key was pressed after `W`, it kept publishing the previous forward command.
+
+Fix:
+- Changed the keyboard controller to deadman behavior: any idle cycle or unrecognized key publishes zero velocity. Movement now requires holding or key-repeat of the requested command key.
+
+Verification:
+- Added a regression test requiring idle keyboard input to produce `(0.0, 0.0)`.
+
+
+## 2026-06-25 - Gazebo Wheel Friction Direction Tuning
+
+Scope:
+- Investigated continued motion after stop and right-turn/side-slip behavior when commanding straight forward motion in Gazebo.
+
+Evidence:
+- A stale `gazebo_driver_keyboard.py` process was still running after the keyboard script was edited, so the running process did not have the new deadman-stop behavior.
+- Live odometry showed `linear.x` remained about `0.10 m/s` until an explicit zero `/cmd_vel` was published. After killing the stale keyboard process and publishing zero velocity, odometry twist returned to zero.
+- A short `linear.x=0.04, angular.z=0.0` test showed the physical model pose still had small yaw and lateral drift, so straight-line instability was also present in the Gazebo contact model.
+
+Fix:
+- Added wheel `fdir1` rolling-friction direction to all four wheel collision ODE friction blocks in the Warthog SDF.
+- Added conservative DiffDrive velocity and acceleration limits to reduce abrupt wheel commands while testing.
+
+Verification:
+- Added regression coverage requiring wheel collision friction direction and DiffDrive limits.
+- Ran `python3 -m unittest tests/test_warthog_gazebo_model.py -v`.
+- Ran `python3 -m unittest tests/test_gazebo_cmd_vel_adapter.py -v`.
+- Ran `python3 -m py_compile src/tunnel_nav/gazebo_control.py tools/sim/gazebo_driver_keyboard.py`.
+- Ran `gz sdf -k sim/gazebo/worlds/warthog_flat_test.sdf`; Gazebo reported `Valid.`
+
+Operational Note:
+- Existing Gazebo sessions must be restarted to load the updated SDF model.
+
+
+## 2026-06-25 - Gazebo Wheel Axis Direction Fix
+
+Scope:
+- Followed up on straight-drive testing after wheel friction tuning revealed positive `linear.x` still moved the model in the wrong direction.
+
+Root Cause:
+- The SDF wheel links used a positive `+1.570796` roll and wheel joint axis `0 1 0`, while Gazebo's DiffDrive examples use wheel links rolled `-1.570796` with the wheel axis expressed as the link-frame `0 0 1`. The previous setup could move, but it did not match the DiffDrive convention.
+
+Fix:
+- Changed all four Gazebo SDF wheel link poses to `-1.57079632679 0 0`.
+- Changed all four Gazebo SDF wheel joint axes to `0 0 1`.
+- Left the URDF joint axes unchanged because URDF axis semantics are parent-frame based in the current wrapper.
+
+Verification:
+- Added regression coverage for the Gazebo SDF wheel pose and axis convention.
+- Ran `python3 -m unittest tests/test_warthog_gazebo_model.py -v`.
+- Ran `python3 -m unittest tests/test_gazebo_cmd_vel_adapter.py -v`.
+- Ran `gz sdf -k sim/gazebo/worlds/warthog_flat_test.sdf`; Gazebo reported `Valid.`
+- Ran a headless Gazebo motion test with `linear.x=0.04, angular.z=0.0` for 1.5 s. Result: `dx=0.061540`, `dy=0.000000`, `dyaw=0.000000`, and stop command cleared odometry twist.
+
+
+## 2026-06-25 - Gazebo Keyboard Input Buffer Fix
+
+Scope:
+- Investigated keyboard control where `W` could drive straight, but releasing `W`, pressing `K`/`Space`, or pressing `Q` did not reliably stop or exit.
+
+Root Cause:
+- The keyboard controller read only one terminal character per loop. Holding `W` can generate repeated buffered `w` characters faster than the loop consumes them, so release/stop/quit keys may sit behind stale motion keys.
+
+Fix:
+- Added per-loop input draining in `tools/sim/gazebo_driver_keyboard.py`.
+- Added control-key selection so `Q` takes priority over all buffered motion, `Space`/`K` take priority over buffered motion, and motion uses only the latest buffered motion key.
+
+Verification:
+- Added regression coverage for buffered `W` plus stop/quit keys.
+- Ran `python3 -m unittest tests/test_gazebo_cmd_vel_adapter.py -v`.
+- Ran `python3 -m unittest tests/test_warthog_gazebo_model.py -v`.
+- Ran `python3 -m py_compile tools/sim/gazebo_driver_keyboard.py src/tunnel_nav/gazebo_control.py`.
+- Stopped the stale keyboard controller process and published a zero `/cmd_vel`; live odometry twist returned to zero.
+
+
+## 2026-06-25 - New RS232 Soft-Control GUI
+
+Scope:
+- Added a new RS232 GUI instead of modifying the original CAN GUI or legacy RS232 driver files.
+- Addressed manual-control safety concerns observed with the physical remote: strong initial response from small joystick input and possible reverse kick when returning to center.
+
+Implementation:
+- Created `src/tunnel_nav/manual_control.py` with deadzone, curved joystick response, and slew-rate limiting.
+- Created `tools/robot/rs232_vehicle_gui.py`, a PyQt5 GUI for `/dev/ttyUSB0` RS232 / Modbus RTU control.
+- The GUI imports the unmodified `1/driver_controller.py` at runtime and wraps it with low-speed manual control.
+- Default manual limits are conservative: max linear `0.04 m/s`, max angular `0.12 rad/s`, deadzone `0.18`, linear acceleration `0.08 m/s^2`, angular acceleration `0.25 rad/s^2`.
+- Normal joystick/key release and the Soft Stop button ramp toward zero instead of using emergency stop. The red Emergency Stop button remains available for immediate emergency-stop register writes.
+
+Verification:
+- Ran `python3 -m unittest tests/test_manual_control.py -v`.
+- Ran `python3 -m unittest tests/test_rs232_keyboard_drive.py -v`.
+- Ran `/usr/bin/python3 -m py_compile tools/robot/rs232_vehicle_gui.py tools/robot/rs232_keyboard_drive.py src/tunnel_nav/manual_control.py`.
+- Ran `/usr/bin/python3 tools/robot/rs232_vehicle_gui.py --help`.
+- Ran an offscreen PyQt smoke test instantiating the new GUI without connecting hardware.
+
+Operational Note:
+- Run with `/usr/bin/python3` because system Python has PyQt5 and pyserial available.
+- Do not use the CAN GUI for the current CH340 `/dev/ttyUSB0` RS232 adapter.
+
+
+## 2026-06-25 - VSCode Conda PySerial Fix
+
+Scope:
+- Fixed the RS232 GUI `Connect failed: No module named 'serial'` issue when launched from VSCode.
+
+Root Cause:
+- VSCode was launching the GUI with `/home/tomato/miniconda3/bin/python3`, which had PyQt5 but did not have `pyserial`. System Python `/usr/bin/python3` already had `pyserial 3.5`.
+
+Fix:
+- Installed `pyserial 3.5` into the active conda Python environment used by VSCode.
+
+Verification:
+- Verified `import serial` from `/home/tomato/miniconda3/bin/python3`.
+- Ran an offscreen smoke test instantiating `tools.robot.rs232_vehicle_gui.MainWindow` with the conda Python.
+
+
+## 2026-06-25 - RGB Camera Detection Check
+
+Scope:
+- Checked whether the vehicle's built-in RGB camera data is visible from the current laptop after RS232 control was brought up.
+
+Findings:
+- Linux currently exposes `/dev/video0` through `/dev/video3`, but all nodes map to `Integrated_Webcam_HD`, the laptop's internal webcam.
+- `lsusb` shows `Microdia Integrated_Webcam_HD` and the CH340 serial converter, but no separate vehicle RGB camera USB device.
+- No ROS 2 topics matching camera/image/rgb/video were present.
+- Captured one frame from `/dev/video0` successfully with ffmpeg, confirming the local V4L2 capture path works for the built-in laptop webcam.
+- The active Python environment does not currently have `cv2` installed.
+
+Conclusion:
+- The vehicle RGB camera is not currently visible to this laptop through USB/V4L2 or ROS. RS232 only carries chassis control, not video. A separate USB camera connection, Ethernet/IP camera stream, or ROS camera publisher from the vehicle computer is required.
+
+
+## 2026-06-25 - RS232 GUI In-Place Turn Lag Tuning
+
+Scope:
+- Addressed observed lag/stiction when commanding in-place left/right turns with the RS232 GUI.
+
+Root Cause Hypothesis:
+- The GUI's angular acceleration default was conservative (`0.25 rad/s^2`), so at a 100 ms control interval the angular command increased by only about `0.025 rad/s` each step. For a heavy chassis, this can sit below static friction / controller deadband before rotation starts.
+
+Fix:
+- Added `min_turn_start_radps` to `src/tunnel_nav/manual_control.py`. It applies only to in-place turns after the turn axis leaves the deadzone; it does not create turning at joystick center and does not boost turning while driving forward/backward.
+- Added a GUI `Turn start` control, default `0.06 rad/s`.
+- Increased the GUI default angular acceleration to `0.60 rad/s^2` while keeping soft ramping and soft stop.
+
+Verification:
+- Added regression tests covering in-place turn start boost and confirming it does not affect centered input or driving arcs.
+- Ran `python3 -m unittest tests/test_manual_control.py tests/test_rs232_keyboard_drive.py -v`.
+- Ran py_compile for `tools/robot/rs232_vehicle_gui.py` and `src/tunnel_nav/manual_control.py` with the VSCode conda Python.
+- Ran an offscreen PyQt smoke test confirming default `Turn start = 0.06` and `Angular accel = 0.60`.
+
+
+## 2026-06-25 - Laptop Webcam Road Segmentation Smoke Test
+
+Scope:
+- Tested whether the existing passable-road segmentation models can run on a frame captured from the laptop's built-in webcam.
+
+Findings:
+- The active VSCode/base Python lacks `torch` and `cv2`, but the `lerobot` conda environment has `torch 2.9.0+cu128` and `cv2 4.12.0`.
+- Captured one frame from `/dev/video0` to `runs/camera_tests/laptop_webcam/raw/laptop_webcam_001.jpg`.
+- Ran the existing fused passable/boundary inference using:
+  - `runs/passable_ego/passable_ditch_artifact_v3_finetune/best_model.pt`
+  - `runs/passable_ego/boundary_wall_aux_v2_no_testvideo/best_model.pt`
+- Wrote overlay to `runs/camera_tests/laptop_webcam/overlays/laptop_webcam_001_fused_overlay.jpg` and masks under `runs/camera_tests/laptop_webcam/masks/`.
+
+Note:
+- This validates the inference path on a local webcam frame, but laptop webcam viewpoint is not equivalent to the vehicle front camera. Use it as a software smoke test, not model-quality validation.
+
+## 2026-06-25 - Live Laptop Webcam Road Segmentation Preview
+
+Scope:
+- Added a live OpenCV preview tool for testing passable-road segmentation from the laptop's built-in webcam while the laptop is placed on the vehicle.
+
+Implementation:
+- Created `tools/passable_segmentation/live_webcam_fused_preview.py`.
+- The tool opens `/dev/video0` by default, loads the existing passable/ditch model plus boundary/wall auxiliary model, runs fused inference on live frames, and displays raw camera view next to the segmentation overlay.
+- Added CLI controls for camera path/index, capture size/FPS, display width, CPU forcing, frame-skip inference, and optional save of the final overlay.
+
+Verification:
+- Added `tests/test_live_webcam_fused_preview.py` covering camera argument parsing, parser defaults, and display scaling.
+- Ran `python3 -m unittest tests/test_live_webcam_fused_preview.py -v`.
+- Ran `python3 -m py_compile tools/passable_segmentation/live_webcam_fused_preview.py`.
+- Ran `python3 tools/passable_segmentation/live_webcam_fused_preview.py --help`.
+- Verified with `/home/tomato/miniconda3/envs/lerobot/bin/python` that runtime imports work and both default checkpoint files exist.
+
+Operational Note:
+- Run with the `lerobot` conda environment because it has `torch` and `cv2`.
+- This preview only visualizes perception output; it does not send any drive command to the vehicle.
+
+## 2026-06-25 - Live Webcam Preview Display Backend Fix
+
+Scope:
+- Fixed the live laptop webcam segmentation preview crash caused by OpenCV HighGUI being unavailable in the `lerobot` environment.
+
+Root Cause:
+- The `lerobot` environment has `cv2 4.12.0` with `GUI: NONE`, so `cv2.namedWindow` / `cv2.imshow` are not implemented.
+- The same environment does have `tkinter` and Pillow/ImageTk available.
+
+Fix:
+- Added `--display-backend {tk,opencv}` to `tools/passable_segmentation/live_webcam_fused_preview.py`.
+- Changed the default display backend to `tk`, using Tk/Pillow for the preview window while keeping OpenCV for camera capture, resizing, text drawing, and color conversion.
+- Kept `--display-backend opencv` available for environments with GUI-enabled OpenCV builds.
+
+Verification:
+- Added a regression test confirming the parser defaults to `display_backend = tk`.
+- Ran `python3 -m unittest tests/test_live_webcam_fused_preview.py -v`.
+- Ran `python3 -m py_compile tools/passable_segmentation/live_webcam_fused_preview.py`.
+- Ran `python3 tools/passable_segmentation/live_webcam_fused_preview.py --help`.
+- Verified in `/home/tomato/miniconda3/envs/lerobot/bin/python` that `tkinter`, Pillow/ImageTk, `torch`, and `cv2` import successfully.
+
+## 2026-06-25 - Vision-Gated Autonomous Forward Drive
+
+Scope:
+- Added a conservative autonomous forward-driving prototype that connects live road segmentation to the RS232 vehicle controller.
+
+Implementation:
+- Created `src/tunnel_nav/vision_autodrive.py` with pure drive-gate logic over the fused segmentation masks.
+- Created `tools/robot/vision_autodrive_forward.py` to run laptop webcam inference, evaluate a near-center drive ROI, and send low-speed straight RS232 commands only when the ROI is clear.
+- Default behavior is visual/zero-speed unless `--enable-driver` is passed. With `--enable-driver`, the script sends low-speed forward commands when safe and stop commands otherwise.
+- The finalizer sends stop and disables the driver on window close, `q`/Esc, Ctrl+C, or exceptions.
+
+Default Safety Parameters:
+- Forward speed: `0.015 m/s`.
+- Drive ROI: center-bottom image region, x `0.35-0.65`, y `0.60-0.95`.
+- Minimum safe-passable ratio: `0.65`.
+- Maximum hazard ratio: `0.02` for ditch, tunnel wall, or left barrier in the drive ROI.
+
+Verification:
+- Added `tests/test_vision_autodrive.py` for clear/stop ROI decisions and ROI bounds.
+- Added `tests/test_vision_autodrive_forward_script.py` for script parser defaults.
+- Ran `python3 -m unittest tests/test_vision_autodrive.py tests/test_vision_autodrive_forward_script.py -v`.
+- Ran `python3 -m py_compile src/tunnel_nav/vision_autodrive.py tools/robot/vision_autodrive_forward.py`.
+- Ran `python3 tools/robot/vision_autodrive_forward.py --help`.
+- Verified with `/home/tomato/miniconda3/envs/lerobot/bin/python` that the script imports with torch, cv2, Tk/Pillow display support, and pyserial available.
+
+Operational Note:
+- Start with the physical remote/emergency stop ready. The script is a straight, low-speed gate; it does not steer around obstacles.
+
+## 2026-06-25 - Vision Trajectory Steering Prototype
+
+Scope:
+- Added a low-speed trajectory-following prototype that derives an image-space centerline from `safe_passable` segmentation and sends differential-drive `linear/angular` commands over the existing RS232 driver.
+
+Implementation:
+- Created `src/tunnel_nav/vision_trajectory.py` for pure centerline extraction and steering command generation.
+- Created `tools/robot/vision_autodrive_trajectory.py` for live webcam inference, fused-mask trajectory drawing, and RS232 command output.
+- The script draws the planned yellow centerline, the lookahead target point, and the safety ROI in the preview window.
+- Default behavior is visual/zero-speed unless `--enable-driver` is explicitly passed.
+
+Default Safety Parameters:
+- Forward speed: `0.012 m/s`.
+- Max angular speed: `0.08 rad/s`.
+- Angular gain: `0.18`.
+- Center deadband: `0.04` normalized image width.
+- Minimum path points: `3`.
+- It stops on hazard ROI, missing path, camera read failure, window close, `q`/Esc, Ctrl+C, or exceptions.
+
+Verification:
+- Ran `python3 -m unittest tests/test_vision_autodrive.py tests/test_vision_trajectory.py tests/test_vision_autodrive_forward_script.py tests/test_vision_autodrive_trajectory_script.py tests/test_live_webcam_fused_preview.py -v` with 19 tests passing.
+- Ran `python3 -m py_compile` on the related vision/autodrive modules and scripts.
+- Verified with `/home/tomato/miniconda3/envs/lerobot/bin/python` that trajectory and forward autodrive scripts import with torch, cv2, Tk/Pillow, and serial dependencies available.
+
+Operational Note:
+- This is still image-space steering without camera calibration, BEV, odometry, or DWA. Use it only for very low-speed bring-up with the physical remote/emergency stop ready.
+

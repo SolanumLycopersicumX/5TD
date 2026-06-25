@@ -1,0 +1,50 @@
+{
+  "source_step": "/home/tomato/5TD/assets/cad/warthog_02m_pro_4wd_chassis/Warthog-02M-Pro 4WD Chassis.STEP",
+  "output_stl": "/home/tomato/5TD/sim/gazebo/models/warthog_02m_pro_4wd_chassis/meshes/chassis_visual.stl",
+  "stl_units": "millimeter",
+  "gazebo_mesh_scale": [
+    0.001,
+    0.001,
+    0.001
+  ],
+  "rotate_original_y_axis_to_gazebo_x_axis": true,
+  "linear_deflection_mm": 8.0,
+  "angular_deflection_rad": 0.35,
+  "source_solid_count": 18,
+  "source_bbox": {
+    "min_mm": [
+      -288.4545206028457,
+      -126.99999999998397,
+      -571.630390796725
+    ],
+    "max_mm": [
+      1020.1013735051297,
+      1481.0000000000216,
+      427.6157148741703
+    ],
+    "span_mm": [
+      1308.5558941079753,
+      1608.0000000000055,
+      999.2461056708953
+    ]
+  },
+  "normalized_bbox": {
+    "min_mm": [
+      -804.000000000003,
+      -603.2378635463617,
+      0.28309167245507183
+    ],
+    "max_mm": [
+      804.0000000000027,
+      603.2384093597955,
+      999.2461056708953
+    ],
+    "span_mm": [
+      1608.0000000000057,
+      1206.4762729061572,
+      998.9630139984403
+    ]
+  },
+  "mesh_facets": 145223,
+  "mesh_points": 87843
+}
