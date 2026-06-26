@@ -1206,3 +1206,57 @@ Verification:
 Operational Note:
 - This is still image-space steering without camera calibration, BEV, odometry, or DWA. Use it only for very low-speed bring-up with the physical remote/emergency stop ready.
 
+## 2026-06-26 - Gazebo Keyboard Control Timeout Clarification
+
+Scope:
+- Clarified and hardened the Gazebo simulation keyboard-control path after running the keyboard script without a running Gazebo window caused the `gz topic` subprocess to hang until Ctrl+C.
+
+Root Cause:
+- `tools/sim/gazebo_driver_keyboard.py` is only a `/cmd_vel` publisher. It does not launch Gazebo or open a simulation window.
+- If `sim/gazebo/run_warthog_flat_test.sh` is not running first, the adapter can block while trying to publish to Gazebo transport.
+
+Fix:
+- Added `publish_timeout_s` to `src/tunnel_nav/gazebo_control.py` and pass it to the `gz topic` subprocess call.
+- On timeout, the adapter now raises a clear runtime error telling the user to start Gazebo first.
+
+Verification:
+- Ran `python3 -m unittest tests/test_gazebo_cmd_vel_adapter.py tests/test_warthog_gazebo_model.py -v` with 13 tests passing.
+- Ran `python3 -m py_compile src/tunnel_nav/gazebo_control.py tools/sim/gazebo_driver_keyboard.py`.
+- Ran Gazebo SDF validation with `GZ_SIM_RESOURCE_PATH` and `SDF_PATH` set; result: `Valid.`
+
+
+## 2026-06-26 - Gazebo Keyboard Stop-On-Release Control
+
+Scope:
+- Fixed the simulated keyboard controller so releasing a movement key sends a stop or updated combined velocity command immediately.
+
+Root Cause:
+- The original terminal backend reads buffered characters and cannot observe true key-release events.
+- Keyboard auto-repeat can leave repeated movement characters queued, causing the robot to continue receiving the old direction after the operator releases the key.
+
+Fix:
+- Added a default Tk keyboard-control backend that tracks `KeyPress` and `KeyRelease` events.
+- On movement-key release, the controller recalculates the active key set and publishes the new command, including `(0, 0)` when no movement keys remain.
+- Kept the terminal backend available with `--backend terminal`, but documented that it cannot guarantee release-event braking.
+
+Verification:
+- Added regression tests for pressed-key state, default Tk backend selection, and immediate zero command after release.
+- Ran `python3 -m unittest tests/test_gazebo_cmd_vel_adapter.py tests/test_warthog_gazebo_model.py -v` with 16 tests passing.
+
+## 2026-06-26 - Gazebo Keyboard Key-State Publishing
+
+Scope:
+- Refined the Gazebo keyboard controller so movement commands are driven by key state transitions instead of repeated key input events.
+
+Root Cause:
+- Holding `W` can generate repeated key events.
+- The previous Tk handler still forced a Gazebo publish on every repeated `KeyPress`, so release handling could wait behind a queue of stale forward publishes.
+
+Fix:
+- Added `_KeyPressState` to track pressed keys explicitly.
+- A movement key now publishes only when it transitions from released to pressed.
+- Repeated `KeyPress` events for an already pressed key are ignored.
+- `KeyRelease` now publishes the updated command immediately by default, including `(0, 0)` when no movement keys remain.
+
+Verification:
+- Added a regression test that repeated `press("w")` calls do not emit additional commands before `release("w")`.

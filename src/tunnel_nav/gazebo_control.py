@@ -25,23 +25,31 @@ class GazeboCmdVelAdapter:
     topic: str = "/cmd_vel"
     gz_command: str = field(default_factory=_default_gz_command)
     runner: Callable[..., object] = subprocess.run
+    publish_timeout_s: float = 1.0
 
     def set_velocity(self, linear_mps: float, angular_radps: float) -> None:
         """Set linear and angular velocity in physical units."""
         payload = self.twist_payload(linear_mps, angular_radps)
-        self.runner(
-            [
-                self.gz_command,
-                "topic",
-                "-t",
-                self.topic,
-                "-m",
-                "gz.msgs.Twist",
-                "-p",
-                payload,
-            ],
-            check=True,
-        )
+        try:
+            self.runner(
+                [
+                    self.gz_command,
+                    "topic",
+                    "-t",
+                    self.topic,
+                    "-m",
+                    "gz.msgs.Twist",
+                    "-p",
+                    payload,
+                ],
+                check=True,
+                timeout=max(0.1, float(self.publish_timeout_s)),
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError(
+                f"Timed out publishing to Gazebo topic {self.topic}. "
+                "Start the simulation first with: bash sim/gazebo/run_warthog_flat_test.sh"
+            ) from exc
 
     @staticmethod
     def twist_payload(linear_mps: float, angular_radps: float) -> str:
