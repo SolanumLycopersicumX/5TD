@@ -15,6 +15,19 @@ class VisionAutodriveTrajectoryScriptTest(unittest.TestCase):
         self.assertFalse(args.release_estop)
         self.assertEqual(args.display_backend, "tk")
 
+
+    def test_dry_run_vehicle_accepts_control_calls_without_serial(self):
+        args = script.build_arg_parser().parse_args(["--dry-run"])
+
+        vehicle = script.build_vehicle(args)
+        vehicle.stop()
+        vehicle.set_velocity(0.01, 0.02)
+        vehicle.enable()
+        vehicle.disable()
+        vehicle.close()
+
+        self.assertTrue(args.dry_run)
+
     def test_node_address_accepts_hex(self):
         args = script.build_arg_parser().parse_args(["--addr", "0x06"])
 

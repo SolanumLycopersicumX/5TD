@@ -29,6 +29,37 @@ from tools.passable_segmentation.live_webcam_fused_preview import (
 from tools.robot.rs232_keyboard_drive import build_controller, parse_node_addr
 
 
+class DryRunVehicle:
+    """No-op vehicle controller for perception-only deployment tests."""
+
+    def __init__(self) -> None:
+        self.commands: list[tuple[float, float]] = []
+
+    def set_velocity(self, linear_mps: float, angular_radps: float) -> None:
+        self.commands.append((float(linear_mps), float(angular_radps)))
+
+    def stop(self) -> None:
+        self.set_velocity(0.0, 0.0)
+
+    def enable(self) -> None:
+        pass
+
+    def disable(self) -> None:
+        pass
+
+    def emergency_release(self) -> None:
+        pass
+
+    def close(self) -> None:
+        pass
+
+
+def build_vehicle(args: argparse.Namespace) -> Any:
+    if args.dry_run:
+        return DryRunVehicle()
+    return build_controller(port=args.port, addr=args.addr, baudrate=args.baudrate)
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--camera", default="/dev/video0", help="camera index, V4L2 device, or video URL")
@@ -61,6 +92,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-path-points", type=int, default=3, help="minimum centerline points required before motion")
     parser.add_argument("--enable-driver", action="store_true", help="enable the driver and allow nonzero commands")
     parser.add_argument("--release-estop", action="store_true", help="clear driver emergency-stop bit before the loop")
+    parser.add_argument("--dry-run", action="store_true", help="do not open RS232; log no-op vehicle commands only")
     parser.add_argument("--cpu", action="store_true", help="force CPU inference even if CUDA is available")
     parser.add_argument("--passable-checkpoint", type=Path, default=DEFAULT_PASSABLE_CHECKPOINT)
     parser.add_argument("--boundary-checkpoint", type=Path, default=DEFAULT_BOUNDARY_CHECKPOINT)
@@ -177,7 +209,7 @@ def run_trajectory_autodrive(args: argparse.Namespace) -> int:
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(args.height))
         cap.set(cv2.CAP_PROP_FPS, int(args.fps))
 
-        vehicle = build_controller(port=args.port, addr=args.addr, baudrate=args.baudrate)
+        vehicle = build_vehicle(args)
         if not args.no_display:
             preview_window = make_display_backend(args.display_backend, cv2, "Vision Autodrive Trajectory")
 
@@ -186,6 +218,8 @@ def run_trajectory_autodrive(args: argparse.Namespace) -> int:
             f"linear={args.linear:.3f}m/s max_angular={args.max_angular:.3f}rad/s armed={drive_armed}"
         )
         print("[INFO] Yellow line/point = planned image-space trajectory. Close window or press q/Esc to stop.")
+        if args.dry_run:
+            print("[WARN] Dry-run vehicle controller; no RS232 serial port will be opened.")
         if not drive_armed:
             print("[WARN] Driver is not enabled; this run will visualize and send zero-speed stop commands only.")
 
