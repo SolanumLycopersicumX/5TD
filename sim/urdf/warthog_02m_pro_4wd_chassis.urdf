@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<robot name="warthog_02m_pro_4wd_chassis">
+  <!-- Visual mesh is STL in millimeters. The scale below converts it to meters. -->
+  <material name="cad_gray">
+    <color rgba="0.45 0.48 0.48 1"/>
+  </material>
+  <link name="base_link">
+    <inertial>
+      <mass value="120.000"/>
+      <origin xyz="0 0 0.480" rpy="0 0 0"/>
+      <inertia ixx="18.0" ixy="0" ixz="0" iyy="24.0" iyz="0" izz="30.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///home/tomato/5TD/sim/gazebo/models/warthog_02m_pro_4wd_chassis/meshes/chassis_visual.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="cad_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.480" rpy="0 0 0"/>
+      <geometry>
+        <box size="1.200 0.780 0.320"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="front_left_wheel_link">
+    <inertial>
+      <mass value="12.000"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.380" ixy="0" ixz="0" iyy="0.380" iyz="0" izz="0.070"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+      <geometry>
+        <cylinder radius="0.285" length="0.220"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="front_right_wheel_link">
+    <inertial>
+      <mass value="12.000"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.380" ixy="0" ixz="0" iyy="0.380" iyz="0" izz="0.070"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+      <geometry>
+        <cylinder radius="0.285" length="0.220"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="rear_left_wheel_link">
+    <inertial>
+      <mass value="12.000"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.380" ixy="0" ixz="0" iyy="0.380" iyz="0" izz="0.070"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+      <geometry>
+        <cylinder radius="0.285" length="0.220"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="rear_right_wheel_link">
+    <inertial>
+      <mass value="12.000"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.380" ixy="0" ixz="0" iyy="0.380" iyz="0" izz="0.070"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+      <geometry>
+        <cylinder radius="0.285" length="0.220"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="front_left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_left_wheel_link"/>
+    <origin xyz="0.343 0.500 0.285" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+  <joint name="front_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_right_wheel_link"/>
+    <origin xyz="0.343 -0.500 0.285" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+  <joint name="rear_left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_left_wheel_link"/>
+    <origin xyz="-0.498 0.500 0.285" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+  <joint name="rear_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_right_wheel_link"/>
+    <origin xyz="-0.498 -0.500 0.285" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+</robot>
