@@ -95,6 +95,7 @@ def extract_keyframes(
     labels_path: Path | str = DEFAULT_LABELS_PATH,
     sample_seconds: float = 2.0,
     max_frames_per_video: int = 40,
+    allow_empty: bool = False,
 ) -> dict[str, Any]:
     """Extract sampled frames from discovered videos and write batch helper files."""
     video_root = Path(video_root)
@@ -109,6 +110,9 @@ def extract_keyframes(
         (output_root / "labels.txt").write_text("\n".join(ANNOTATION_LABELS) + "\n", encoding="utf-8")
 
     videos = discover_videos(video_root)
+    if not videos and not allow_empty:
+        raise RuntimeError(f"No supported video files were discovered in {video_root}")
+
     video_summaries: list[dict[str, Any]] = []
     all_frames: list[dict[str, Any]] = []
     for video_path in videos:
@@ -138,6 +142,7 @@ def extract_keyframes(
         "labels_path": str(labels_path),
         "sample_seconds": sample_seconds,
         "max_frames_per_video": max_frames_per_video,
+        "allow_empty": allow_empty,
         "video_count": len(videos),
         "frame_count": len(all_frames),
         "videos": video_summaries,
@@ -351,6 +356,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--labels", type=Path, default=DEFAULT_LABELS_PATH)
     parser.add_argument("--sample-seconds", type=float, default=2.0)
     parser.add_argument("--max-frames-per-video", type=int, default=40)
+    parser.add_argument("--allow-empty", action="store_true")
     return parser
 
 
@@ -362,6 +368,7 @@ def main() -> None:
         labels_path=args.labels,
         sample_seconds=args.sample_seconds,
         max_frames_per_video=args.max_frames_per_video,
+        allow_empty=args.allow_empty,
     )
     print(f"[OK] Extracted {metadata['frame_count']} frames from {metadata['video_count']} videos")
     print(f"[OUT] {metadata['output_root']}")

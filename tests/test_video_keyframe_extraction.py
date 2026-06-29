@@ -116,6 +116,19 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
         self.assertEqual(len(set(frame_names)), 2)
         self.assertEqual(len(set(prefixes)), 2)
 
+    def test_extract_keyframes_raises_when_no_videos_are_discovered(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            empty_video_root = root / "Videos"
+            empty_video_root.mkdir()
+
+            with self.assertRaisesRegex(RuntimeError, "No supported video files"):
+                extract_keyframes(
+                    video_root=empty_video_root,
+                    output_root=root / "out",
+                    labels_path=root / "missing_labels.txt",
+                )
+
     def test_sample_frame_indices_limits_uniform_samples(self) -> None:
         self.assertEqual(
             sample_frame_indices(total_frames=300, source_fps=30.0, sample_seconds=2.0, max_frames=4),

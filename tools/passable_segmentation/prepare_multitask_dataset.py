@@ -45,6 +45,7 @@ DEFAULT_IMAGE_DIRS = (
 )
 DEFAULT_OUTPUT_DIR = Path("data/derived/passable_boundary_obstacle_2026-06-29")
 DEFAULT_VAL_PREFIXES = ("IMG_3197", "b0c37d")
+DEFAULT_EXCLUDE_PREFIXES = ("demo_video", "test_video")
 VIEWS = {
     "passable": PASSABLE_LABELS,
     "boundary": BOUNDARY_LABELS,
@@ -117,14 +118,24 @@ def prepare_multitask_dataset(
     image_dirs: Sequence[Path | str] = DEFAULT_IMAGE_DIRS,
     output_dir: Path | str = DEFAULT_OUTPUT_DIR,
     val_prefixes: Sequence[str] = DEFAULT_VAL_PREFIXES,
+    exclude_prefixes: Sequence[str] = DEFAULT_EXCLUDE_PREFIXES,
     labels: Sequence[str] = LABELS,
 ) -> dict:
     """Create copied images, raster masks, manifests, view manifests, and summary JSON."""
     output_dir = Path(output_dir)
     label_names = tuple(labels)
-    records = _discover_records_with_source_stems(image_dirs)
-    if not records:
+    discovered_records = _discover_records_with_source_stems(image_dirs)
+    if not discovered_records:
         raise RuntimeError("No annotated image records were discovered.")
+
+    exclude_set = set(exclude_prefixes)
+    records = [
+        record
+        for record in discovered_records
+        if not _matches_stem_policy(record[1], exclude_set)
+    ]
+    if not records:
+        raise RuntimeError("No annotated image records were discovered after applying exclusions.")
 
     out_images = output_dir / "images"
     out_masks = output_dir / "masks"
@@ -172,7 +183,10 @@ def prepare_multitask_dataset(
         "output_dir": str(output_dir),
         "labels": list(label_names),
         "val_prefixes": list(val_prefixes),
+        "exclude_prefixes": list(exclude_prefixes),
         "view_labels": {view_name: list(view_labels) for view_name, view_labels in VIEWS.items()},
+        "discovered": len(discovered_records),
+        "excluded": len(discovered_records) - len(records),
         "total": len(rows),
         "train": len(train_rows),
         "val": len(val_rows),
@@ -232,12 +246,14 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument("--image-dir", action="append", type=Path, dest="image_dirs")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--val-prefix", action="append", dest="val_prefixes")
+    parser.add_argument("--exclude-prefix", action="append", dest="exclude_prefixes")
     args = parser.parse_args(argv)
 
     summary = prepare_multitask_dataset(
         image_dirs=tuple(args.image_dirs) if args.image_dirs else DEFAULT_IMAGE_DIRS,
         output_dir=args.output_dir,
         val_prefixes=tuple(args.val_prefixes) if args.val_prefixes else DEFAULT_VAL_PREFIXES,
+        exclude_prefixes=tuple(args.exclude_prefixes) if args.exclude_prefixes else DEFAULT_EXCLUDE_PREFIXES,
     )
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 
@@ -259,9 +275,13 @@ def _relative_path(path: Path, root: Path) -> str:
 
 
 def _is_validation_stem(source_stem: str, val_prefixes: set[str]) -> bool:
-    if label_prefix(source_stem) in val_prefixes:
+    return _matches_stem_policy(source_stem, val_prefixes)
+
+
+def _matches_stem_policy(source_stem: str, prefixes: set[str]) -> bool:
+    if label_prefix(source_stem) in prefixes:
         return True
-    for prefix in val_prefixes:
+    for prefix in prefixes:
         if source_stem == prefix or source_stem.startswith(f"{prefix}_"):
             return True
     return False

@@ -123,6 +123,73 @@ class PrepareMultitaskDatasetTest(unittest.TestCase):
             stems = [row.split("	")[0] for row in val_rows]
             self.assertEqual(stems, ["IMG_3197_0001", "batch_two_IMG_3197_0001"])
 
+    def test_prepare_multitask_dataset_rasterizes_reversed_rectangle_points(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            batch = root / "batch" / "images"
+            output_dir = root / "derived"
+            batch.mkdir(parents=True)
+
+            Image.new("RGB", (8, 8), "black").save(batch / "IMG_1_0001.jpg")
+            annotation = {
+                "imagePath": "IMG_1_0001.jpg",
+                "imageWidth": 8,
+                "imageHeight": 8,
+                "shapes": [
+                    {
+                        "label": "worker",
+                        "shape_type": "rectangle",
+                        "points": [[5, 6], [2, 2]],
+                    },
+                ],
+            }
+            (batch / "IMG_1_0001.json").write_text(json.dumps(annotation), encoding="utf-8")
+
+            prepare_multitask_dataset(
+                image_dirs=[batch],
+                output_dir=output_dir,
+                val_prefixes=("IMG",),
+            )
+
+            mask = Image.open(output_dir / "masks" / "worker" / "IMG_1_0001.png")
+            self.assertGreater(sum(1 for value in mask.getdata() if value), 0)
+
+    def test_prepare_multitask_dataset_excludes_test_video_holdout_by_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            batch = root / "batch" / "images"
+            output_dir = root / "derived"
+            batch.mkdir(parents=True)
+
+            annotation = {
+                "imagePath": "placeholder.jpg",
+                "imageWidth": 8,
+                "imageHeight": 8,
+                "shapes": [
+                    {
+                        "label": "ego_passable",
+                        "shape_type": "polygon",
+                        "points": [[1, 1], [6, 1], [6, 6]],
+                    },
+                ],
+            }
+            for stem in ("IMG_1_0001", "test_video_0001"):
+                Image.new("RGB", (8, 8), "black").save(batch / f"{stem}.jpg")
+                (batch / f"{stem}.json").write_text(json.dumps(annotation), encoding="utf-8")
+
+            summary = prepare_multitask_dataset(
+                image_dirs=[batch],
+                output_dir=output_dir,
+                val_prefixes=("IMG",),
+            )
+
+            self.assertEqual(summary["total"], 1)
+            self.assertEqual(summary["excluded"], 1)
+            self.assertEqual(summary["exclude_prefixes"], ["demo_video", "test_video"])
+            manifest_text = (output_dir / "manifest.tsv").read_text(encoding="utf-8")
+            self.assertIn("IMG_1_0001", manifest_text)
+            self.assertNotIn("test_video_0001", manifest_text)
+
     def test_prepare_multitask_dataset_raises_when_no_records_are_discovered(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
