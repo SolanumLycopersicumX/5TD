@@ -52,6 +52,7 @@ VIEWS = {
 }
 
 Record = tuple[str, Path, Path, str]
+InternalRecord = tuple[str, str, Path, Path, str]
 ManifestRow = tuple[str, Path, tuple[Path, ...]]
 
 
@@ -69,7 +70,14 @@ def validate_annotation_labels(annotation: dict, *, allowed_labels: Sequence[str
 
 def discover_records(image_dirs: Sequence[Path | str]) -> list[Record]:
     """Find jpg/jpeg Labelme image/json pairs across image directories."""
-    records: list[Record] = []
+    return [
+        (output_stem, image_path, annotation_path, batch_name)
+        for output_stem, _source_stem, image_path, annotation_path, batch_name in _discover_records_with_source_stems(image_dirs)
+    ]
+
+
+def _discover_records_with_source_stems(image_dirs: Sequence[Path | str]) -> list[InternalRecord]:
+    records: list[InternalRecord] = []
     used_stems: set[str] = set()
     seen_source_stems: set[str] = set()
 
@@ -89,17 +97,17 @@ def discover_records(image_dirs: Sequence[Path | str]) -> list[Record]:
                 continue
 
             source_stem = image_path.stem
-            stem = source_stem
-            if source_stem in seen_source_stems or stem in used_stems:
-                stem = f"{batch_name}_{source_stem}"
+            output_stem = source_stem
+            if source_stem in seen_source_stems or output_stem in used_stems:
+                output_stem = f"{batch_name}_{source_stem}"
                 suffix = 2
-                while stem in used_stems:
-                    stem = f"{batch_name}_{source_stem}_{suffix}"
+                while output_stem in used_stems:
+                    output_stem = f"{batch_name}_{source_stem}_{suffix}"
                     suffix += 1
 
             seen_source_stems.add(source_stem)
-            used_stems.add(stem)
-            records.append((stem, image_path, annotation_path, batch_name))
+            used_stems.add(output_stem)
+            records.append((output_stem, source_stem, image_path, annotation_path, batch_name))
 
     return records
 
@@ -113,40 +121,43 @@ def prepare_multitask_dataset(
 ) -> dict:
     """Create copied images, raster masks, manifests, view manifests, and summary JSON."""
     output_dir = Path(output_dir)
+    label_names = tuple(labels)
+    records = _discover_records_with_source_stems(image_dirs)
+    if not records:
+        raise RuntimeError("No annotated image records were discovered.")
+
     out_images = output_dir / "images"
     out_masks = output_dir / "masks"
     out_images.mkdir(parents=True, exist_ok=True)
     out_masks.mkdir(parents=True, exist_ok=True)
 
-    label_names = tuple(labels)
     for label_name in label_names:
         (out_masks / label_name).mkdir(parents=True, exist_ok=True)
 
-    records = discover_records(image_dirs)
     val_set = set(val_prefixes)
     rows: list[ManifestRow] = []
     train_rows: list[ManifestRow] = []
     val_rows: list[ManifestRow] = []
     mask_pixels: dict[str, dict[str, int]] = {label_name: {} for label_name in label_names}
 
-    for stem, image_path, annotation_path, _batch_name in records:
+    for output_stem, source_stem, image_path, annotation_path, _batch_name in records:
         annotation = load_labelme_json(annotation_path)
         validate_annotation_labels(annotation, allowed_labels=label_names)
 
-        image_out = out_images / f"{stem}{image_path.suffix.lower()}"
+        image_out = out_images / f"{output_stem}{image_path.suffix.lower()}"
         shutil.copy2(image_path, image_out)
 
         mask_paths = []
         for label_name in label_names:
             mask = rasterize_labelme_mask(annotation, label=label_name)
-            mask_out = out_masks / label_name / f"{stem}.png"
+            mask_out = out_masks / label_name / f"{output_stem}.png"
             Image.fromarray(mask).save(mask_out)
-            mask_pixels[label_name][stem] = int((mask > 0).sum())
+            mask_pixels[label_name][output_stem] = int((mask > 0).sum())
             mask_paths.append(mask_out)
 
-        row = (stem, image_out, tuple(mask_paths))
+        row = (output_stem, image_out, tuple(mask_paths))
         rows.append(row)
-        if _is_validation_stem(stem, val_set):
+        if _is_validation_stem(source_stem, val_set):
             val_rows.append(row)
         else:
             train_rows.append(row)
@@ -161,6 +172,7 @@ def prepare_multitask_dataset(
         "output_dir": str(output_dir),
         "labels": list(label_names),
         "val_prefixes": list(val_prefixes),
+        "view_labels": {view_name: list(view_labels) for view_name, view_labels in VIEWS.items()},
         "total": len(rows),
         "train": len(train_rows),
         "val": len(val_rows),
@@ -246,8 +258,13 @@ def _relative_path(path: Path, root: Path) -> str:
     return os.path.relpath(path.resolve(), start=root.resolve()).replace(os.sep, "/")
 
 
-def _is_validation_stem(stem: str, val_prefixes: set[str]) -> bool:
-    return label_prefix(stem) in val_prefixes
+def _is_validation_stem(source_stem: str, val_prefixes: set[str]) -> bool:
+    if label_prefix(source_stem) in val_prefixes:
+        return True
+    for prefix in val_prefixes:
+        if source_stem == prefix or source_stem.startswith(f"{prefix}_"):
+            return True
+    return False
 
 
 if __name__ == "__main__":
