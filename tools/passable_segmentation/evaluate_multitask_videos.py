@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import re
 import sys
 import time
 from pathlib import Path
@@ -116,15 +117,38 @@ def discover_videos(video_root: Path | str) -> list[Path]:
     return sorted(path for path in root.rglob("*") if path.is_file() and path.suffix.lower() in suffixes)
 
 
+def frame_sample_step(source_fps: float, sample_fps: float) -> int:
+    """Return the frame interval for a requested sample rate."""
+    if sample_fps <= 0:
+        raise ValueError("sample_fps must be positive")
+    fps = source_fps if source_fps > 0 and math.isfinite(source_fps) else 30.0
+    return max(1, round(fps / sample_fps))
+
+
+def should_sample_frame(frame_idx: int, source_fps: float, sample_fps: float) -> bool:
+    """Return whether a sequential frame counter should be evaluated."""
+    return frame_idx >= 0 and frame_idx % frame_sample_step(source_fps, sample_fps) == 0
+
+
 def sample_frame_indices(total_frames: int, source_fps: float, sample_fps: float) -> list[int]:
     """Return frame indices sampled at approximately sample_fps."""
     if total_frames <= 0:
         return []
-    if sample_fps <= 0:
-        raise ValueError("sample_fps must be positive")
-    fps = source_fps if source_fps > 0 and math.isfinite(source_fps) else 30.0
-    step = max(1, round(fps / sample_fps))
-    return list(range(0, total_frames, step))
+    return [idx for idx in range(total_frames) if should_sample_frame(idx, source_fps, sample_fps)]
+
+
+def video_output_slug(video_path: Path | str, video_root: Path | str) -> str:
+    """Build a filesystem-safe slug from a video's path relative to the video root."""
+    path = Path(video_path)
+    root = Path(video_root)
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        rel = Path(path.name)
+    rel_no_suffix = rel.with_suffix("")
+    raw = "_".join(rel_no_suffix.parts)
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "_", raw).strip("._-")
+    return slug or path.stem or "video"
 
 
 def make_fused_overlay(image_rgb: np.ndarray, fused: dict[str, np.ndarray]) -> np.ndarray:
@@ -184,6 +208,7 @@ def write_contact_sheet(image_paths: list[Path], output_path: Path, *, max_width
 def evaluate_video(
     video_path: Path,
     *,
+    video_root: Path,
     output_dir: Path,
     sample_fps: float,
     models: tuple[torch.nn.Module, torch.nn.Module, torch.nn.Module],
@@ -198,21 +223,23 @@ def evaluate_video(
 
     source_fps = cap.get(cv2.CAP_PROP_FPS)
     fps = source_fps if source_fps > 0 and math.isfinite(source_fps) else 30.0
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    indices = sample_frame_indices(total_frames, fps, sample_fps)
-    index_set = set(indices)
-    overlay_dir = output_dir / "overlays" / video_path.stem
+    reported_total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    known_total_frames = reported_total_frames if reported_total_frames > 0 else None
+    slug = video_output_slug(video_path, video_root)
+    overlay_dir = output_dir / "overlays" / slug
     overlay_dir.mkdir(parents=True, exist_ok=True)
 
     passable_model, boundary_model, obstacle_model = models
     frame_rows: list[dict[str, object]] = []
     contact_paths: list[Path] = []
+    frames_read = 0
     frame_idx = 0
-    while frame_idx < total_frames:
+    while known_total_frames is None or frame_idx < known_total_frames:
         ok, frame_bgr = cap.read()
         if not ok:
             break
-        if frame_idx not in index_set:
+        frames_read += 1
+        if not should_sample_frame(frame_idx, fps, sample_fps):
             frame_idx += 1
             continue
 
@@ -225,7 +252,7 @@ def evaluate_video(
         fused = fuse_multitask_predictions(passable_probs, boundary_probs, obstacle_probs)
         ratios = mask_ratios(fused)
         overlay = make_fused_overlay(image_resized, fused)
-        overlay_path = overlay_dir / f"{video_path.stem}_frame_{frame_idx:06d}.jpg"
+        overlay_path = overlay_dir / f"{slug}_frame_{frame_idx:06d}.jpg"
         cv2.imwrite(str(overlay_path), cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, 92])
         if len(contact_paths) < max_contact_per_video:
             contact_paths.append(overlay_path)
@@ -242,12 +269,16 @@ def evaluate_video(
 
     cap.release()
     elapsed = time.perf_counter() - start
+    total_frames = known_total_frames if known_total_frames is not None else frames_read
+    skipped_frames = max(0, frames_read - len(frame_rows))
+    if known_total_frames is not None and frames_read < known_total_frames:
+        skipped_frames += known_total_frames - frames_read
     summary: dict[str, object] = {
         "video": str(video_path),
         "fps": fps,
         "total_frames": total_frames,
         "sampled_frames": len(frame_rows),
-        "skipped_frames": max(0, total_frames - len(frame_rows)),
+        "skipped_frames": skipped_frames,
         "duration_sec": total_frames / fps if fps > 0 else 0.0,
         "elapsed_sec": elapsed,
     }
@@ -284,6 +315,7 @@ def evaluate_videos(
     for video_path in videos:
         rows, summary, contacts = evaluate_video(
             video_path,
+            video_root=video_root,
             output_dir=output_dir,
             sample_fps=sample_fps,
             models=models,

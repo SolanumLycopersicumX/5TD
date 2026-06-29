@@ -10,6 +10,8 @@ from tools.passable_segmentation.evaluate_multitask_videos import (
     fuse_multitask_predictions,
     mask_ratios,
     sample_frame_indices,
+    should_sample_frame,
+    video_output_slug,
 )
 
 
@@ -79,6 +81,20 @@ class MultitaskFusionTest(unittest.TestCase):
     def test_sample_frame_indices_uses_basic_one_fps_step(self):
         self.assertEqual(sample_frame_indices(total_frames=95, source_fps=30.0, sample_fps=1.0), [0, 30, 60, 90])
         self.assertEqual(sample_frame_indices(total_frames=0, source_fps=30.0, sample_fps=1.0), [])
+
+    def test_should_sample_frame_supports_unknown_length_streaming(self):
+        sampled = [idx for idx in range(95) if should_sample_frame(idx, source_fps=30.0, sample_fps=1.0)]
+
+        self.assertEqual(sampled, [0, 30, 60, 90])
+
+    def test_video_output_slug_uses_relative_path_to_avoid_stem_collisions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = root / "session_a" / "front.mp4"
+            second = root / "session_b" / "front.MOV"
+
+            self.assertEqual(video_output_slug(first, root), "session_a_front")
+            self.assertEqual(video_output_slug(second, root), "session_b_front")
 
 
 if __name__ == "__main__":
