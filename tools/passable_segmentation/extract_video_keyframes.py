@@ -80,7 +80,17 @@ def sample_frame_indices(
         return []
     fps = source_fps if source_fps > 0 else 30.0
     step = max(1, round(fps * sample_seconds))
-    return list(range(0, total_frames, step))[:max_frames]
+    candidates = list(range(0, total_frames, step))
+    if len(candidates) <= max_frames:
+        return candidates
+    if max_frames == 1:
+        return [candidates[0]]
+
+    last_index = len(candidates) - 1
+    selected_positions = [
+        int((idx * last_index / (max_frames - 1)) + 0.5) for idx in range(max_frames)
+    ]
+    return [candidates[position] for position in selected_positions]
 
 
 def should_save_sequential_frame(frame_idx: int, source_fps: float, sample_seconds: float) -> bool:

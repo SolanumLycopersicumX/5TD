@@ -145,10 +145,14 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
                 )
 
     def test_sample_frame_indices_limits_uniform_samples(self) -> None:
-        self.assertEqual(
-            sample_frame_indices(total_frames=300, source_fps=30.0, sample_seconds=2.0, max_frames=4),
-            [0, 60, 120, 180],
+        indices = sample_frame_indices(
+            total_frames=300, source_fps=30.0, sample_seconds=2.0, max_frames=4
         )
+
+        self.assertEqual(len(indices), 4)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[-1], 240)
+        self.assertTrue(all(right > left for left, right in zip(indices, indices[1:])))
 
     def test_sample_frame_indices_handles_unknown_fps(self) -> None:
         self.assertEqual(
