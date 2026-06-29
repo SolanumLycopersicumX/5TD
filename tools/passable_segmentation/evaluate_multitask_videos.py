@@ -208,6 +208,30 @@ def write_contact_sheet(image_paths: list[Path], output_path: Path, *, max_width
     return bool(cv2.imwrite(str(output_path), sheet, [cv2.IMWRITE_JPEG_QUALITY, 92]))
 
 
+def write_metric_csvs(output_dir: Path, frame_rows: list[dict[str, object]], summary_rows: list[dict[str, object]]) -> None:
+    """Write per-frame and per-video metric CSV files."""
+    frame_fields = ["video", "frame_idx", "timestamp_sec", "overlay", *RATIO_COLUMNS]
+    with (output_dir / "frame_metrics.csv").open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=frame_fields)
+        writer.writeheader()
+        writer.writerows(frame_rows)
+
+    summary_fields = [
+        "video",
+        "fps",
+        "total_frames",
+        "sampled_frames",
+        "skipped_frames",
+        "duration_sec",
+        "elapsed_sec",
+        *MEAN_RATIO_COLUMNS,
+    ]
+    with (output_dir / "video_summary.csv").open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=summary_fields)
+        writer.writeheader()
+        writer.writerows(summary_rows)
+
+
 def evaluate_video(
     video_path: Path,
     *,
@@ -301,9 +325,19 @@ def evaluate_videos(
     obstacle_checkpoint: Path,
     cpu: bool = False,
     max_contact_per_video: int = 4,
+    allow_empty: bool = False,
 ) -> tuple[int, int]:
     """Evaluate all discovered videos and write metrics artifacts."""
+    videos = discover_videos(video_root)
+    if not videos and not allow_empty:
+        raise RuntimeError(f"No supported video files were discovered in {video_root}")
+
     output_dir.mkdir(parents=True, exist_ok=True)
+    if not videos:
+        write_metric_csvs(output_dir, [], [])
+        write_contact_sheet([], output_dir / "contact_sheet.jpg")
+        return 0, 0
+
     device = torch.device("cpu" if cpu or not torch.cuda.is_available() else "cuda")
     models = (
         load_model(passable_checkpoint, expected_labels=PASSABLE_LABELS, device=device),
@@ -311,7 +345,6 @@ def evaluate_videos(
         load_model(obstacle_checkpoint, expected_labels=OBSTACLE_LABELS, device=device),
     )
 
-    videos = discover_videos(video_root)
     frame_rows: list[dict[str, object]] = []
     summary_rows: list[dict[str, object]] = []
     contact_paths: list[Path] = []
@@ -329,27 +362,7 @@ def evaluate_videos(
         summary_rows.append(summary)
         contact_paths.extend(contacts)
 
-    frame_fields = ["video", "frame_idx", "timestamp_sec", "overlay", *RATIO_COLUMNS]
-    with (output_dir / "frame_metrics.csv").open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=frame_fields)
-        writer.writeheader()
-        writer.writerows(frame_rows)
-
-    summary_fields = [
-        "video",
-        "fps",
-        "total_frames",
-        "sampled_frames",
-        "skipped_frames",
-        "duration_sec",
-        "elapsed_sec",
-        *MEAN_RATIO_COLUMNS,
-    ]
-    with (output_dir / "video_summary.csv").open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=summary_fields)
-        writer.writeheader()
-        writer.writerows(summary_rows)
-
+    write_metric_csvs(output_dir, frame_rows, summary_rows)
     write_contact_sheet(contact_paths, output_dir / "contact_sheet.jpg")
     return len(videos), len(frame_rows)
 
@@ -365,6 +378,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--obstacle-checkpoint", type=Path, default=DEFAULT_OBSTACLE_CHECKPOINT)
     parser.add_argument("--cpu", action="store_true")
     parser.add_argument("--max-contact-per-video", type=int, default=4)
+    parser.add_argument("--allow-empty", action="store_true")
     return parser
 
 
@@ -380,6 +394,7 @@ def main() -> None:
         obstacle_checkpoint=args.obstacle_checkpoint,
         cpu=args.cpu,
         max_contact_per_video=max(0, args.max_contact_per_video),
+        allow_empty=args.allow_empty,
     )
     print(f"[OK] Evaluated {videos} videos / {frames} sampled frames into {args.output_dir}")
 

@@ -209,6 +209,45 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
             ["clip_f000000.jpg", "clip_f000030.jpg"],
         )
 
+    def test_extract_video_raises_when_unknown_length_stream_has_no_readable_frames(self) -> None:
+        class FakeCapture:
+            def __init__(self, _path: str) -> None:
+                pass
+
+            def isOpened(self) -> bool:
+                return True
+
+            def get(self, _prop: int) -> float:
+                return 0.0
+
+            def read(self):
+                return False, None
+
+            def release(self) -> None:
+                pass
+
+        class FakeCV2:
+            CAP_PROP_FPS = 1
+            CAP_PROP_FRAME_COUNT = 2
+            VideoCapture = FakeCapture
+
+        previous_cv2 = sys.modules.get("cv2")
+        sys.modules["cv2"] = FakeCV2
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                with self.assertRaisesRegex(RuntimeError, "Could not extract readable frames"):
+                    extract_video(
+                        Path("Videos/broken.h264"),
+                        Path(tmp) / "images",
+                        sample_seconds=1.0,
+                        max_frames=1,
+                    )
+        finally:
+            if previous_cv2 is None:
+                sys.modules.pop("cv2", None)
+            else:
+                sys.modules["cv2"] = previous_cv2
+
     def test_write_batch_files_uses_nodata_and_shape_specific_guidance(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             output_root = Path(tmp)

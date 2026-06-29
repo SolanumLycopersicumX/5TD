@@ -7,6 +7,7 @@ import numpy as np
 from tools.passable_segmentation.evaluate_multitask_videos import (
     FUSED_LABELS,
     discover_videos,
+    evaluate_videos,
     fuse_multitask_predictions,
     mask_ratios,
     sample_frame_indices,
@@ -77,6 +78,43 @@ class MultitaskFusionTest(unittest.TestCase):
             videos = discover_videos(root)
 
         self.assertEqual(videos, sorted([camera, generic]))
+
+    def test_evaluate_videos_raises_when_no_videos_are_discovered(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video_root = root / "Videos"
+            video_root.mkdir()
+
+            with self.assertRaisesRegex(RuntimeError, "No supported video files"):
+                evaluate_videos(
+                    video_root=video_root,
+                    output_dir=root / "out",
+                    sample_fps=1.0,
+                    passable_checkpoint=root / "missing_passable.pt",
+                    boundary_checkpoint=root / "missing_boundary.pt",
+                    obstacle_checkpoint=root / "missing_obstacle.pt",
+                )
+
+    def test_evaluate_videos_allows_empty_output_when_explicit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video_root = root / "Videos"
+            output_dir = root / "out"
+            video_root.mkdir()
+
+            videos, frames = evaluate_videos(
+                video_root=video_root,
+                output_dir=output_dir,
+                sample_fps=1.0,
+                passable_checkpoint=root / "missing_passable.pt",
+                boundary_checkpoint=root / "missing_boundary.pt",
+                obstacle_checkpoint=root / "missing_obstacle.pt",
+                allow_empty=True,
+            )
+
+            self.assertEqual((videos, frames), (0, 0))
+            self.assertTrue((output_dir / "frame_metrics.csv").exists())
+            self.assertTrue((output_dir / "video_summary.csv").exists())
 
     def test_sample_frame_indices_uses_basic_one_fps_step(self):
         self.assertEqual(sample_frame_indices(total_frames=95, source_fps=30.0, sample_fps=1.0), [0, 30, 60, 90])

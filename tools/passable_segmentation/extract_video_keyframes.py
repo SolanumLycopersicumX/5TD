@@ -221,11 +221,11 @@ def extract_video(
                     continue
                 save_frame(frame_idx, frame)
 
-            if not records and frame_indices:
-                raise RuntimeError(f"Could not extract readable frames from video: {video_path}")
     finally:
         capture.release()
 
+    if not records and max_frames > 0:
+        raise RuntimeError(f"Could not extract readable frames from video: {video_path}")
     return records
 
 

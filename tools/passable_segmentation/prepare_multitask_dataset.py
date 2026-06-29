@@ -59,7 +59,7 @@ ManifestRow = tuple[str, Path, tuple[Path, ...]]
 
 # ==== CORE ====
 def validate_annotation_labels(annotation: dict, *, allowed_labels: Sequence[str] = LABELS) -> None:
-    """Raise when a Labelme annotation contains labels outside the allowed set."""
+    """Raise when a Labelme annotation contains unknown labels or unsupported shapes."""
     allowed = set(allowed_labels)
     unknown = sorted(
         {shape.get("label") for shape in annotation.get("shapes", []) if shape.get("label") not in allowed},
@@ -67,6 +67,18 @@ def validate_annotation_labels(annotation: dict, *, allowed_labels: Sequence[str
     )
     if unknown:
         raise ValueError(f"unknown Labelme labels: {unknown}")
+
+    supported_shape_types = {"polygon", "rectangle"}
+    unsupported = sorted(
+        {
+            f"{shape.get('label')}:{shape.get('shape_type') or 'polygon'}"
+            for shape in annotation.get("shapes", [])
+            if shape.get("label") in allowed
+            and (shape.get("shape_type") or "polygon") not in supported_shape_types
+        }
+    )
+    if unsupported:
+        raise ValueError(f"unsupported Labelme shape types: {unsupported}")
 
 
 def discover_records(image_dirs: Sequence[Path | str]) -> list[Record]:
@@ -150,6 +162,7 @@ def prepare_multitask_dataset(
     train_rows: list[ManifestRow] = []
     val_rows: list[ManifestRow] = []
     mask_pixels: dict[str, dict[str, int]] = {label_name: {} for label_name in label_names}
+    surface_artifact_outside_ego: list[dict[str, int | str]] = []
 
     for output_stem, source_stem, image_path, annotation_path, _batch_name in records:
         annotation = load_labelme_json(annotation_path)
@@ -159,12 +172,21 @@ def prepare_multitask_dataset(
         shutil.copy2(image_path, image_out)
 
         mask_paths = []
+        row_masks = {}
         for label_name in label_names:
             mask = rasterize_labelme_mask(annotation, label=label_name)
+            row_masks[label_name] = mask
             mask_out = out_masks / label_name / f"{output_stem}.png"
             Image.fromarray(mask).save(mask_out)
             mask_pixels[label_name][output_stem] = int((mask > 0).sum())
             mask_paths.append(mask_out)
+
+        artifact_mask = row_masks.get("surface_artifact_passable")
+        ego_mask = row_masks.get("ego_passable")
+        if artifact_mask is not None and ego_mask is not None:
+            outside_pixels = int(((artifact_mask > 0) & ~(ego_mask > 0)).sum())
+            if outside_pixels > 0:
+                surface_artifact_outside_ego.append({"stem": output_stem, "pixels": outside_pixels})
 
         row = (output_stem, image_out, tuple(mask_paths))
         rows.append(row)
@@ -190,6 +212,7 @@ def prepare_multitask_dataset(
         "total": len(rows),
         "train": len(train_rows),
         "val": len(val_rows),
+        "surface_artifact_outside_ego": surface_artifact_outside_ego,
         "empty_masks": {
             label_name: sorted(stem for stem, pixels in label_pixels.items() if pixels == 0)
             for label_name, label_pixels in mask_pixels.items()
