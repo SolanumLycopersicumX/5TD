@@ -286,11 +286,14 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
             self.assertIn("--nodata", launch_script)
             self.assertIn("Use polygons for:", rules)
             self.assertIn("Use rectangles by default for:", rules)
+            polygon_section = rules.split("Use polygons for:", 1)[1].split("Use rectangles by default for:", 1)[0]
+            rectangle_section = rules.split("Use rectangles by default for:", 1)[1].split("`surface_artifact_passable`", 1)[0]
             self.assertIn("worker", rules)
             self.assertIn("construction_vehicle", rules)
             self.assertIn("suspended_object", rules)
-            self.assertIn("debris", rules)
-            self.assertIn("polygon is allowed for irregular debris", rules)
+            self.assertIn("- debris", polygon_section)
+            self.assertNotIn("- debris", rectangle_section)
+            self.assertIn("Mark debris with polygons", rules)
             self.assertIn("surface_artifact_passable` is not a hazard label", rules)
 
 

@@ -281,12 +281,13 @@ labelme images --labels labels.txt --nodata
             "left_barrier",
             "right_barrier",
             "tunnel_wall",
+            "debris",
             "surface_artifact_passable",
         )
     )
     rectangle_labels = "\n".join(
         f"- {label}"
-        for label in ("worker", "construction_vehicle", "suspended_object", "debris")
+        for label in ("worker", "construction_vehicle", "suspended_object")
     )
     rules = f"""# Annotation rules
 
@@ -302,8 +303,8 @@ Use rectangles by default for:
 
 {rectangle_labels}
 
-A polygon is allowed for irregular debris when a rectangle would include too much
-background.
+Mark debris with polygons around the visible obstacle boundary, especially for
+irregular piles, scattered material, cables, boards, and broken ground.
 
 `surface_artifact_passable` is not a hazard label. Use it only for passable surface
 artifacts such as texture, staining, mats, shallow plates, or similar features that
