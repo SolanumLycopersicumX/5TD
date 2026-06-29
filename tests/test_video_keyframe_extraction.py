@@ -7,8 +7,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.passable_segmentation.extract_video_keyframes import (
     discover_videos,
+    extract_video,
+    should_save_sequential_frame,
     sample_frame_indices,
     video_prefix,
+    write_batch_files,
 )
 
 
@@ -40,6 +43,94 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
             sample_frame_indices(total_frames=90, source_fps=0.0, sample_seconds=1.0, max_frames=10),
             [0, 30, 60],
         )
+
+    def test_should_save_sequential_frame_matches_sample_interval(self) -> None:
+        self.assertTrue(
+            should_save_sequential_frame(frame_idx=0, source_fps=0.0, sample_seconds=1.0)
+        )
+        self.assertFalse(
+            should_save_sequential_frame(frame_idx=29, source_fps=0.0, sample_seconds=1.0)
+        )
+        self.assertTrue(
+            should_save_sequential_frame(frame_idx=30, source_fps=0.0, sample_seconds=1.0)
+        )
+
+    def test_extract_video_reads_sequentially_when_frame_count_unknown(self) -> None:
+        class FakeFrame:
+            shape = (4, 5, 3)
+
+        class FakeCapture:
+            def __init__(self, _path: str) -> None:
+                self.next_frame = 0
+
+            def isOpened(self) -> bool:
+                return True
+
+            def get(self, _prop: int) -> float:
+                return 0.0
+
+            def read(self):
+                if self.next_frame >= 35:
+                    return False, None
+                self.next_frame += 1
+                return True, FakeFrame()
+
+            def release(self) -> None:
+                pass
+
+        class FakeCV2:
+            CAP_PROP_FPS = 1
+            CAP_PROP_FRAME_COUNT = 2
+            VideoCapture = FakeCapture
+
+            @staticmethod
+            def imwrite(path: str, _frame: FakeFrame) -> bool:
+                Path(path).write_bytes(b"jpg")
+                return True
+
+        previous_cv2 = sys.modules.get("cv2")
+        sys.modules["cv2"] = FakeCV2
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                image_dir = Path(tmp) / "images"
+
+                records = extract_video(
+                    Path("Videos/clip.h264"),
+                    image_dir,
+                    sample_seconds=1.0,
+                    max_frames=2,
+                )
+        finally:
+            if previous_cv2 is None:
+                sys.modules.pop("cv2", None)
+            else:
+                sys.modules["cv2"] = previous_cv2
+
+        self.assertEqual([record["frame_idx"] for record in records], [0, 30])
+        self.assertEqual(
+            [Path(record["file"]).name for record in records],
+            ["clip_f000000.jpg", "clip_f000030.jpg"],
+        )
+
+    def test_write_batch_files_uses_nodata_and_shape_specific_guidance(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            output_root = Path(tmp)
+
+            write_batch_files(output_root)
+
+            readme = (output_root / "README.md").read_text(encoding="utf-8")
+            launch_script = (output_root / "launch_labelme.sh").read_text(encoding="utf-8")
+            rules = (output_root / "annotation_rules.md").read_text(encoding="utf-8")
+            self.assertIn("--nodata", readme)
+            self.assertIn("--nodata", launch_script)
+            self.assertIn("Use polygons for:", rules)
+            self.assertIn("Use rectangles by default for:", rules)
+            self.assertIn("worker", rules)
+            self.assertIn("construction_vehicle", rules)
+            self.assertIn("suspended_object", rules)
+            self.assertIn("debris", rules)
+            self.assertIn("polygon is allowed for irregular debris", rules)
+            self.assertIn("surface_artifact_passable` is not a hazard label", rules)
 
 
 if __name__ == "__main__":

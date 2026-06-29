@@ -60,6 +60,13 @@ def sample_frame_indices(
     return list(range(0, total_frames, step))[:max_frames]
 
 
+def should_save_sequential_frame(frame_idx: int, source_fps: float, sample_seconds: float) -> bool:
+    """Return True when a sequentially read frame falls on the sample interval."""
+    fps = source_fps if source_fps > 0 else 30.0
+    step = max(1, round(fps * sample_seconds))
+    return frame_idx % step == 0
+
+
 def extract_keyframes(
     *,
     video_root: Path | str = DEFAULT_VIDEO_ROOT,
@@ -140,37 +147,52 @@ def extract_video(
     source_fps = float(capture.get(cv2.CAP_PROP_FPS) or 0.0)
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
     fps_for_timestamp = source_fps if source_fps > 0 else 30.0
-    frame_indices = sample_frame_indices(
-        total_frames=total_frames,
-        source_fps=source_fps,
-        sample_seconds=sample_seconds,
-        max_frames=max_frames,
-    )
-
     records: list[dict[str, Any]] = []
     prefix = video_prefix(video_path)
+
+    def save_frame(frame_idx: int, frame: Any) -> None:
+        height, width = frame.shape[:2]
+        image_path = images_dir / f"{prefix}_f{frame_idx:06d}.jpg"
+        if not cv2.imwrite(str(image_path), frame):
+            raise RuntimeError(f"Could not write frame image: {image_path}")
+
+        records.append(
+            {
+                "file": str(image_path),
+                "source_video": str(video_path),
+                "frame_idx": frame_idx,
+                "timestamp_sec": frame_idx / fps_for_timestamp,
+                "width": int(width),
+                "height": int(height),
+            }
+        )
+
     try:
-        for frame_idx in frame_indices:
-            capture.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
-            ok, frame = capture.read()
-            if not ok or frame is None:
-                continue
-
-            height, width = frame.shape[:2]
-            image_path = images_dir / f"{prefix}_f{frame_idx:06d}.jpg"
-            if not cv2.imwrite(str(image_path), frame):
-                raise RuntimeError(f"Could not write frame image: {image_path}")
-
-            records.append(
-                {
-                    "file": str(image_path),
-                    "source_video": str(video_path),
-                    "frame_idx": frame_idx,
-                    "timestamp_sec": frame_idx / fps_for_timestamp,
-                    "width": int(width),
-                    "height": int(height),
-                }
+        if total_frames <= 0:
+            frame_idx = 0
+            while len(records) < max_frames:
+                ok, frame = capture.read()
+                if not ok or frame is None:
+                    break
+                if should_save_sequential_frame(frame_idx, source_fps, sample_seconds):
+                    save_frame(frame_idx, frame)
+                frame_idx += 1
+        else:
+            frame_indices = sample_frame_indices(
+                total_frames=total_frames,
+                source_fps=source_fps,
+                sample_seconds=sample_seconds,
+                max_frames=max_frames,
             )
+            for frame_idx in frame_indices:
+                capture.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+                ok, frame = capture.read()
+                if not ok or frame is None:
+                    continue
+                save_frame(frame_idx, frame)
+
+            if not records and frame_indices:
+                raise RuntimeError(f"Could not extract readable frames from video: {video_path}")
     finally:
         capture.release()
 
@@ -188,17 +210,46 @@ def write_batch_files(output_root: Path) -> None:
 
 Images are in `{image_dir.as_posix()}`.
 
-Run `./launch_labelme.sh` from this directory to start Labelme with the batch image folder
-and label list.
+Run `./launch_labelme.sh` from this directory to start Labelme with `--nodata`:
+
+```bash
+labelme images --labels labels.txt --nodata
+```
 """
     (output_root / "README.md").write_text(readme, encoding="utf-8")
 
-    labels = "\n".join(f"- {label}" for label in ANNOTATION_LABELS)
+    all_labels = "\n".join(f"- {label}" for label in ANNOTATION_LABELS)
+    polygon_labels = "\n".join(
+        f"- {label}"
+        for label in (
+            "ego_passable",
+            "ditch",
+            "left_barrier",
+            "right_barrier",
+            "tunnel_wall",
+            "surface_artifact_passable",
+        )
+    )
+    rectangle_labels = "\n".join(
+        f"- {label}"
+        for label in ("worker", "construction_vehicle", "suspended_object", "debris")
+    )
     rules = f"""# Annotation rules
 
-Use polygon annotations with these ten labels:
+Available labels:
 
-{labels}
+{all_labels}
+
+Use polygons for:
+
+{polygon_labels}
+
+Use rectangles by default for:
+
+{rectangle_labels}
+
+A polygon is allowed for irregular debris when a rectangle would include too much
+background.
 
 `surface_artifact_passable` is not a hazard label. Use it only for passable surface
 artifacts such as texture, staining, mats, shallow plates, or similar features that
@@ -209,7 +260,7 @@ should remain traversable.
     launch_script = f"""#!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")"
-labelme images --labels labels.txt
+labelme images --labels labels.txt --nodata
 """
     launch_path = output_root / "launch_labelme.sh"
     launch_path.write_text(launch_script, encoding="utf-8")
