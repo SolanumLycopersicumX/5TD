@@ -6,6 +6,7 @@ import torch
 
 from tools.passable_segmentation.train_boundary_right_wall import (
     LABELS,
+    boundary_right_wall_metrics,
     copy_compatible_state,
     read_boundary_right_wall_manifest,
 )
@@ -35,23 +36,40 @@ class BoundaryRightWallTrainingTest(unittest.TestCase):
             ],
         )
 
-    def test_copy_compatible_state_loads_two_output_head_into_three_output_model(self):
+    def test_copy_compatible_state_maps_output_head_by_label(self):
         torch.manual_seed(123)
         source = SmallPassableUNet(base_channels=4, out_channels=2)
         target = SmallPassableUNet(base_channels=4, out_channels=3)
-        original_third_weight = target.out.weight[2].detach().clone()
-        original_third_bias = target.out.bias[2].detach().clone()
+        original_right_weight = target.out.weight[1].detach().clone()
+        original_right_bias = target.out.bias[1].detach().clone()
 
         with torch.no_grad():
-            source.out.bias.fill_(0.25)
-            source.out.weight.fill_(0.5)
+            source.out.weight[0].fill_(0.25)
+            source.out.weight[1].fill_(0.75)
+            source.out.bias[0].fill_(0.5)
+            source.out.bias[1].fill_(1.5)
 
-        copy_compatible_state(target, source.state_dict())
+        copy_compatible_state(
+            target,
+            source.state_dict(),
+            source_labels=("left_barrier", "tunnel_wall"),
+        )
 
-        self.assertTrue(torch.equal(target.out.weight[:2], source.out.weight))
-        self.assertTrue(torch.equal(target.out.bias[:2], source.out.bias))
-        self.assertTrue(torch.equal(target.out.weight[2], original_third_weight))
-        self.assertTrue(torch.equal(target.out.bias[2], original_third_bias))
+        self.assertTrue(torch.equal(target.out.weight[0], source.out.weight[0]))
+        self.assertTrue(torch.equal(target.out.bias[0], source.out.bias[0]))
+        self.assertTrue(torch.equal(target.out.weight[1], original_right_weight))
+        self.assertTrue(torch.equal(target.out.bias[1], original_right_bias))
+        self.assertTrue(torch.equal(target.out.weight[2], source.out.weight[1]))
+        self.assertTrue(torch.equal(target.out.bias[2], source.out.bias[1]))
+
+    def test_boundary_right_wall_metrics_report_zero_for_absent_classes(self):
+        logits = torch.zeros((1, len(LABELS), 4, 4))
+        targets = torch.zeros((1, len(LABELS), 4, 4))
+
+        metrics = boundary_right_wall_metrics(logits, targets)
+
+        for key, value in metrics.items():
+            self.assertEqual(value, 0.0, key)
 
     def test_labels_include_right_barrier_between_left_and_wall(self):
         self.assertEqual(LABELS, ("left_barrier", "right_barrier", "tunnel_wall"))

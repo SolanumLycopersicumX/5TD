@@ -173,22 +173,42 @@ def masked_bce(logits: torch.Tensor, targets: torch.Tensor, mask: torch.Tensor) 
     return (loss * mask).sum() / mask.sum().clamp_min(1.0)
 
 
-def copy_compatible_state(model: nn.Module, source_state: dict[str, torch.Tensor]) -> None:
-    """Load matching weights and copy compatible leading output channels."""
+def copy_compatible_state(
+    model: nn.Module,
+    source_state: dict[str, torch.Tensor],
+    *,
+    source_labels: tuple[str, ...] | list[str] = (),
+    target_labels: tuple[str, ...] | list[str] = LABELS,
+) -> None:
+    """Load matching weights and copy compatible output channels by label when possible."""
+    source_labels = tuple(source_labels)
+    target_labels = tuple(target_labels)
+    target_label_to_idx = {label: idx for idx, label in enumerate(target_labels)}
+
     target_state = model.state_dict()
     updated = {key: value.detach().clone() for key, value in target_state.items()}
     for key, source_value in source_state.items():
         if key not in updated:
             continue
         target_value = updated[key]
-        if source_value.shape == target_value.shape:
-            updated[key] = source_value.detach().clone()
-        elif key in {"out.weight", "out.bias"} and target_value.ndim == source_value.ndim:
-            rows = source_value.shape[0]
-            if target_value.shape[0] >= rows and target_value.shape[1:] == source_value.shape[1:]:
-                copied = target_value.detach().clone()
-                copied[:rows] = source_value.detach().clone()
+        if key in {"out.weight", "out.bias"}:
+            if target_value.ndim != source_value.ndim or target_value.shape[1:] != source_value.shape[1:]:
+                continue
+            copied = target_value.detach().clone()
+            source_detached = source_value.detach()
+            if source_labels:
+                for source_idx, label in enumerate(source_labels):
+                    target_idx = target_label_to_idx.get(label)
+                    if target_idx is None:
+                        continue
+                    if source_idx < source_detached.shape[0] and target_idx < copied.shape[0]:
+                        copied[target_idx] = source_detached[source_idx]
                 updated[key] = copied
+            elif target_value.shape[0] >= source_value.shape[0]:
+                copied[: source_value.shape[0]] = source_detached.clone()
+                updated[key] = copied
+        elif source_value.shape == target_value.shape:
+            updated[key] = source_value.detach().clone()
     model.load_state_dict(updated)
 
 
@@ -215,8 +235,9 @@ def boundary_right_wall_metrics(logits: torch.Tensor, targets: torch.Tensor) -> 
         union = ((pred + tgt) > 0).float().sum().item()
         pred_sum = pred.sum().item()
         tgt_sum = tgt.sum().item()
-        metrics[f"{label}_iou"] = float((intersection + 1e-6) / (union + 1e-6))
-        metrics[f"{label}_dice"] = float((2 * intersection + 1e-6) / (pred_sum + tgt_sum + 1e-6))
+        metrics[f"{label}_iou"] = float(intersection / union) if union > 0 else 0.0
+        dice_denom = pred_sum + tgt_sum
+        metrics[f"{label}_dice"] = float((2 * intersection) / dice_denom) if dice_denom > 0 else 0.0
 
     for source_idx, source_label in enumerate(LABELS):
         source_tgt = targets[:, source_idx : source_idx + 1]
@@ -225,8 +246,9 @@ def boundary_right_wall_metrics(logits: torch.Tensor, targets: torch.Tensor) -> 
             if pred_idx == source_idx:
                 continue
             pred = preds[:, pred_idx : pred_idx + 1]
-            metrics[f"{source_label}_as_{pred_label}_rate"] = float(
-                ((pred * source_tgt).sum().item() + 1e-6) / (source_pixels + 1e-6)
+            confusion_pixels = (pred * source_tgt).sum().item()
+            metrics[f"{source_label}_as_{pred_label}_rate"] = (
+                float(confusion_pixels / source_pixels) if source_pixels > 0 else 0.0
             )
 
     for left_idx in range(len(LABELS)):
@@ -234,8 +256,9 @@ def boundary_right_wall_metrics(logits: torch.Tensor, targets: torch.Tensor) -> 
             left_pred = preds[:, left_idx : left_idx + 1]
             right_pred = preds[:, right_idx : right_idx + 1]
             denom = left_pred.sum().item() + right_pred.sum().item()
-            metrics[f"{LABELS[left_idx]}_{LABELS[right_idx]}_overlap_rate"] = float(
-                ((left_pred * right_pred).sum().item() + 1e-6) / (denom + 1e-6)
+            overlap_pixels = (left_pred * right_pred).sum().item()
+            metrics[f"{LABELS[left_idx]}_{LABELS[right_idx]}_overlap_rate"] = (
+                float(overlap_pixels / denom) if denom > 0 else 0.0
             )
     return metrics
 
@@ -363,14 +386,17 @@ def run_training(config: dict | None = None) -> dict:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SmallPassableUNet(base_channels=int(config["base_channels"]), out_channels=len(LABELS)).to(device)
-    init_checkpoint = Path(str(config.get("init_checkpoint", "")))
-    if init_checkpoint.exists():
-        checkpoint = torch.load(init_checkpoint, map_location=device, weights_only=False)
-        source_state = checkpoint.get("model", checkpoint)
-        copy_compatible_state(model, source_state)
-        print(f"[TRAIN] Loaded compatible checkpoint weights from {init_checkpoint}")
-    elif str(config.get("init_checkpoint", "")):
-        print(f"[WARN] Init checkpoint not found, training from scratch: {init_checkpoint}")
+    init_checkpoint_value = config.get("init_checkpoint")
+    if init_checkpoint_value:
+        init_checkpoint = Path(str(init_checkpoint_value))
+        if init_checkpoint.exists():
+            checkpoint = torch.load(init_checkpoint, map_location=device, weights_only=False)
+            source_state = checkpoint.get("model", checkpoint)
+            source_labels = tuple(checkpoint.get("labels", ())) if isinstance(checkpoint, dict) else ()
+            copy_compatible_state(model, source_state, source_labels=source_labels)
+            print(f"[TRAIN] Loaded compatible checkpoint weights from {init_checkpoint}")
+        else:
+            print(f"[WARN] Init checkpoint not found, training from scratch: {init_checkpoint}")
 
     optimizer = torch.optim.AdamW(
         model.parameters(),
