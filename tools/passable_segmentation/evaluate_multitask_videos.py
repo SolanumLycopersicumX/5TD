@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import math
 import re
 import sys
@@ -145,10 +146,12 @@ def video_output_slug(video_path: Path | str, video_root: Path | str) -> str:
         rel = path.relative_to(root)
     except ValueError:
         rel = Path(path.name)
-    rel_no_suffix = rel.with_suffix("")
-    raw = "_".join(rel_no_suffix.parts)
+    rel_text = rel.as_posix()
+    raw = "_".join(rel.parts)
     slug = re.sub(r"[^A-Za-z0-9._-]+", "_", raw).strip("._-")
-    return slug or path.stem or "video"
+    slug = re.sub(r"[._-]+", "_", slug).strip("_")
+    digest = hashlib.sha1(rel_text.encode("utf-8")).hexdigest()[:8]
+    return f"{slug or path.stem or 'video'}_{digest}"
 
 
 def make_fused_overlay(image_rgb: np.ndarray, fused: dict[str, np.ndarray]) -> np.ndarray:

@@ -93,8 +93,20 @@ class MultitaskFusionTest(unittest.TestCase):
             first = root / "session_a" / "front.mp4"
             second = root / "session_b" / "front.MOV"
 
-            self.assertEqual(video_output_slug(first, root), "session_a_front")
-            self.assertEqual(video_output_slug(second, root), "session_b_front")
+            first_slug = video_output_slug(first, root)
+            second_slug = video_output_slug(second, root)
+
+            self.assertTrue(first_slug.startswith("session_a_front_mp4_"), first_slug)
+            self.assertTrue(second_slug.startswith("session_b_front_MOV_"), second_slug)
+            self.assertNotEqual(first_slug, second_slug)
+
+    def test_video_output_slug_distinguishes_same_stem_different_extensions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            mp4 = root / "session" / "front.mp4"
+            mov = root / "session" / "front.MOV"
+
+            self.assertNotEqual(video_output_slug(mp4, root), video_output_slug(mov, root))
 
 
 if __name__ == "__main__":
