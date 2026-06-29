@@ -80,6 +80,23 @@ def validate_annotation_labels(annotation: dict, *, allowed_labels: Sequence[str
     if unsupported:
         raise ValueError(f"unsupported Labelme shape types: {unsupported}")
 
+    malformed = []
+    for index, shape in enumerate(annotation.get("shapes", [])):
+        label = shape.get("label")
+        if label not in allowed:
+            continue
+        shape_type = shape.get("shape_type") or "polygon"
+        points = shape.get("points", [])
+        if not _points_are_numeric_pairs(points):
+            malformed.append(f"shape[{index}] {label}:{shape_type} points")
+            continue
+        if shape_type == "polygon" and len(points) < 3:
+            malformed.append(f"shape[{index}] {label}:polygon needs >=3 points")
+        elif shape_type == "rectangle" and len(points) != 2:
+            malformed.append(f"shape[{index}] {label}:rectangle needs 2 points")
+    if malformed:
+        raise ValueError(f"malformed Labelme shapes: {malformed}")
+
 
 def discover_records(image_dirs: Sequence[Path | str]) -> list[Record]:
     """Find jpg/jpeg Labelme image/json pairs across image directories."""
@@ -296,6 +313,18 @@ def _write_manifest(path: Path | str, rows: Sequence[ManifestRow], *, root: Path
 def _relative_path(path: Path, root: Path) -> str:
     return os.path.relpath(path.resolve(), start=root.resolve()).replace(os.sep, "/")
 
+
+
+def _points_are_numeric_pairs(points: object) -> bool:
+    if not isinstance(points, list):
+        return False
+    for point in points:
+        if not isinstance(point, (list, tuple)) or len(point) != 2:
+            return False
+        x, y = point
+        if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
+            return False
+    return True
 
 def _is_validation_stem(source_stem: str, val_prefixes: set[str]) -> bool:
     return _matches_stem_policy(source_stem, val_prefixes)

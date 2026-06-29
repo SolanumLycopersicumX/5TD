@@ -141,6 +141,12 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
             [0, 30, 60],
         )
 
+    def test_sample_frame_indices_rejects_non_positive_sample_seconds(self) -> None:
+        with self.assertRaisesRegex(ValueError, "sample_seconds must be positive"):
+            sample_frame_indices(total_frames=30, source_fps=30.0, sample_seconds=0.0, max_frames=10)
+        with self.assertRaisesRegex(ValueError, "sample_seconds must be positive"):
+            should_save_sequential_frame(frame_idx=0, source_fps=30.0, sample_seconds=-1.0)
+
     def test_should_save_sequential_frame_matches_sample_interval(self) -> None:
         self.assertTrue(
             should_save_sequential_frame(frame_idx=0, source_fps=0.0, sample_seconds=1.0)

@@ -74,6 +74,8 @@ def sample_frame_indices(
     max_frames: int,
 ) -> list[int]:
     """Compute frame indices sampled every sample_seconds, capped by max_frames."""
+    if sample_seconds <= 0:
+        raise ValueError("sample_seconds must be positive")
     if total_frames <= 0 or max_frames <= 0:
         return []
     fps = source_fps if source_fps > 0 else 30.0
@@ -83,6 +85,8 @@ def sample_frame_indices(
 
 def should_save_sequential_frame(frame_idx: int, source_fps: float, sample_seconds: float) -> bool:
     """Return True when a sequentially read frame falls on the sample interval."""
+    if sample_seconds <= 0:
+        raise ValueError("sample_seconds must be positive")
     fps = source_fps if source_fps > 0 else 30.0
     step = max(1, round(fps * sample_seconds))
     return frame_idx % step == 0

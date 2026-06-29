@@ -295,6 +295,11 @@ def evaluate_video(
         frame_idx += 1
 
     cap.release()
+    if frames_read == 0:
+        raise RuntimeError(f"Could not read any frames from video: {video_path}")
+    if not frame_rows:
+        raise RuntimeError(f"Could not sample any frames from video: {video_path}")
+
     elapsed = time.perf_counter() - start
     total_frames = known_total_frames if known_total_frames is not None else frames_read
     skipped_frames = max(0, frames_read - len(frame_rows))

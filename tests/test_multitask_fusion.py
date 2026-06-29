@@ -4,9 +4,12 @@ from pathlib import Path
 
 import numpy as np
 
+import tools.passable_segmentation.evaluate_multitask_videos as eval_mod
+
 from tools.passable_segmentation.evaluate_multitask_videos import (
     FUSED_LABELS,
     discover_videos,
+    evaluate_video,
     evaluate_videos,
     fuse_multitask_predictions,
     mask_ratios,
@@ -115,6 +118,52 @@ class MultitaskFusionTest(unittest.TestCase):
             self.assertEqual((videos, frames), (0, 0))
             self.assertTrue((output_dir / "frame_metrics.csv").exists())
             self.assertTrue((output_dir / "video_summary.csv").exists())
+
+    def test_evaluate_video_raises_when_opened_video_has_no_readable_frames(self):
+        import torch
+
+        class FakeCapture:
+            def __init__(self, _path: str) -> None:
+                pass
+
+            def isOpened(self) -> bool:
+                return True
+
+            def get(self, prop: int) -> float:
+                if prop == FakeCV2.CAP_PROP_FPS:
+                    return 30.0
+                if prop == FakeCV2.CAP_PROP_FRAME_COUNT:
+                    return 0.0
+                return 0.0
+
+            def read(self):
+                return False, None
+
+            def release(self) -> None:
+                pass
+
+        class FakeCV2:
+            CAP_PROP_FPS = 1
+            CAP_PROP_FRAME_COUNT = 2
+            VideoCapture = FakeCapture
+
+        previous_cv2 = eval_mod.cv2
+        eval_mod.cv2 = FakeCV2
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                with self.assertRaisesRegex(RuntimeError, "Could not read any frames"):
+                    evaluate_video(
+                        root / "broken.mp4",
+                        video_root=root,
+                        output_dir=root / "out",
+                        sample_fps=1.0,
+                        models=(object(), object(), object()),
+                        device=torch.device("cpu"),
+                        max_contact_per_video=1,
+                    )
+        finally:
+            eval_mod.cv2 = previous_cv2
 
     def test_sample_frame_indices_uses_basic_one_fps_step(self):
         self.assertEqual(sample_frame_indices(total_frames=95, source_fps=30.0, sample_fps=1.0), [0, 30, 60, 90])

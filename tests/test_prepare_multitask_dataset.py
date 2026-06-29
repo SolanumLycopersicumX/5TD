@@ -38,6 +38,51 @@ class PrepareMultitaskDatasetTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported Labelme shape types"):
             validate_annotation_labels(annotation)
 
+    def test_validate_annotation_labels_rejects_malformed_polygon_and_rectangle_points(self):
+        polygon = {
+            "imageWidth": 8,
+            "imageHeight": 8,
+            "shapes": [
+                {
+                    "label": "worker",
+                    "shape_type": "polygon",
+                    "points": [[1, 1], [2, 2]],
+                }
+            ],
+        }
+        rectangle = {
+            "imageWidth": 8,
+            "imageHeight": 8,
+            "shapes": [
+                {
+                    "label": "debris",
+                    "shape_type": "rectangle",
+                    "points": [[1, 1], [2, 2], [3, 3]],
+                }
+            ],
+        }
+
+        with self.assertRaisesRegex(ValueError, "malformed Labelme shapes"):
+            validate_annotation_labels(polygon)
+        with self.assertRaisesRegex(ValueError, "malformed Labelme shapes"):
+            validate_annotation_labels(rectangle)
+
+    def test_validate_annotation_labels_rejects_non_numeric_points(self):
+        annotation = {
+            "imageWidth": 8,
+            "imageHeight": 8,
+            "shapes": [
+                {
+                    "label": "worker",
+                    "shape_type": "rectangle",
+                    "points": [[1, 1], ["bad", 2]],
+                }
+            ],
+        }
+
+        with self.assertRaisesRegex(ValueError, "malformed Labelme shapes"):
+            validate_annotation_labels(annotation)
+
     def test_prepare_multitask_dataset_reports_surface_artifacts_outside_ego_passable(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
