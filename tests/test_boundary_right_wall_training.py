@@ -2,10 +2,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import numpy as np
 import torch
 
 from tools.passable_segmentation.train_boundary_right_wall import (
     LABELS,
+    augment_boundary_image_and_mask,
     boundary_right_wall_metrics,
     copy_compatible_state,
     finalize_boundary_metrics,
@@ -64,6 +66,27 @@ class BoundaryRightWallTrainingTest(unittest.TestCase):
         self.assertTrue(torch.equal(target.out.bias[1], original_right_bias))
         self.assertTrue(torch.equal(target.out.weight[2], source.out.weight[1]))
         self.assertTrue(torch.equal(target.out.bias[2], source.out.bias[1]))
+
+    def test_boundary_augmentation_swaps_left_and_right_channels_on_forced_flip(self):
+        class ForceFlipOnlyRandom:
+            def __init__(self) -> None:
+                self.values = iter([0.0, 1.0, 1.0, 1.0, 1.0, 1.0])
+
+            def random(self) -> float:
+                return next(self.values)
+
+        image = np.arange(9, dtype=np.uint8).reshape(1, 3, 3)
+        mask = np.zeros((1, 3, 3), dtype=np.uint8)
+        mask[0, 0, 0] = 255
+        mask[0, 2, 1] = 255
+        mask[0, 1, 2] = 255
+
+        flipped_image, flipped_mask = augment_boundary_image_and_mask(image, mask, ForceFlipOnlyRandom())
+
+        np.testing.assert_array_equal(flipped_image, image[:, ::-1])
+        np.testing.assert_array_equal(flipped_mask[..., 0], np.array([[255, 0, 0]], dtype=np.uint8))
+        np.testing.assert_array_equal(flipped_mask[..., 1], np.array([[0, 0, 255]], dtype=np.uint8))
+        np.testing.assert_array_equal(flipped_mask[..., 2], np.array([[0, 255, 0]], dtype=np.uint8))
 
     def test_boundary_right_wall_metrics_report_zero_for_absent_classes(self):
         logits = torch.zeros((1, len(LABELS), 4, 4))

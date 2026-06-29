@@ -13,6 +13,7 @@ from tools.passable_segmentation.evaluate_multitask_videos import (
     evaluate_videos,
     fuse_multitask_predictions,
     mask_ratios,
+    write_overlay_image,
     sample_frame_indices,
     should_sample_frame,
     video_output_slug,
@@ -162,6 +163,28 @@ class MultitaskFusionTest(unittest.TestCase):
                         device=torch.device("cpu"),
                         max_contact_per_video=1,
                     )
+        finally:
+            eval_mod.cv2 = previous_cv2
+
+    def test_write_overlay_image_raises_when_cv2_write_fails(self):
+        class FakeCV2:
+            COLOR_RGB2BGR = 1
+            IMWRITE_JPEG_QUALITY = 2
+
+            @staticmethod
+            def cvtColor(image, _code):
+                return image
+
+            @staticmethod
+            def imwrite(_path, _image, _params):
+                return False
+
+        previous_cv2 = eval_mod.cv2
+        eval_mod.cv2 = FakeCV2
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                with self.assertRaisesRegex(RuntimeError, "Could not write overlay image"):
+                    write_overlay_image(Path(tmp) / "overlay.jpg", np.zeros((2, 2, 3), dtype=np.uint8))
         finally:
             eval_mod.cv2 = previous_cv2
 

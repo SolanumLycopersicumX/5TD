@@ -102,6 +102,11 @@ def extract_keyframes(
     allow_empty: bool = False,
 ) -> dict[str, Any]:
     """Extract sampled frames from discovered videos and write batch helper files."""
+    if sample_seconds <= 0:
+        raise ValueError("sample_seconds must be positive")
+    if max_frames_per_video <= 0:
+        raise ValueError("max_frames_per_video must be positive")
+
     video_root = Path(video_root)
     output_root = Path(output_root)
     labels_path = Path(labels_path)
@@ -167,6 +172,11 @@ def extract_video(
 ) -> list[dict[str, Any]]:
     """Extract sampled JPEG frames from one video into images_dir."""
     import cv2
+
+    if sample_seconds <= 0:
+        raise ValueError("sample_seconds must be positive")
+    if max_frames <= 0:
+        raise ValueError("max_frames must be positive")
 
     video_path = Path(video_path)
     images_dir = Path(images_dir)

@@ -129,6 +129,21 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
                     labels_path=root / "missing_labels.txt",
                 )
 
+    def test_extract_keyframes_rejects_non_positive_max_frames_per_video(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video_root = root / "Videos"
+            video_root.mkdir()
+            (video_root / "front.mp4").write_bytes(b"video")
+
+            with self.assertRaisesRegex(ValueError, "max_frames_per_video must be positive"):
+                extract_keyframes(
+                    video_root=video_root,
+                    output_root=root / "out",
+                    labels_path=root / "missing_labels.txt",
+                    max_frames_per_video=0,
+                )
+
     def test_sample_frame_indices_limits_uniform_samples(self) -> None:
         self.assertEqual(
             sample_frame_indices(total_frames=300, source_fps=30.0, sample_seconds=2.0, max_frames=4),

@@ -208,6 +208,13 @@ def write_contact_sheet(image_paths: list[Path], output_path: Path, *, max_width
     return bool(cv2.imwrite(str(output_path), sheet, [cv2.IMWRITE_JPEG_QUALITY, 92]))
 
 
+def write_overlay_image(path: Path, overlay_rgb: np.ndarray) -> None:
+    """Write one overlay image and raise when OpenCV reports failure."""
+    ok = cv2.imwrite(str(path), cv2.cvtColor(overlay_rgb, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, 92])
+    if not ok:
+        raise RuntimeError(f"Could not write overlay image: {path}")
+
+
 def write_metric_csvs(output_dir: Path, frame_rows: list[dict[str, object]], summary_rows: list[dict[str, object]]) -> None:
     """Write per-frame and per-video metric CSV files."""
     frame_fields = ["video", "frame_idx", "timestamp_sec", "overlay", *RATIO_COLUMNS]
@@ -280,7 +287,7 @@ def evaluate_video(
         ratios = mask_ratios(fused)
         overlay = make_fused_overlay(image_resized, fused)
         overlay_path = overlay_dir / f"{slug}_frame_{frame_idx:06d}.jpg"
-        cv2.imwrite(str(overlay_path), cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, 92])
+        write_overlay_image(overlay_path, overlay)
         if len(contact_paths) < max_contact_per_video:
             contact_paths.append(overlay_path)
 

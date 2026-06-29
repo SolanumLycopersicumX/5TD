@@ -83,6 +83,36 @@ class PrepareMultitaskDatasetTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "malformed Labelme shapes"):
             validate_annotation_labels(annotation)
 
+    def test_prepare_multitask_dataset_rasterizes_falsey_shape_type_as_polygon(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            batch = root / "batch" / "images"
+            output_dir = root / "derived"
+            batch.mkdir(parents=True)
+
+            Image.new("RGB", (8, 8), "black").save(batch / "IMG_1_0001.jpg")
+            annotation = {
+                "imagePath": "IMG_1_0001.jpg",
+                "imageWidth": 8,
+                "imageHeight": 8,
+                "shapes": [
+                    {
+                        "label": "ego_passable",
+                        "shape_type": None,
+                        "points": [[1, 1], [6, 1], [6, 6]],
+                    },
+                ],
+            }
+            (batch / "IMG_1_0001.json").write_text(json.dumps(annotation), encoding="utf-8")
+
+            summary = prepare_multitask_dataset(
+                image_dirs=[batch],
+                output_dir=output_dir,
+                val_prefixes=("IMG",),
+            )
+
+            self.assertNotIn("IMG_1_0001", summary["empty_masks"]["ego_passable"])
+
     def test_prepare_multitask_dataset_reports_surface_artifacts_outside_ego_passable(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

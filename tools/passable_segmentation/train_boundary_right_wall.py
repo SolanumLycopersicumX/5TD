@@ -24,8 +24,12 @@ from tools.passable_segmentation.train_passable import (
     MEAN,
     STD,
     SmallPassableUNet,
-    augment_image_and_mask,
+    add_sensor_noise,
+    add_water_reflection,
     dice_loss,
+    random_affine,
+    random_blur,
+    random_light,
     resize_pair,
     seed_everything,
 )
@@ -122,7 +126,7 @@ class BoundaryRightWallDataset(Dataset):
 
         rng = random.Random(self.seed + idx * 1009 + random.randint(0, 1_000_000))
         if self.augment:
-            image, mask_stack = augment_image_and_mask(image, mask_stack, rng)
+            image, mask_stack = augment_boundary_image_and_mask(image, mask_stack, rng)
         image, mask_stack = resize_pair(image, mask_stack, self.image_size)
 
         image_f = image.astype(np.float32) / 255.0
@@ -131,6 +135,33 @@ class BoundaryRightWallDataset(Dataset):
         image_t = torch.from_numpy(image_f.transpose(2, 0, 1)).float()
         mask_t = torch.from_numpy(mask_f).float()
         return {"stem": stem, "image": image_t, "mask": mask_t}
+
+
+def augment_boundary_image_and_mask(
+    image: np.ndarray, mask_stack: np.ndarray, rng: random.Random
+) -> tuple[np.ndarray, np.ndarray]:
+    """Apply augmentation while preserving left/right boundary channel semantics."""
+    if rng.random() < 0.5:
+        image = np.ascontiguousarray(image[:, ::-1])
+        mask_stack = np.ascontiguousarray(mask_stack[:, ::-1]).copy()
+        mask_stack[..., [0, 1]] = mask_stack[..., [1, 0]]
+
+    if rng.random() < 0.7:
+        image, mask_stack = random_affine(image, mask_stack, rng)
+
+    if rng.random() < 0.85:
+        image = random_light(image, rng)
+
+    if rng.random() < 0.35:
+        image = random_blur(image, rng)
+
+    if rng.random() < 0.35:
+        image = add_water_reflection(image, rng)
+
+    if rng.random() < 0.25:
+        image = add_sensor_noise(image, rng)
+
+    return image, mask_stack
 
 
 def boundary_right_wall_loss(
