@@ -8,7 +8,10 @@ from tools.passable_segmentation.train_boundary_right_wall import (
     LABELS,
     boundary_right_wall_metrics,
     copy_compatible_state,
+    finalize_boundary_metrics,
+    new_boundary_metric_totals,
     read_boundary_right_wall_manifest,
+    update_boundary_metric_totals,
 )
 from tools.passable_segmentation.train_passable import SmallPassableUNet
 
@@ -70,6 +73,25 @@ class BoundaryRightWallTrainingTest(unittest.TestCase):
 
         for key, value in metrics.items():
             self.assertEqual(value, 0.0, key)
+
+    def test_boundary_metric_totals_finalize_corpus_ratios_across_sparse_batches(self):
+        totals = new_boundary_metric_totals()
+
+        empty_logits = torch.full((1, len(LABELS), 2, 2), -10.0)
+        empty_targets = torch.zeros((1, len(LABELS), 2, 2))
+        update_boundary_metric_totals(totals, empty_logits, empty_targets)
+
+        positive_logits = torch.full((1, len(LABELS), 2, 2), -10.0)
+        positive_targets = torch.zeros((1, len(LABELS), 2, 2))
+        positive_logits[:, :, 0, 0] = 10.0
+        positive_targets[:, :, 0, 0] = 1.0
+        update_boundary_metric_totals(totals, positive_logits, positive_targets)
+
+        metrics = finalize_boundary_metrics(totals)
+
+        for label in LABELS:
+            self.assertEqual(metrics[f"{label}_iou"], 1.0)
+            self.assertEqual(metrics[f"{label}_dice"], 1.0)
 
     def test_labels_include_right_barrier_between_left_and_wall(self):
         self.assertEqual(LABELS, ("left_barrier", "right_barrier", "tunnel_wall"))

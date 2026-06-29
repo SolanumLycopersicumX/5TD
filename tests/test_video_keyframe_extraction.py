@@ -3,13 +3,17 @@ import sys
 import tempfile
 import unittest
 
+from PIL import Image
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.passable_segmentation.extract_video_keyframes import (
     discover_videos,
+    extract_keyframes,
     extract_video,
     should_save_sequential_frame,
     sample_frame_indices,
+    video_output_prefix,
     video_prefix,
     write_batch_files,
 )
@@ -31,6 +35,86 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
 
     def test_video_prefix_preserves_camera_filename_stem(self) -> None:
         self.assertEqual(video_prefix(Path("Videos/IMG_3161.MOV")), "IMG_3161")
+
+    def test_video_output_prefix_distinguishes_same_stem_batch_inputs(self) -> None:
+        video_root = Path("Videos")
+
+        mp4_prefix = video_output_prefix(video_root / "front.mp4", video_root=video_root)
+        mov_prefix = video_output_prefix(video_root / "front.MOV", video_root=video_root)
+
+        self.assertNotEqual(mp4_prefix, mov_prefix)
+        self.assertNotEqual(f"{mp4_prefix}_f000000.jpg", f"{mov_prefix}_f000000.jpg")
+
+    def test_extract_keyframes_uses_unique_output_prefix_for_same_stem_videos(self) -> None:
+        class FakeFrame:
+            shape = (4, 5, 3)
+
+        class FakeCapture:
+            def __init__(self, _path: str) -> None:
+                self.read_count = 0
+
+            def isOpened(self) -> bool:
+                return True
+
+            def get(self, prop: int) -> float:
+                if prop == FakeCV2.CAP_PROP_FPS:
+                    return 30.0
+                if prop == FakeCV2.CAP_PROP_FRAME_COUNT:
+                    return 1.0
+                return 0.0
+
+            def set(self, _prop: int, _value: int) -> None:
+                pass
+
+            def read(self):
+                if self.read_count >= 1:
+                    return False, None
+                self.read_count += 1
+                return True, FakeFrame()
+
+            def release(self) -> None:
+                pass
+
+        class FakeCV2:
+            CAP_PROP_FPS = 1
+            CAP_PROP_FRAME_COUNT = 2
+            CAP_PROP_POS_FRAMES = 3
+            VideoCapture = FakeCapture
+
+            @staticmethod
+            def imwrite(path: str, _frame: FakeFrame) -> bool:
+                Image.new("RGB", (5, 4), "white").save(path, "JPEG")
+                return True
+
+        previous_cv2 = sys.modules.get("cv2")
+        sys.modules["cv2"] = FakeCV2
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                video_root = root / "Videos"
+                output_root = root / "out"
+                video_root.mkdir()
+                (video_root / "front.mp4").write_bytes(b"video")
+                (video_root / "front.MOV").write_bytes(b"video")
+
+                metadata = extract_keyframes(
+                    video_root=video_root,
+                    output_root=output_root,
+                    labels_path=root / "missing_labels.txt",
+                    sample_seconds=1.0,
+                    max_frames_per_video=1,
+                )
+        finally:
+            if previous_cv2 is None:
+                sys.modules.pop("cv2", None)
+            else:
+                sys.modules["cv2"] = previous_cv2
+
+        frame_names = [Path(record["file"]).name for record in metadata["frames"]]
+        prefixes = [video["prefix"] for video in metadata["videos"]]
+        self.assertEqual(len(frame_names), 2)
+        self.assertEqual(len(set(frame_names)), 2)
+        self.assertEqual(len(set(prefixes)), 2)
 
     def test_sample_frame_indices_limits_uniform_samples(self) -> None:
         self.assertEqual(

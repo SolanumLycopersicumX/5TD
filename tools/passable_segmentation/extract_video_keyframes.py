@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import re
 import shutil
 import stat
 from pathlib import Path
@@ -44,6 +46,25 @@ def discover_videos(video_root: Path | str) -> list[Path]:
 def video_prefix(video_path: Path | str) -> str:
     """Return the filename stem used as the frame output prefix."""
     return Path(video_path).stem
+
+
+def video_output_prefix(video_path: Path | str, video_root: Path | str | None = None) -> str:
+    """Build a filesystem-safe batch output prefix that avoids same-stem collisions."""
+    path = Path(video_path)
+    if video_root is None:
+        rel = Path(path.name)
+    else:
+        root = Path(video_root)
+        try:
+            rel = path.relative_to(root)
+        except ValueError:
+            rel = Path(path.name)
+    rel_text = rel.as_posix()
+    raw = "_".join(rel.parts)
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "_", raw).strip("._-")
+    slug = re.sub(r"[._-]+", "_", slug).strip("_")
+    digest = hashlib.sha1(rel_text.encode("utf-8")).hexdigest()[:8]
+    return f"{slug or path.stem or 'video'}_{digest}"
 
 
 def sample_frame_indices(
@@ -91,17 +112,19 @@ def extract_keyframes(
     video_summaries: list[dict[str, Any]] = []
     all_frames: list[dict[str, Any]] = []
     for video_path in videos:
+        prefix = video_output_prefix(video_path, video_root=video_root)
         frames = extract_video(
             video_path=video_path,
             images_dir=images_dir,
             sample_seconds=sample_seconds,
             max_frames=max_frames_per_video,
+            prefix=prefix,
         )
         all_frames.extend(frames)
         video_summaries.append(
             {
                 "source_video": str(video_path),
-                "prefix": video_prefix(video_path),
+                "prefix": prefix,
                 "frames": len(frames),
             }
         )
@@ -131,6 +154,7 @@ def extract_video(
     images_dir: Path | str,
     sample_seconds: float = 2.0,
     max_frames: int = 40,
+    prefix: str | None = None,
 ) -> list[dict[str, Any]]:
     """Extract sampled JPEG frames from one video into images_dir."""
     import cv2
@@ -148,7 +172,7 @@ def extract_video(
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
     fps_for_timestamp = source_fps if source_fps > 0 else 30.0
     records: list[dict[str, Any]] = []
-    prefix = video_prefix(video_path)
+    prefix = video_prefix(video_path) if prefix is None else prefix
 
     def save_frame(frame_idx: int, frame: Any) -> None:
         height, width = frame.shape[:2]
@@ -160,6 +184,7 @@ def extract_video(
             {
                 "file": str(image_path),
                 "source_video": str(video_path),
+                "prefix": prefix,
                 "frame_idx": frame_idx,
                 "timestamp_sec": frame_idx / fps_for_timestamp,
                 "width": int(width),

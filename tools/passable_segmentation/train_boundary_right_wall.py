@@ -221,46 +221,88 @@ def _loss_from_config(logits: torch.Tensor, masks: torch.Tensor, config: dict) -
     )
 
 
+def new_boundary_metric_totals() -> dict[str, torch.Tensor]:
+    """Create corpus-level metric accumulators for boundary/right-wall validation."""
+    label_count = len(LABELS)
+    return {
+        "intersection": torch.zeros(label_count, dtype=torch.float64),
+        "union": torch.zeros(label_count, dtype=torch.float64),
+        "pred_sum": torch.zeros(label_count, dtype=torch.float64),
+        "target_sum": torch.zeros(label_count, dtype=torch.float64),
+        "confusion": torch.zeros((label_count, label_count), dtype=torch.float64),
+        "overlap": torch.zeros((label_count, label_count), dtype=torch.float64),
+        "overlap_denom": torch.zeros((label_count, label_count), dtype=torch.float64),
+    }
+
+
 @torch.no_grad()
-def boundary_right_wall_metrics(logits: torch.Tensor, targets: torch.Tensor) -> dict[str, float]:
-    """Compute per-label IoU/Dice and deterministic pairwise confusion rates."""
+def update_boundary_metric_totals(
+    totals: dict[str, torch.Tensor], logits: torch.Tensor, targets: torch.Tensor
+) -> None:
+    """Accumulate boundary intersections and denominators over a batch."""
     preds = (torch.sigmoid(logits) > 0.5).float()
     targets = (targets > 0.5).float()
 
+    totals["intersection"] += (preds * targets).sum(dim=(0, 2, 3)).detach().cpu().double()
+    totals["union"] += ((preds + targets) > 0).float().sum(dim=(0, 2, 3)).detach().cpu().double()
+    totals["pred_sum"] += preds.sum(dim=(0, 2, 3)).detach().cpu().double()
+    totals["target_sum"] += targets.sum(dim=(0, 2, 3)).detach().cpu().double()
+
+    for source_idx in range(len(LABELS)):
+        source_tgt = targets[:, source_idx : source_idx + 1]
+        for pred_idx in range(len(LABELS)):
+            if pred_idx == source_idx:
+                continue
+            pred = preds[:, pred_idx : pred_idx + 1]
+            totals["confusion"][source_idx, pred_idx] += (pred * source_tgt).sum().detach().cpu().double()
+
+    pred_sums = preds.sum(dim=(0, 2, 3)).detach().cpu().double()
+    for left_idx in range(len(LABELS)):
+        for right_idx in range(left_idx + 1, len(LABELS)):
+            left_pred = preds[:, left_idx : left_idx + 1]
+            right_pred = preds[:, right_idx : right_idx + 1]
+            totals["overlap"][left_idx, right_idx] += (left_pred * right_pred).sum().detach().cpu().double()
+            totals["overlap_denom"][left_idx, right_idx] += pred_sums[left_idx] + pred_sums[right_idx]
+
+
+def finalize_boundary_metrics(totals: dict[str, torch.Tensor]) -> dict[str, float]:
+    """Convert corpus-level boundary totals into IoU, Dice, confusion, and overlap metrics."""
     metrics = {}
     for idx, label in enumerate(LABELS):
-        pred = preds[:, idx : idx + 1]
-        tgt = targets[:, idx : idx + 1]
-        intersection = (pred * tgt).sum().item()
-        union = ((pred + tgt) > 0).float().sum().item()
-        pred_sum = pred.sum().item()
-        tgt_sum = tgt.sum().item()
+        intersection = totals["intersection"][idx].item()
+        union = totals["union"][idx].item()
+        pred_sum = totals["pred_sum"][idx].item()
+        tgt_sum = totals["target_sum"][idx].item()
         metrics[f"{label}_iou"] = float(intersection / union) if union > 0 else 0.0
         dice_denom = pred_sum + tgt_sum
         metrics[f"{label}_dice"] = float((2 * intersection) / dice_denom) if dice_denom > 0 else 0.0
 
     for source_idx, source_label in enumerate(LABELS):
-        source_tgt = targets[:, source_idx : source_idx + 1]
-        source_pixels = source_tgt.sum().item()
+        source_pixels = totals["target_sum"][source_idx].item()
         for pred_idx, pred_label in enumerate(LABELS):
             if pred_idx == source_idx:
                 continue
-            pred = preds[:, pred_idx : pred_idx + 1]
-            confusion_pixels = (pred * source_tgt).sum().item()
+            confusion_pixels = totals["confusion"][source_idx, pred_idx].item()
             metrics[f"{source_label}_as_{pred_label}_rate"] = (
                 float(confusion_pixels / source_pixels) if source_pixels > 0 else 0.0
             )
 
     for left_idx in range(len(LABELS)):
         for right_idx in range(left_idx + 1, len(LABELS)):
-            left_pred = preds[:, left_idx : left_idx + 1]
-            right_pred = preds[:, right_idx : right_idx + 1]
-            denom = left_pred.sum().item() + right_pred.sum().item()
-            overlap_pixels = (left_pred * right_pred).sum().item()
+            denom = totals["overlap_denom"][left_idx, right_idx].item()
+            overlap_pixels = totals["overlap"][left_idx, right_idx].item()
             metrics[f"{LABELS[left_idx]}_{LABELS[right_idx]}_overlap_rate"] = (
                 float(overlap_pixels / denom) if denom > 0 else 0.0
             )
     return metrics
+
+
+@torch.no_grad()
+def boundary_right_wall_metrics(logits: torch.Tensor, targets: torch.Tensor) -> dict[str, float]:
+    """Compute per-label IoU/Dice and deterministic pairwise confusion rates for one batch."""
+    totals = new_boundary_metric_totals()
+    update_boundary_metric_totals(totals, logits, targets)
+    return finalize_boundary_metrics(totals)
 
 
 def train_one_epoch(
@@ -290,21 +332,19 @@ def evaluate(model: nn.Module, loader: DataLoader, device: torch.device, config:
     """Evaluate one right-boundary model."""
     model.eval()
     total_loss = 0.0
-    totals: dict[str, float] = {}
+    metric_totals = new_boundary_metric_totals()
     n = 0
     for batch in loader:
         images = batch["image"].to(device)
         masks = batch["mask"].to(device)
         logits = model(images)
         loss = _loss_from_config(logits, masks, config)
-        metrics = boundary_right_wall_metrics(logits, masks)
         batch_n = images.size(0)
         total_loss += loss.item() * batch_n
-        for key, value in metrics.items():
-            totals[key] = totals.get(key, 0.0) + value * batch_n
+        update_boundary_metric_totals(metric_totals, logits, masks)
         n += batch_n
     out = {"loss": total_loss / max(1, n)}
-    out.update({key: value / max(1, n) for key, value in totals.items()})
+    out.update(finalize_boundary_metrics(metric_totals))
     return out
 
 
