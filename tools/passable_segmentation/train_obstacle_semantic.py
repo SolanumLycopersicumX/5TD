@@ -25,7 +25,6 @@ from tools.passable_segmentation.train_passable import (
     STD,
     SmallPassableUNet,
     augment_image_and_mask,
-    dice_loss,
     resize_pair,
     seed_everything,
 )
@@ -144,7 +143,7 @@ def obstacle_loss(
 ) -> torch.Tensor:
     """Combine BCE, Dice, and a small predicted-class overlap penalty."""
     bce = F.binary_cross_entropy_with_logits(logits, targets)
-    d_loss = dice_loss(logits, targets)
+    d_loss = per_class_dice_loss(logits, targets)
     probs = torch.sigmoid(logits)
 
     overlap = logits.sum() * 0.0
@@ -157,34 +156,78 @@ def obstacle_loss(
     return bce + d_loss + overlap_weight * overlap
 
 
+def per_class_dice_loss(logits: torch.Tensor, targets: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
+    """Average soft Dice loss across obstacle channels with neutral absent classes."""
+    probs = torch.sigmoid(logits)
+    targets = targets.float()
+    dims = (0, 2, 3)
+    intersection = (probs * targets).sum(dim=dims)
+    target_sum = targets.sum(dim=dims)
+    denom = probs.sum(dim=dims) + target_sum
+    dice = (2.0 * intersection + eps) / (denom + eps)
+    dice = torch.where(target_sum > 0, dice, torch.ones_like(dice))
+    return 1.0 - dice.mean()
+
+
 def _loss_from_config(logits: torch.Tensor, masks: torch.Tensor, config: dict) -> torch.Tensor:
     return obstacle_loss(logits, masks, overlap_weight=float(config["overlap_weight"]))
 
 
+def new_obstacle_metric_totals() -> dict[str, torch.Tensor]:
+    """Create corpus-level metric accumulators for obstacle validation."""
+    return {
+        "intersection": torch.zeros(len(LABELS), dtype=torch.float64),
+        "union": torch.zeros(len(LABELS), dtype=torch.float64),
+        "pred_sum": torch.zeros(len(LABELS), dtype=torch.float64),
+        "target_sum": torch.zeros(len(LABELS), dtype=torch.float64),
+        "hazard_intersection": torch.zeros((), dtype=torch.float64),
+        "hazard_union": torch.zeros((), dtype=torch.float64),
+    }
+
+
 @torch.no_grad()
-def obstacle_metrics(logits: torch.Tensor, targets: torch.Tensor) -> dict[str, float]:
-    """Compute per-obstacle IoU/Dice and aggregate hazard-union IoU."""
+def update_obstacle_metric_totals(
+    totals: dict[str, torch.Tensor], logits: torch.Tensor, targets: torch.Tensor
+) -> None:
+    """Accumulate obstacle intersections and denominators over a batch."""
     preds = (torch.sigmoid(logits) > 0.5).float()
     targets = (targets > 0.5).float()
 
+    totals["intersection"] += (preds * targets).sum(dim=(0, 2, 3)).detach().cpu().double()
+    totals["union"] += ((preds + targets) > 0).float().sum(dim=(0, 2, 3)).detach().cpu().double()
+    totals["pred_sum"] += preds.sum(dim=(0, 2, 3)).detach().cpu().double()
+    totals["target_sum"] += targets.sum(dim=(0, 2, 3)).detach().cpu().double()
+
+    hazard_pred = (preds.sum(dim=1, keepdim=True) > 0).float()
+    hazard_target = (targets.sum(dim=1, keepdim=True) > 0).float()
+    totals["hazard_intersection"] += (hazard_pred * hazard_target).sum().detach().cpu().double()
+    totals["hazard_union"] += ((hazard_pred + hazard_target) > 0).float().sum().detach().cpu().double()
+
+
+def finalize_obstacle_metrics(totals: dict[str, torch.Tensor]) -> dict[str, float]:
+    """Convert corpus-level obstacle totals into IoU and Dice metrics."""
     metrics = {}
     for idx, label in enumerate(LABELS):
-        pred = preds[:, idx : idx + 1]
-        tgt = targets[:, idx : idx + 1]
-        intersection = (pred * tgt).sum().item()
-        union = ((pred + tgt) > 0).float().sum().item()
-        pred_sum = pred.sum().item()
-        tgt_sum = tgt.sum().item()
+        intersection = totals["intersection"][idx].item()
+        union = totals["union"][idx].item()
+        pred_sum = totals["pred_sum"][idx].item()
+        tgt_sum = totals["target_sum"][idx].item()
         metrics[f"{label}_iou"] = float(intersection / union) if union > 0 else 0.0
         dice_denom = pred_sum + tgt_sum
         metrics[f"{label}_dice"] = float((2 * intersection) / dice_denom) if dice_denom > 0 else 0.0
 
-    hazard_pred = (preds.sum(dim=1, keepdim=True) > 0).float()
-    hazard_target = (targets.sum(dim=1, keepdim=True) > 0).float()
-    hazard_intersection = (hazard_pred * hazard_target).sum().item()
-    hazard_union = ((hazard_pred + hazard_target) > 0).float().sum().item()
+    hazard_intersection = totals["hazard_intersection"].item()
+    hazard_union = totals["hazard_union"].item()
     metrics["obstacle_hazard_iou"] = float(hazard_intersection / hazard_union) if hazard_union > 0 else 0.0
     return metrics
+
+
+@torch.no_grad()
+def obstacle_metrics(logits: torch.Tensor, targets: torch.Tensor) -> dict[str, float]:
+    """Compute per-obstacle IoU/Dice and aggregate hazard-union IoU for one batch."""
+    totals = new_obstacle_metric_totals()
+    update_obstacle_metric_totals(totals, logits, targets)
+    return finalize_obstacle_metrics(totals)
 
 
 def train_one_epoch(
@@ -214,21 +257,19 @@ def evaluate(model: nn.Module, loader: DataLoader, device: torch.device, config:
     """Evaluate one obstacle-semantic model."""
     model.eval()
     total_loss = 0.0
-    totals: dict[str, float] = {}
+    metric_totals = new_obstacle_metric_totals()
     n = 0
     for batch in loader:
         images = batch["image"].to(device)
         masks = batch["mask"].to(device)
         logits = model(images)
         loss = _loss_from_config(logits, masks, config)
-        metrics = obstacle_metrics(logits, masks)
         batch_n = images.size(0)
         total_loss += loss.item() * batch_n
-        for key, value in metrics.items():
-            totals[key] = totals.get(key, 0.0) + value * batch_n
+        update_obstacle_metric_totals(metric_totals, logits, masks)
         n += batch_n
     out = {"loss": total_loss / max(1, n)}
-    out.update({key: value / max(1, n) for key, value in totals.items()})
+    out.update(finalize_obstacle_metrics(metric_totals))
     return out
 
 
