@@ -148,6 +148,35 @@ class PrepareMultitaskDatasetTest(unittest.TestCase):
 
             self.assertEqual(summary["surface_artifact_outside_ego"], [{"stem": "IMG_1_0001", "pixels": 4}])
 
+    def test_prepare_multitask_dataset_rejects_image_json_dimension_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            batch = root / "batch" / "images"
+            output_dir = root / "derived"
+            batch.mkdir(parents=True)
+
+            Image.new("RGB", (8, 8), "black").save(batch / "IMG_1_0001.jpg")
+            annotation = {
+                "imagePath": "IMG_1_0001.jpg",
+                "imageWidth": 9,
+                "imageHeight": 8,
+                "shapes": [
+                    {
+                        "label": "ego_passable",
+                        "shape_type": "polygon",
+                        "points": [[1, 1], [6, 1], [6, 6]],
+                    },
+                ],
+            }
+            (batch / "IMG_1_0001.json").write_text(json.dumps(annotation), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "does not match image size"):
+                prepare_multitask_dataset(
+                    image_dirs=[batch],
+                    output_dir=output_dir,
+                    val_prefixes=("IMG",),
+                )
+
     def test_prepare_multitask_dataset_writes_full_and_view_manifests(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -182,6 +211,11 @@ class PrepareMultitaskDatasetTest(unittest.TestCase):
             )
 
             self.assertEqual(summary["total"], 1)
+            self.assertGreater(summary["label_positive_counts"]["val"]["ego_passable"]["images"], 0)
+            self.assertGreater(summary["label_positive_counts"]["val"]["ego_passable"]["pixels"], 0)
+            self.assertGreater(summary["label_positive_counts"]["val"]["worker"]["images"], 0)
+            self.assertGreater(summary["label_positive_counts"]["all"]["worker"]["pixels"], 0)
+            self.assertEqual(summary["label_positive_counts"]["train"]["worker"]["images"], 0)
             self.assertEqual(
                 summary["view_labels"],
                 {

@@ -188,6 +188,23 @@ class MultitaskFusionTest(unittest.TestCase):
         finally:
             eval_mod.cv2 = previous_cv2
 
+    def test_evaluate_videos_rejects_non_positive_sample_fps_even_when_empty_allowed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video_root = root / "Videos"
+            video_root.mkdir()
+
+            with self.assertRaisesRegex(ValueError, "sample_fps must be positive"):
+                evaluate_videos(
+                    video_root=video_root,
+                    output_dir=root / "out",
+                    sample_fps=0.0,
+                    passable_checkpoint=root / "missing_passable.pt",
+                    boundary_checkpoint=root / "missing_boundary.pt",
+                    obstacle_checkpoint=root / "missing_obstacle.pt",
+                    allow_empty=True,
+                )
+
     def test_sample_frame_indices_uses_basic_one_fps_step(self):
         self.assertEqual(sample_frame_indices(total_frames=95, source_fps=30.0, sample_fps=1.0), [0, 30, 60, 90])
         self.assertEqual(sample_frame_indices(total_frames=0, source_fps=30.0, sample_fps=1.0), [])

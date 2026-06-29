@@ -340,6 +340,9 @@ def evaluate_videos(
     allow_empty: bool = False,
 ) -> tuple[int, int]:
     """Evaluate all discovered videos and write metrics artifacts."""
+    if sample_fps <= 0:
+        raise ValueError("sample_fps must be positive")
+
     videos = discover_videos(video_root)
     if not videos and not allow_empty:
         raise RuntimeError(f"No supported video files were discovered in {video_root}")

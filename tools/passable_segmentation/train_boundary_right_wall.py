@@ -70,6 +70,7 @@ def build_train_config() -> dict:
         "seed": SEED,
         "num_workers": NUM_WORKERS,
         "overlay_count": OVERLAY_COUNT,
+        "allow_zero_positive_labels": False,
     }
 
 
@@ -88,6 +89,35 @@ def read_boundary_right_wall_manifest(path: Path | str) -> list[tuple[str, Path,
             stem, image_rel, left_rel, right_rel, wall_rel = row
             rows.append((stem, root / image_rel, (root / left_rel, root / right_rel, root / wall_rel)))
     return rows
+
+
+def assert_positive_label_coverage(
+    manifest_path: Path | str,
+    *,
+    split_name: str,
+    labels: tuple[str, ...] | list[str] = LABELS,
+    allow_zero_positive_labels: bool = False,
+) -> dict[str, dict[str, int]]:
+    """Require every boundary label to have positive pixels in one split."""
+    label_names = tuple(labels)
+    rows = read_boundary_right_wall_manifest(manifest_path)
+    counts = {label: {"images": 0, "pixels": 0} for label in label_names}
+    for _stem, _image_path, mask_paths in rows:
+        for label, mask_path in zip(label_names, mask_paths):
+            mask = cv2.imread(str(mask_path), cv2.IMREAD_GRAYSCALE)
+            if mask is None:
+                raise FileNotFoundError(mask_path)
+            pixels = int((mask > 0).sum())
+            if pixels > 0:
+                counts[label]["images"] += 1
+                counts[label]["pixels"] += pixels
+    zero_labels = [label for label, label_counts in counts.items() if label_counts["pixels"] == 0]
+    if zero_labels and not allow_zero_positive_labels:
+        raise RuntimeError(
+            f"{manifest_path} {split_name} labels have zero positive pixels: {zero_labels}. "
+            "Add annotations for these labels or set allow_zero_positive_labels=True for an explicit dry run."
+        )
+    return counts
 
 
 class BoundaryRightWallDataset(Dataset):
@@ -410,6 +440,13 @@ def make_boundary_right_wall_overlay(
     return np.concatenate(panels, axis=1)
 
 
+def write_overlay_image(path: Path, overlay_rgb: np.ndarray) -> None:
+    """Write one RGB overlay image and raise when OpenCV reports failure."""
+    ok = cv2.imwrite(str(path), cv2.cvtColor(overlay_rgb, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, 92])
+    if not ok:
+        raise RuntimeError(f"Could not write overlay image: {path}")
+
+
 @torch.no_grad()
 def save_overlays(model: nn.Module, loader: DataLoader, device: torch.device, out_dir: Path, limit: int) -> None:
     """Save right-boundary validation overlays."""
@@ -423,7 +460,7 @@ def save_overlays(model: nn.Module, loader: DataLoader, device: torch.device, ou
         for i, stem in enumerate(batch["stem"]):
             image = _denormalize_image(batch["image"][i])
             canvas = make_boundary_right_wall_overlay(image, probs[i], targets[i].detach().cpu().numpy())
-            cv2.imwrite(str(out_dir / f"{stem}_overlay.jpg"), cv2.cvtColor(canvas, cv2.COLOR_RGB2BGR))
+            write_overlay_image(out_dir / f"{stem}_overlay.jpg", canvas)
             saved += 1
             if saved >= limit:
                 return
@@ -431,12 +468,21 @@ def save_overlays(model: nn.Module, loader: DataLoader, device: torch.device, ou
 
 def run_training(config: dict | None = None) -> dict:
     """Train the three-output boundary/right-wall model."""
-    config = build_train_config() if config is None else config
+    config = build_train_config() if config is None else dict(config)
+    config.setdefault("allow_zero_positive_labels", False)
     seed_everything(int(config["seed"]))
     dataset_dir = Path(str(config["dataset_dir"]))
     run_dir = Path(str(config["run_dir"]))
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "config.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
+
+    allow_zero = bool(config.get("allow_zero_positive_labels", False))
+    train_positive_counts = assert_positive_label_coverage(
+        dataset_dir / "train.tsv", split_name="train", allow_zero_positive_labels=allow_zero
+    )
+    val_positive_counts = assert_positive_label_coverage(
+        dataset_dir / "val.tsv", split_name="val", allow_zero_positive_labels=allow_zero
+    )
 
     train_ds = BoundaryRightWallDataset(dataset_dir / "train.tsv", augment=True, seed=int(config["seed"]))
     val_ds = BoundaryRightWallDataset(dataset_dir / "val.tsv", augment=False, seed=int(config["seed"]))
@@ -533,6 +579,7 @@ def run_training(config: dict | None = None) -> dict:
         "train_samples": len(train_ds),
         "val_samples": len(val_ds),
         "best_checkpoint": str(best_path),
+        "label_positive_counts": {"train": train_positive_counts, "val": val_positive_counts},
         "final_val": final_metrics,
     }
     (run_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")

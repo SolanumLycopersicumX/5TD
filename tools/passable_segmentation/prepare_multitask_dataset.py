@@ -179,11 +179,13 @@ def prepare_multitask_dataset(
     train_rows: list[ManifestRow] = []
     val_rows: list[ManifestRow] = []
     mask_pixels: dict[str, dict[str, int]] = {label_name: {} for label_name in label_names}
+    label_positive_counts = _new_label_positive_counts(label_names)
     surface_artifact_outside_ego: list[dict[str, int | str]] = []
 
     for output_stem, source_stem, image_path, annotation_path, _batch_name in records:
         annotation = load_labelme_json(annotation_path)
         validate_annotation_labels(annotation, allowed_labels=label_names)
+        _validate_annotation_image_dimensions(annotation, annotation_path=annotation_path, image_path=image_path)
 
         image_out = out_images / f"{output_stem}{image_path.suffix.lower()}"
         shutil.copy2(image_path, image_out)
@@ -207,7 +209,13 @@ def prepare_multitask_dataset(
 
         row = (output_stem, image_out, tuple(mask_paths))
         rows.append(row)
-        if _is_validation_stem(source_stem, val_set):
+        split_name = "val" if _is_validation_stem(source_stem, val_set) else "train"
+        _add_label_positive_counts(
+            label_positive_counts,
+            split_name=split_name,
+            mask_pixels_by_label={label: mask_pixels[label][output_stem] for label in label_names},
+        )
+        if split_name == "val":
             val_rows.append(row)
         else:
             train_rows.append(row)
@@ -230,6 +238,7 @@ def prepare_multitask_dataset(
         "train": len(train_rows),
         "val": len(val_rows),
         "surface_artifact_outside_ego": surface_artifact_outside_ego,
+        "label_positive_counts": label_positive_counts,
         "empty_masks": {
             label_name: sorted(stem for stem, pixels in label_pixels.items() if pixels == 0)
             for label_name, label_pixels in mask_pixels.items()
@@ -313,6 +322,39 @@ def _write_manifest(path: Path | str, rows: Sequence[ManifestRow], *, root: Path
 def _relative_path(path: Path, root: Path) -> str:
     return os.path.relpath(path.resolve(), start=root.resolve()).replace(os.sep, "/")
 
+
+def _validate_annotation_image_dimensions(annotation: dict, *, annotation_path: Path, image_path: Path) -> None:
+    expected_width = int(annotation.get("imageWidth", -1))
+    expected_height = int(annotation.get("imageHeight", -1))
+    with Image.open(image_path) as image:
+        actual_width, actual_height = image.size
+    if (expected_width, expected_height) != (actual_width, actual_height):
+        raise ValueError(
+            f"{annotation_path} imageWidth/imageHeight "
+            f"{expected_width}x{expected_height} does not match image size "
+            f"{actual_width}x{actual_height} for {image_path}"
+        )
+
+
+def _new_label_positive_counts(labels: Sequence[str]) -> dict[str, dict[str, dict[str, int]]]:
+    return {
+        split_name: {label_name: {"images": 0, "pixels": 0} for label_name in labels}
+        for split_name in ("train", "val", "all")
+    }
+
+
+def _add_label_positive_counts(
+    counts: dict[str, dict[str, dict[str, int]]],
+    *,
+    split_name: str,
+    mask_pixels_by_label: dict[str, int],
+) -> None:
+    for label_name, pixels in mask_pixels_by_label.items():
+        if pixels <= 0:
+            continue
+        for bucket in (split_name, "all"):
+            counts[bucket][label_name]["images"] += 1
+            counts[bucket][label_name]["pixels"] += int(pixels)
 
 
 def _points_are_numeric_pairs(points: object) -> bool:

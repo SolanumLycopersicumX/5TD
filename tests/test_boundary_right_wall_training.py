@@ -2,11 +2,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import cv2
 import numpy as np
 import torch
 
 from tools.passable_segmentation.train_boundary_right_wall import (
     LABELS,
+    assert_positive_label_coverage,
     augment_boundary_image_and_mask,
     boundary_right_wall_metrics,
     copy_compatible_state,
@@ -14,6 +16,7 @@ from tools.passable_segmentation.train_boundary_right_wall import (
     new_boundary_metric_totals,
     read_boundary_right_wall_manifest,
     update_boundary_metric_totals,
+    write_overlay_image,
 )
 from tools.passable_segmentation.train_passable import SmallPassableUNet
 
@@ -40,6 +43,31 @@ class BoundaryRightWallTrainingTest(unittest.TestCase):
                 )
             ],
         )
+
+    def test_assert_positive_label_coverage_rejects_zero_positive_boundary_label(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "images").mkdir()
+            for label in ("left", "right", "wall"):
+                (root / "masks" / label).mkdir(parents=True, exist_ok=True)
+            cv2.imwrite(str(root / "images" / "frame.jpg"), np.zeros((4, 4, 3), dtype=np.uint8))
+            cv2.imwrite(str(root / "masks" / "left" / "frame.png"), np.full((4, 4), 255, dtype=np.uint8))
+            cv2.imwrite(str(root / "masks" / "right" / "frame.png"), np.zeros((4, 4), dtype=np.uint8))
+            cv2.imwrite(str(root / "masks" / "wall" / "frame.png"), np.full((4, 4), 255, dtype=np.uint8))
+            manifest = root / "train.tsv"
+            manifest.write_text(
+                "frame\timages/frame.jpg\tmasks/left/frame.png\tmasks/right/frame.png\tmasks/wall/frame.png\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(RuntimeError, "zero positive pixels"):
+                assert_positive_label_coverage(manifest, split_name="train")
+            assert_positive_label_coverage(manifest, split_name="train", allow_zero_positive_labels=True)
+
+    def test_write_overlay_image_raises_when_boundary_overlay_write_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(RuntimeError, "Could not write overlay image"):
+                write_overlay_image(Path(tmp) / "missing" / "overlay.jpg", np.zeros((2, 2, 3), dtype=np.uint8))
 
     def test_copy_compatible_state_maps_output_head_by_label(self):
         torch.manual_seed(123)
