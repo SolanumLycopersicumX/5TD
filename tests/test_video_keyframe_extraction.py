@@ -8,6 +8,7 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.passable_segmentation.extract_video_keyframes import (
+    ANNOTATION_LABELS,
     discover_videos,
     extract_keyframes,
     extract_video,
@@ -284,17 +285,12 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
             rules = (output_root / "annotation_rules.md").read_text(encoding="utf-8")
             self.assertIn("--nodata", readme)
             self.assertIn("--nodata", launch_script)
-            self.assertIn("Use polygons for:", rules)
-            self.assertIn("Use rectangles by default for:", rules)
-            polygon_section = rules.split("Use polygons for:", 1)[1].split("Use rectangles by default for:", 1)[0]
-            rectangle_section = rules.split("Use rectangles by default for:", 1)[1].split("`surface_artifact_passable`", 1)[0]
-            self.assertIn("worker", rules)
-            self.assertIn("construction_vehicle", rules)
-            self.assertIn("- suspended_object", polygon_section)
-            self.assertNotIn("- suspended_object", rectangle_section)
-            self.assertIn("- debris", polygon_section)
-            self.assertNotIn("- debris", rectangle_section)
-            self.assertIn("Mark debris with polygons", rules)
+            self.assertIn("Use polygons for every label:", rules)
+            self.assertNotIn("Use rectangles by default", rules)
+            polygon_section = rules.split("Use polygons for every label:", 1)[1].split("Draw polygons around", 1)[0]
+            for label in ANNOTATION_LABELS:
+                self.assertIn(f"- {label}", polygon_section)
+            self.assertIn("Avoid rectangle annotations", rules)
             self.assertIn("surface_artifact_passable` is not a hazard label", rules)
 
 

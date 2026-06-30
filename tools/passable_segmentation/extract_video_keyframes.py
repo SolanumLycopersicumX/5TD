@@ -273,41 +273,19 @@ labelme images --labels labels.txt --nodata
     (output_root / "README.md").write_text(readme, encoding="utf-8")
 
     all_labels = "\n".join(f"- {label}" for label in ANNOTATION_LABELS)
-    polygon_labels = "\n".join(
-        f"- {label}"
-        for label in (
-            "ego_passable",
-            "ditch",
-            "left_barrier",
-            "right_barrier",
-            "tunnel_wall",
-            "suspended_object",
-            "debris",
-            "surface_artifact_passable",
-        )
-    )
-    rectangle_labels = "\n".join(
-        f"- {label}"
-        for label in ("worker", "construction_vehicle")
-    )
+    polygon_labels = all_labels
     rules = f"""# Annotation rules
 
 Available labels:
 
 {all_labels}
 
-Use polygons for:
+Use polygons for every label:
 
 {polygon_labels}
 
-Use rectangles by default for:
-
-{rectangle_labels}
-
-Mark suspended objects with polygons around the visible overhead or hanging
-object boundary. Mark debris with polygons around the visible obstacle boundary,
-especially for irregular piles, scattered material, cables, boards, and broken
-ground.
+Draw polygons around only the visible pixels belonging to each class. Avoid rectangle annotations because boxed-in
+background pixels become training noise for the segmentation masks.
 
 `surface_artifact_passable` is not a hazard label. Use it only for passable surface
 artifacts such as texture, staining, mats, shallow plates, or similar features that
