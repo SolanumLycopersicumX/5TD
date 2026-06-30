@@ -290,7 +290,8 @@ class VideoKeyframeExtractionTest(unittest.TestCase):
             rectangle_section = rules.split("Use rectangles by default for:", 1)[1].split("`surface_artifact_passable`", 1)[0]
             self.assertIn("worker", rules)
             self.assertIn("construction_vehicle", rules)
-            self.assertIn("suspended_object", rules)
+            self.assertIn("- suspended_object", polygon_section)
+            self.assertNotIn("- suspended_object", rectangle_section)
             self.assertIn("- debris", polygon_section)
             self.assertNotIn("- debris", rectangle_section)
             self.assertIn("Mark debris with polygons", rules)
