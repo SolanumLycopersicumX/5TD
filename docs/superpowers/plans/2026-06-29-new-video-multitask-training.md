@@ -1,5 +1,19 @@
 # New Video Multitask Training Implementation Plan
 
+> Status: Updated / partially superseded.
+>
+> This document records the original 2026-06-29 implementation plan.
+> The current PR #2 landing plan and review response are updated in:
+>
+> - `docs/reviews/2026-07-01-pr2-review-response.md`
+> - `docs/plans/2026-07-01-new-video-multitask-data-loop-plan.md`
+>
+> The latest direction keeps PR #2 as a new-video multitask semantic-segmentation
+> data loop and tooling workflow. It should remain draft for training outputs,
+> obstacle safety behavior, and live-driving integration until strict polygon
+> validation, video/session splits, positive coverage gates, `unsafe` fusion, and
+> safety metrics are implemented and reviewed.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Turn the six `Videos/` recordings into a Labelme batch, combined derived masks, three trainable model families, and a fused evaluator that outputs individual classes plus `hazard` and `safe_passable`.

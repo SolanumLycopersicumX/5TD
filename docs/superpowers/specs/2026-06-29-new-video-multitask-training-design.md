@@ -2,6 +2,19 @@
 
 Date: 2026-06-29
 
+> Status: Updated / partially superseded.
+>
+> This document records the original 2026-06-29 new-video multitask training design.
+> The current PR #2 positioning and follow-up decisions are updated in:
+>
+> - `docs/reviews/2026-07-01-pr2-review-response.md`
+> - `docs/plans/2026-07-01-new-video-multitask-data-loop-plan.md`
+>
+> The latest direction treats PR #2 as a new-video multitask semantic-segmentation
+> data loop and tooling workflow, not as a production-ready live-driving safety
+> perception stack. New-video annotations should be polygon-only; legacy rectangle
+> compatibility remains only for historical batches.
+
 ## Purpose
 
 The new `Videos/` recordings contain substantially more tunnel-scene variation than the earlier keyframe batches. They also include obstacle classes that were listed in the annotation rules but were not part of the active training path: `worker`, `construction_vehicle`, `suspended_object`, and `debris`.

@@ -59,13 +59,15 @@ def rasterize_labelme_mask(annotation: dict, *, label: str = "ego_passable") -> 
     for shape in annotation.get("shapes", []):
         if shape.get("label") != label:
             continue
-        shape_type = shape.get("shape_type", "polygon")
+        shape_type = shape.get("shape_type") or "polygon"
         points = shape.get("points", [])
         if shape_type == "polygon" and len(points) >= 3:
             draw.polygon(_clip_points(points, width, height), fill=255)
         elif shape_type == "rectangle" and len(points) == 2:
             (x1, y1), (x2, y2) = _clip_points(points, width, height)
-            draw.rectangle([x1, y1, x2, y2], fill=255)
+            left, right = sorted((x1, x2))
+            top, bottom = sorted((y1, y2))
+            draw.rectangle([left, top, right, bottom], fill=255)
 
     return np.array(mask, dtype=np.uint8)
 

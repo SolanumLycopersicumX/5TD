@@ -1,0 +1,152 @@
+import tempfile
+import unittest
+from pathlib import Path
+
+import cv2
+import numpy as np
+import torch
+
+from tools.passable_segmentation.train_boundary_right_wall import (
+    LABELS,
+    assert_positive_label_coverage,
+    augment_boundary_image_and_mask,
+    boundary_right_wall_metrics,
+    copy_compatible_state,
+    finalize_boundary_metrics,
+    new_boundary_metric_totals,
+    read_boundary_right_wall_manifest,
+    update_boundary_metric_totals,
+    write_overlay_image,
+)
+from tools.passable_segmentation.train_passable import SmallPassableUNet
+
+
+class BoundaryRightWallTrainingTest(unittest.TestCase):
+    def test_read_manifest_resolves_three_masks_relative_to_parent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "train.tsv"
+            manifest.write_text(
+                "frame_001\timages/frame_001.jpg\tmasks/left.png\tmasks/right.png\tmasks/wall.png\n",
+                encoding="utf-8",
+            )
+
+            rows = read_boundary_right_wall_manifest(manifest)
+
+        self.assertEqual(
+            rows,
+            [
+                (
+                    "frame_001",
+                    root / "images/frame_001.jpg",
+                    (root / "masks/left.png", root / "masks/right.png", root / "masks/wall.png"),
+                )
+            ],
+        )
+
+    def test_assert_positive_label_coverage_rejects_zero_positive_boundary_label(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "images").mkdir()
+            for label in ("left", "right", "wall"):
+                (root / "masks" / label).mkdir(parents=True, exist_ok=True)
+            cv2.imwrite(str(root / "images" / "frame.jpg"), np.zeros((4, 4, 3), dtype=np.uint8))
+            cv2.imwrite(str(root / "masks" / "left" / "frame.png"), np.full((4, 4), 255, dtype=np.uint8))
+            cv2.imwrite(str(root / "masks" / "right" / "frame.png"), np.zeros((4, 4), dtype=np.uint8))
+            cv2.imwrite(str(root / "masks" / "wall" / "frame.png"), np.full((4, 4), 255, dtype=np.uint8))
+            manifest = root / "train.tsv"
+            manifest.write_text(
+                "frame\timages/frame.jpg\tmasks/left/frame.png\tmasks/right/frame.png\tmasks/wall/frame.png\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(RuntimeError, "zero positive pixels"):
+                assert_positive_label_coverage(manifest, split_name="train")
+            assert_positive_label_coverage(manifest, split_name="train", allow_zero_positive_labels=True)
+
+    def test_write_overlay_image_raises_when_boundary_overlay_write_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(RuntimeError, "Could not write overlay image"):
+                write_overlay_image(Path(tmp) / "missing" / "overlay.jpg", np.zeros((2, 2, 3), dtype=np.uint8))
+
+    def test_copy_compatible_state_maps_output_head_by_label(self):
+        torch.manual_seed(123)
+        source = SmallPassableUNet(base_channels=4, out_channels=2)
+        target = SmallPassableUNet(base_channels=4, out_channels=3)
+        original_right_weight = target.out.weight[1].detach().clone()
+        original_right_bias = target.out.bias[1].detach().clone()
+
+        with torch.no_grad():
+            source.out.weight[0].fill_(0.25)
+            source.out.weight[1].fill_(0.75)
+            source.out.bias[0].fill_(0.5)
+            source.out.bias[1].fill_(1.5)
+
+        copy_compatible_state(
+            target,
+            source.state_dict(),
+            source_labels=("left_barrier", "tunnel_wall"),
+        )
+
+        self.assertTrue(torch.equal(target.out.weight[0], source.out.weight[0]))
+        self.assertTrue(torch.equal(target.out.bias[0], source.out.bias[0]))
+        self.assertTrue(torch.equal(target.out.weight[1], original_right_weight))
+        self.assertTrue(torch.equal(target.out.bias[1], original_right_bias))
+        self.assertTrue(torch.equal(target.out.weight[2], source.out.weight[1]))
+        self.assertTrue(torch.equal(target.out.bias[2], source.out.bias[1]))
+
+    def test_boundary_augmentation_swaps_left_and_right_channels_on_forced_flip(self):
+        class ForceFlipOnlyRandom:
+            def __init__(self) -> None:
+                self.values = iter([0.0, 1.0, 1.0, 1.0, 1.0, 1.0])
+
+            def random(self) -> float:
+                return next(self.values)
+
+        image = np.arange(9, dtype=np.uint8).reshape(1, 3, 3)
+        mask = np.zeros((1, 3, 3), dtype=np.uint8)
+        mask[0, 0, 0] = 255
+        mask[0, 2, 1] = 255
+        mask[0, 1, 2] = 255
+
+        flipped_image, flipped_mask = augment_boundary_image_and_mask(image, mask, ForceFlipOnlyRandom())
+
+        np.testing.assert_array_equal(flipped_image, image[:, ::-1])
+        np.testing.assert_array_equal(flipped_mask[..., 0], np.array([[255, 0, 0]], dtype=np.uint8))
+        np.testing.assert_array_equal(flipped_mask[..., 1], np.array([[0, 0, 255]], dtype=np.uint8))
+        np.testing.assert_array_equal(flipped_mask[..., 2], np.array([[0, 255, 0]], dtype=np.uint8))
+
+    def test_boundary_right_wall_metrics_report_zero_for_absent_classes(self):
+        logits = torch.zeros((1, len(LABELS), 4, 4))
+        targets = torch.zeros((1, len(LABELS), 4, 4))
+
+        metrics = boundary_right_wall_metrics(logits, targets)
+
+        for key, value in metrics.items():
+            self.assertEqual(value, 0.0, key)
+
+    def test_boundary_metric_totals_finalize_corpus_ratios_across_sparse_batches(self):
+        totals = new_boundary_metric_totals()
+
+        empty_logits = torch.full((1, len(LABELS), 2, 2), -10.0)
+        empty_targets = torch.zeros((1, len(LABELS), 2, 2))
+        update_boundary_metric_totals(totals, empty_logits, empty_targets)
+
+        positive_logits = torch.full((1, len(LABELS), 2, 2), -10.0)
+        positive_targets = torch.zeros((1, len(LABELS), 2, 2))
+        positive_logits[:, :, 0, 0] = 10.0
+        positive_targets[:, :, 0, 0] = 1.0
+        update_boundary_metric_totals(totals, positive_logits, positive_targets)
+
+        metrics = finalize_boundary_metrics(totals)
+
+        for label in LABELS:
+            self.assertEqual(metrics[f"{label}_iou"], 1.0)
+            self.assertEqual(metrics[f"{label}_dice"], 1.0)
+
+    def test_labels_include_right_barrier_between_left_and_wall(self):
+        self.assertEqual(LABELS, ("left_barrier", "right_barrier", "tunnel_wall"))
+
+
+if __name__ == "__main__":
+    unittest.main()
